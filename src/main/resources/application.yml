@@ -1,1 +1,9 @@
-spring.application.name=onlinevotingsystem
+spring:
+    application:
+        name: onlinevotingsystem
+    datasource:
+        url: ${DB_URL:jdbc:mysql://localhost:3306/onlinevotingsystem}
+        name: ${DB_NAME:root}
+        password: ${DB_PASSWORD:800618}
+        driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+
