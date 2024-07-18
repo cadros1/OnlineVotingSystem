@@ -9,7 +9,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-INSERT INTO `users` (`account`, `password`, `username`,) VALUES ('admin', 'admin', 'admin');
-InSERT INTO `users` (`account`, `password`, `username`,) VALUES ('111', '111', '高洪森');
-InSERT INTO `users` (`account`, `password`, `username`,) VALUES ('222', '222', '李祖怡');
-InSERT INTO `users` (`account`, `password`, `username`,) VALUES ('333', '333', '王奕轩');
+INSERT INTO `users` (`account`, `password`, `username`) VALUES ('admin', 'admin', 'admin');
+InSERT INTO `users` (`account`, `password`, `username`) VALUES ('111', '111', '高洪森');
+InSERT INTO `users` (`account`, `password`, `username`) VALUES ('222', '222', '李祖怡');
+InSERT INTO `users` (`account`, `password`, `username`) VALUES ('333', '333', '王奕轩');
