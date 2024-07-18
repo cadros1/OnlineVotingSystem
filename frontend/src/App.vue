@@ -47,6 +47,7 @@ const handleSubmit = async () => {
       // 这里可以处理返回的数据，例如存储token到本地存储或sessionStorage
     } else {
       // 错误处理
+      console.log('登录失败:', response.status);
       errorMessage.value = '登录失败，请检查您的凭证。';
     }
   } catch (error) {
@@ -73,7 +74,7 @@ const handleRegister = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url(./assets/bg/bg3.jpg); /* 替换为你的图片路径 */
+  background-image: url(./assets/bg/bg.jpg); /* 替换为你的图片路径 */
   background-size: cover; 
   background-position: center;
   display: flex;
