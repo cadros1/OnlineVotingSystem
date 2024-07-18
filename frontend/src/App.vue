@@ -41,7 +41,7 @@ const handleSubmit = async () => {
       password: password.value
     });
     
-    if (response.status === 20000) {
+    if (response.data.status === 20000) {
       // 登录成功处理
       console.log('登录成功:', response.account);
       // 这里可以处理返回的数据，例如存储token到本地存储或sessionStorage
