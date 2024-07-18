@@ -1,36 +1,68 @@
 <template>
   <div class="background">
     <div class="login-container">
+
       <h1>Login</h1>
-      <form @submit.prevent="handleSubmit">
-        <div class="input-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" v-model="email" required />
-        </div>
-        <div class="input-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="password" required />
-        </div>
-        <div class="button-container">
-          <button class="login-button">登录</button>
-          <button class="register-button">注册</button>
-        </div>
-        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      </form>
+
+      <div class="input-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" v-model="username" required />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" v-model="password" required />
+      </div>
+
+      <div class="button-container">
+        <button class="login-button" @click="handleSubmit">登录</button>
+        <button class="register-button" @click="handleRegister">注册</button>
+      </div>
+
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import axios from 'axios';
 
-const email = ref('');
+const username = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
-const handleSubmit = () => {
-  // 登录逻辑...
-};  
+const handleSubmit = async () => {
+  try {
+    const response = await axios.post('/login', {
+      username: username.value,
+      password: password.value
+    });
+    
+    if (response.status === 20000) {
+      // 登录成功处理
+      console.log('登录成功:', response.account);
+      // 这里可以处理返回的数据，例如存储token到本地存储或sessionStorage
+    } else {
+      // 错误处理
+      errorMessage.value = '登录失败，请检查您的凭证。';
+    }
+  } catch (error) {
+    if (error.response) {
+      errorMessage.value = error.response.data.message || 'An error occurred.';
+    } else if (error.request) {
+      errorMessage.value = 'No response from server.';
+    } else {
+      errorMessage.value = 'Error setting up the request.';
+    }
+    console.error('Login error:', error);
+  }
+};
+const handleRegister = async () => {
+  // 跳转到注册页面
+  console.log('注册');
+};
 </script>
 
 <style scoped>
