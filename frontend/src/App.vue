@@ -18,9 +18,7 @@
         <button class="login-button" @click="handleSubmit">登录</button>
         <button class="register-button" @click="handleRegister">注册</button>
       </div>
-
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-
+      
     </div>
   </div>
 </template>
@@ -47,8 +45,10 @@ const handleSubmit = async () => {
       // 这里可以处理返回的数据，例如存储token到本地存储或sessionStorage
     } else {
       // 错误处理
-      console.log('登录失败:', response.status);
-      errorMessage.value = '登录失败，请检查您的凭证。';
+      console.log('HTTP状态码:', response.data.status);
+      console.log('业务逻辑状态码:', response.data.status);
+      console.log('错误信息:', response.data.message)
+      errorMessage.value = '登录失败，请检查你的账户或密码';
     }
   } catch (error) {
     if (error.response) {
