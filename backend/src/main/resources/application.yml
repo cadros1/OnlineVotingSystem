@@ -6,4 +6,7 @@ spring:
         name: ${DB_NAME:root}
         password: ${DB_PASSWORD:800618}
         driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
-
+        hikari:
+            pool-name: HikariCP
+            maximum-pool-size: 5
+            connection-timeout: 1000
