@@ -14,7 +14,6 @@ public class LoginController{
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> postMethodName(@RequestBody User user) {
-        System.out.println(user.getAccount()+" "+user.getPassword());
         try{
             User entity = top.cadros.onlinevotingsystem.service.DataBase.queryUserByAccount(user);
             if(entity != null){
@@ -23,7 +22,6 @@ public class LoginController{
                 return ResponseEntity.status(401).body(new ApiResponse(40101, "账号或密码不正确", entity));
             }
         }catch(Exception e){
-            e.printStackTrace();
             return ResponseEntity.status(500).body(new ApiResponse(50000, e.getMessage(), null));
         }
     }
