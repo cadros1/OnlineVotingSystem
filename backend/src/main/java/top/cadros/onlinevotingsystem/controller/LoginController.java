@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class LoginController{
 
     @PostMapping("/login")
-    public ResponseEntity postMethodName(@RequestBody User user) {
+    public ResponseEntity<?> postMethodName(@RequestBody User user) {
         try{
             User entity = top.cadros.onlinevotingsystem.service.DataBase.queryUserByAccount(user);
             if(entity != null){
