@@ -5,8 +5,8 @@
       <h1>Login</h1>
 
       <div class="input-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required />
+        <label for="account">Account:</label>
+        <input type="text" id="account" v-model="account" required />
       </div>
 
       <div class="input-group">
@@ -29,14 +29,15 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-const username = ref('');
+const account = ref('');
 const password = ref('');
+
 const errorMessage = ref('');
 
 const handleSubmit = async () => {
   try {
     const response = await axios.post('/login', {
-      username: username.value,
+      account: account.value,
       password: password.value
     });
     
@@ -72,7 +73,7 @@ const handleRegister = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url(./assets/bg/bocchi.jpg); /* 替换为你的图片路径 */
+  background-image: url(./assets/bg/bg3.jpg); /* 替换为你的图片路径 */
   background-size: cover; 
   background-position: center;
   display: flex;
