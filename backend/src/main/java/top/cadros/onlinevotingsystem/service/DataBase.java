@@ -1,7 +1,6 @@
 package top.cadros.onlinevotingsystem.service;
 
-import java.util.List;
-
+import top.cadros.onlinevotingsystem.object.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +12,8 @@ public class DataBase {
         DataBase.jdbcTemplate = jdbcTemplate;
     }
 
-    // 示例方法：查询数据库test表中的所有id
-    public List<Integer> findAllUsers() {
-        return jdbcTemplate.query("SELECT * FROM test",
-                (rs, rowNum) -> rs.getInt("id"));
+    public static User queryUserByAccount(User user) throws Exception {
+        String sql = "SELECT * FROM user WHERE account = ? AND password = ?";
+        return jdbcTemplate.queryForObject(sql, User.class, user.getAccount(), user.getPassword());
     }
 }
