@@ -8,7 +8,7 @@
         <label for="account">账户:</label>
         <input type="text" id="account" v-model="account" required />
       </div>
- 
+
       <div class=" input-group">
         <label for="password">密码:</label>
         <input type="password" id="password" v-model="password" required />
@@ -46,7 +46,7 @@ const handleSubmit = async () => {
       // 跳转到主页面
       sessionStorage.setItem('token', response.data.authorization);
       // 将token存入sessionStorage
-      sessionStorage.setItem('username', response.data.username); 
+      sessionStorage.setItem('username', response.data.username);
       // 将用户名存入sessionStorage'
     } else {
       // 错误处理
@@ -57,17 +57,18 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     if (error.response) {
-    window.alert('登录失败，请检查连接:', error);
-  }
-};
-const goToRegister = () => {
-  // 跳转到注册页面
-  router.push('/register');
-};
-const goToMainPage = () => {
-  // 跳转到主页面
-  router.push('/');
-};
+      window.alert('登录失败，请检查连接:', error);
+    }
+  };
+  const goToRegister = () => {
+    // 跳转到注册页面
+    router.push('/register');
+  };
+  const goToMainPage = () => {
+    // 跳转到主页面
+    router.push('/');
+  };
+}
 </script>
 
 <style scoped>
