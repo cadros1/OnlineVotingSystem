@@ -1,8 +1,6 @@
 <template>
-  <div class="background">
-    <div class="sidebar"></div>
+  <div class="box">
     <div class="container">
-        <h1>Welcome to Online Voting System</h1>
     </div>
   </div>
 </template>
@@ -12,22 +10,11 @@ import Sidebar from './sidebar.vue';
 </script>
 
 <style scoped>
-.background {
+.box {
   position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-size: cover; 
-  background-position: center;
-  display: flex;    
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-
-  background-color: antiquewhite;
-
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100px;
 }
-
 </style>
