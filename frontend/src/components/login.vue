@@ -60,15 +60,15 @@ const handleSubmit = async () => {
       window.alert('登录失败，请检查连接:', error);
     }
   };
-  const goToRegister = () => {
-    // 跳转到注册页面
-    router.push('/register');
-  };
-  const goToMainPage = () => {
-    // 跳转到主页面
-    router.push('/');
-  };
 }
+const goToRegister = () => {
+  // 跳转到注册页面
+  router.push('/register');
+};
+const goToMainPage = () => {
+  // 跳转到主页面
+  router.push('/');
+};
 </script>
 
 <style scoped>
