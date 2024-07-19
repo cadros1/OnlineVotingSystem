@@ -40,7 +40,7 @@ const handleSubmit = async () => {
       password: password.value
     });
 
-    if (response.data.status === 20000) {
+    if (response.data.code === 20000) {
       // 登录成功处理
       goToMainPage();
       // 跳转到主页面
