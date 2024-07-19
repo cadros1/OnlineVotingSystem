@@ -16,7 +16,7 @@ public class LoginController{
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> postMethodName(@RequestBody User user) {
         try{
-            User entity = DataBase.queryUserByAccount(user);
+            User entity = DataBase.queryUserForLogin(user);
             if(entity != null){
                 String token = JwtService.generateToken(entity);
                 entity.setPassword(null);

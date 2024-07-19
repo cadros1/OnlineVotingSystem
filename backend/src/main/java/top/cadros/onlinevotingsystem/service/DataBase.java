@@ -1,6 +1,7 @@
 package top.cadros.onlinevotingsystem.service;
 
 import top.cadros.onlinevotingsystem.object.User;
+import top.cadros.onlinevotingsystem.object.Vote;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class DataBase {
         DataBase.jdbcTemplate = jdbcTemplate;
     }
 
-    public static User queryUserByAccount(User user) throws Exception {
+    public static User queryUserForLogin(User user) throws Exception {
         String sql = "SELECT * FROM users WHERE account = ? AND password = ?";
         RowMapper<User> rowMapper = (rs, rowNum) -> new User(rs.getString("account"), rs.getString("password"), rs.getString("username"));
         
@@ -26,6 +27,29 @@ public class DataBase {
             return null;
         } else {
             return users.get(0);
+        }
+    }
+
+    public static void insertUser(User user) throws Exception {
+        String sql = "INSERT INTO users(account, password, username) VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, user.getAccount(), user.getPassword(), user.getUsername());
+    }
+
+    public static List<Vote> queryVotesByAccount(User user) throws Exception {
+        String sql = "SELECT * FROM votes "+
+                     "JOIN users ON votes.user_account = users.account "+
+                     "WHERE users.account = ?";
+        RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
+                                                             rs.getString("title"),
+                                                             rs.getString("description"),
+                                                             new User(rs.getString("user_account"),
+                                                                      rs.getString("username")));
+        
+        List<Vote> votes = jdbcTemplate.query(sql, rowMapper, user.getAccount());
+        if (votes.isEmpty()) {
+            return null;
+        } else {
+            return votes;
         }
     }
 }
