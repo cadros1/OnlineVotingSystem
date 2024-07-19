@@ -5,7 +5,7 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <a>右侧内容面板</a>
+                <button class="login-button" @click="goToLogin">登录</button>
             </div>
 
             <router-view />
