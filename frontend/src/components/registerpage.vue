@@ -74,7 +74,7 @@ const handleRegister = async () => {
       password: password.value
     });
 
-    if (response.data.status === 20000) {
+    if (response.data.code === 20000) {
       // 注册成功处理
       goToLogin();
     } else {
