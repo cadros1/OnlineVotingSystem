@@ -5,7 +5,7 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome To managepage!</h1>
+                <h1>Welcome To AskPage!</h1>
             </div>
 
             <router-view />
@@ -14,15 +14,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
 import Sidebar from './sidebar.vue';
-
-const router = useRouter();
-
-const goToLogin = () => {
-    router.push('/login');
-};
-
 </script>
 
 <style scoped>

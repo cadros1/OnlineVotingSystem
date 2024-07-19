@@ -5,11 +5,7 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome To Userpage!</h1>
-                <p>You are logged in as {{ sessionStorage.getItem('account') }}.</p>
-                <p>You are logged in as {{ sessionStorage.getItem('username') }}.</p>
-                <p>You are logged in as {{ sessionStorage.getItem('token') }}.</p>
-                <button @click="goToLogin">重新登录</button>
+                <h1>Welcome To managepage!</h1>
             </div>
 
             <router-view />
@@ -18,15 +14,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
 import Sidebar from './sidebar.vue';
-
-const router = useRouter();
-
-const goToLogin = () => {
-    router.push('/login');
-};
-
 </script>
 
 <style scoped>

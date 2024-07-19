@@ -5,8 +5,13 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome To Answerpage!</h1>
+                <h1>Welcome To Userpage!</h1>
+                <p>Your account is {{ sessionStorage.getItem('account') }}.</p>
+                <p>Your username is {{ sessionStorage.getItem('username') }}.</p>
+                <p>Your token is {{ sessionStorage.getItem('token') }}.</p>
+                <button @click="goToLogin">重新登录</button>
             </div>
+
             <router-view />
         </div>
     </div>

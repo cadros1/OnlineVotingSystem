@@ -5,25 +5,15 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome!</h1>
-                <button class="login-button" @click="goToLogin">Welcome!</button>
+                <h1>Welcome To AnswerPage!</h1>
             </div>
-
             <router-view />
         </div>
     </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
 import Sidebar from './sidebar.vue';
-
-const router = useRouter();
-
-const goToLogin = () => {
-    router.push('/login');
-};
-
 </script>
 
 <style scoped>

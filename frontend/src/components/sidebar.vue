@@ -37,7 +37,7 @@ const goToMainPage = () => {
 const goToAskPage = () => {
   if (sessionStorage.getItem('token')) {
     // 已登录，跳转到提问页面
-    router.push('/askpage');
+    router.push('/ask');
   } else {
     // 未登录，跳转到登录页面
     window.alert('请先登录！');
@@ -47,24 +47,24 @@ const goToAskPage = () => {
 }
 const goToAnswerPage = () => {
   // 跳转到回答页面
-  router.push('/answerpage');
+  router.push('/answer');
 }
 const goToManagePage = () => {
   if (sessionStorage.getItem('token')) {
     // 已登录，// 跳转到管理页面
-    router.push('/managepage');
+    router.push('/manage');
   } else {
     // 未登录，跳转到登录页面
     window.alert('请先登录！');
     router.push('/login');
     return;
   }
-  router.push('/userpage');
+  router.push('/user');
 }
 const goToUserPage = () => {
   if (sessionStorage.getItem('token')) {
     // 已登录，跳转到用户页面
-    router.push('/userpage');
+    router.push('/user');
   } else {
     // 未登录，跳转到登录页面
     window.alert('请先登录！');
