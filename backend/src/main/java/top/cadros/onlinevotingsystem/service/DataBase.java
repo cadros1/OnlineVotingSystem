@@ -18,7 +18,7 @@ public class DataBase {
 
     public static User queryUserByAccount(User user) throws Exception {
         String sql = "SELECT * FROM users WHERE account = ? AND password = ?";
-        RowMapper<User> rowMapper = (rs, rowNum) -> new User(rs.getString("account"), rs.getString("password"));
+        RowMapper<User> rowMapper = (rs, rowNum) -> new User(rs.getString("account"), rs.getString("password"), rs.getString("username"));
         
         List<User> users = jdbcTemplate.query(sql, rowMapper, user.getAccount(), user.getPassword());
         

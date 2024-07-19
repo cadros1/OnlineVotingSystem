@@ -21,4 +21,16 @@ public class TestJwtService {
             assert false:e.getMessage();
         }
     }
+
+    @Test
+    public void testTokenExpired(){
+        try{
+            String token=JwtService.generateToken(new User("111","111"));
+            Thread.sleep(60*60*1000+1000);
+            JwtService.getClaimsFromToken(token);
+            assert false:"Token should be expired";
+        }catch(Exception e){
+            assert e.getMessage().equals("JWT expired"):e.getMessage();
+        }
+    }
 }
