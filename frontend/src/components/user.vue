@@ -9,9 +9,8 @@
                 <p>Your account is {{ sessionStorage.getItem('account') }}.</p>
                 <p>Your username is {{ sessionStorage.getItem('username') }}.</p>
                 <p>Your token is {{ sessionStorage.getItem('token') }}.</p>
-                <button @click="goToLogin">重新登录</button>
+                <button @click="Exit">退出登录</button>
             </div>
-
             <router-view />
         </div>
     </div>
@@ -23,7 +22,10 @@ import Sidebar from './sidebar.vue';
 
 const router = useRouter();
 
-const goToLogin = () => {
+const Exit = () => {
+    sessionStorage.removeItem('account');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('token');
     router.push('/login');
 };
 

@@ -51,7 +51,7 @@ const goToAnswerPage = () => {
 }
 const goToManagePage = () => {
   if (sessionStorage.getItem('token')) {
-    // 已登录，// 跳转到管理页面
+    // 已登录，跳转到管理页面
     router.push('/manage');
   } else {
     // 未登录，跳转到登录页面
@@ -59,7 +59,6 @@ const goToManagePage = () => {
     router.push('/login');
     return;
   }
-  router.push('/user');
 }
 const goToUserPage = () => {
   if (sessionStorage.getItem('token')) {
