@@ -76,6 +76,7 @@ const handleRegister = async () => {
 
     if (response.data.code === 20000) {
       // 注册成功处理
+      window.alert('注册成功！');
       goToLogin();
     } else {
       // 错误处理
