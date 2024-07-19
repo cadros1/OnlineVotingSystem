@@ -5,12 +5,12 @@
       <h1>Login</h1>
 
       <div class="input-group">
-        <label for="account">Account:</label>
+        <label for="account">账户:</label>
         <input type="text" id="account" v-model="account" required />
       </div>
-
-      <div class="input-group">
-        <label for="password">Password:</label>
+ 
+      <div class=" input-group">
+        <label for="password">密码:</label>
         <input type="password" id="password" v-model="password" required />
       </div>
 
@@ -31,7 +31,6 @@ import axios from 'axios';
 
 const account = ref('');
 const password = ref('');
-const errorMessage = ref('');
 const router = useRouter();
 
 const handleSubmit = async () => {
@@ -43,32 +42,30 @@ const handleSubmit = async () => {
 
     if (response.data.status === 20000) {
       // 登录成功处理
-      console.log('登录成功:', response.account);
-      // 这里可以处理返回的数据，例如存储token到本地存储或sessionStorage
+      goToMainPage();
+      // 跳转到主页面
+      sessionStorage.setItem('token', response.data.authorization);
+      // 将token存入sessionStorage
+      sessionStorage.setItem('username', response.data.username); 
+      // 将用户名存入sessionStorage'
     } else {
       // 错误处理
-      console.log('HTTP状态码:', response.data.status);
-      console.log('业务逻辑状态码:', response.data.status);
+      console.log('HTTP状态码:', response.status);
+      console.log('业务逻辑状态码:', response.data.code);
       console.log('错误信息:', response.data.message)
       window.alert('登录失败，请检查你的账户或密码');
     }
   } catch (error) {
     if (error.response) {
-      errorMessage.value = error.response.data.message || 'An error occurred.';
-    } else if (error.request) {
-      errorMessage.value = 'No response from server.';
-    } else {
-      errorMessage.value = 'Error setting up the request.';
-    }
-    window.alert('Login error:', error);
+    window.alert('登录失败，请检查连接:', error);
   }
 };
 const goToRegister = () => {
   // 跳转到注册页面
-  router.push('/login');
+  router.push('/register');
 };
 const goToMainPage = () => {
-  // 跳转到注册页面
+  // 跳转到主页面
   router.push('/');
 };
 </script>
@@ -138,9 +135,5 @@ const goToMainPage = () => {
   /* 在按钮之间分配空间，使它们水平均分 */
   width: 100%;
   /* 确保.button-container占据其父元素的完整宽度 */
-}
-
-.error-message {
-  color: red;
 }
 </style>
