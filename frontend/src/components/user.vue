@@ -6,9 +6,9 @@
             </div>
             <div class="right">
                 <h1>Welcome To Userpage!</h1>
-                <p>Your account is {{ sessionStorage.getItem('account') }}.</p>
-                <p>Your username is {{ sessionStorage.getItem('username') }}.</p>
-                <p>Your token is {{ sessionStorage.getItem('token') }}.</p>
+                <p>Your account is {{ getInformation('account') }}.</p>
+                <p>Your username is {{ getInformation('username') }}.</p>
+                <p>Your token is {{ getInformation('token') }}.</p>
                 <button @click="Exit">退出登录</button>
             </div>
             <router-view />
@@ -27,6 +27,10 @@ const Exit = () => {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     router.push('/login');
+};
+
+const getInformation = (key) => {
+    return sessionStorage.getItem(key);
 };
 
 </script>
