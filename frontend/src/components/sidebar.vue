@@ -3,22 +3,22 @@
     <div class="container">
       <div class="top">
         <div class="logo">
-          首页
+          <button class="button" @click="goToMainPage">首页</button>
         </div>
         <div class="question">
-          提问
+          <button class="button" @click="goToAskPage">新建</button>
         </div>
         <div class="answer">
-          作答
+          <button class="button" @click="goToAnswerPage">作答</button>
         </div>
       </div>
       <div class="middle"></div>
       <div class="bottom">
         <div class="manage">
-          管理
+          <button class="button" @click="goToManagePage">管理</button>
         </div>
         <div class="user">
-          我的
+          <button class="button" @click="goToUserPage">我的</button>
         </div>
       </div>
     </div>
@@ -26,6 +26,52 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+
+const goToMainPage = () => {
+  // 跳转到主页面
+  router.push('/');
+};
+const goToAskPage = () => {
+  if (sessionStorage.getItem('token')) {
+    // 已登录，跳转到提问页面
+    router.push('/askpage');
+  } else {
+    // 未登录，跳转到登录页面
+    window.alert('请先登录！');
+    router.push('/login');
+    return;
+  }
+}
+const goToAnswerPage = () => {
+  // 跳转到回答页面
+  router.push('/answerpage');
+}
+const goToManagePage = () => {
+  if (sessionStorage.getItem('token')) {
+    // 已登录，// 跳转到管理页面
+    router.push('/managepage');
+  } else {
+    // 未登录，跳转到登录页面
+    window.alert('请先登录！');
+    router.push('/login');
+    return;
+  }
+  router.push('/userpage');
+}
+const goToUserPage = () => {
+  if (sessionStorage.getItem('token')) {
+    // 已登录，跳转到用户页面
+    router.push('/userpage');
+  } else {
+    // 未登录，跳转到登录页面
+    window.alert('请先登录！');
+    router.push('/login');
+    return;
+  }
+}
 </script>
 
 <style scoped>
@@ -59,5 +105,28 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+
+/* 按钮样式 */
+.button {
+  padding: 0.5em 0.5em;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid;
+  font-size: 18px;
+  display: inline-block;
+  border-radius: 0.3em;
+  /* 隐藏按钮边框 */
+  border-color: transparent;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color);
+  color: #fff;
+}
+
+/* 按钮悬停状态 */
+.button:hover {
+  border-color: #fff;
 }
 </style>

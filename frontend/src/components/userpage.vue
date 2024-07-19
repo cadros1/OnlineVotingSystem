@@ -5,8 +5,11 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome!</h1>
-                <button class="login-button" @click="goToLogin">Welcome!</button>
+                <h1>Welcome To Userpage!</h1>
+                <p>You are logged in as {{ sessionStorage.getItem('account') }}.</p>
+                <p>You are logged in as {{ sessionStorage.getItem('username') }}.</p>
+                <p>You are logged in as {{ sessionStorage.getItem('token') }}.</p>
+                <button @click="goToLogin">重新登录</button>
             </div>
 
             <router-view />

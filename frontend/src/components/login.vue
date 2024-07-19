@@ -48,6 +48,8 @@ const handleSubmit = async () => {
       // 将token存入sessionStorage
       sessionStorage.setItem('username', response.data.username);
       // 将用户名存入sessionStorage'
+      sessionStorage.setItem('account', response.data.account);
+      // 将账户存入sessionStorage'
     } else {
       // 错误处理
       console.log('HTTP状态码:', response.status);

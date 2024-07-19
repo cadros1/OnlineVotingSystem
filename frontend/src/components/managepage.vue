@@ -5,8 +5,7 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome!</h1>
-                <button class="login-button" @click="goToLogin">Welcome!</button>
+                <h1>Welcome To managepage!</h1>
             </div>
 
             <router-view />
