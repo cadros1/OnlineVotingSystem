@@ -24,6 +24,7 @@ CREATE TABLE `votes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 INSERT INTO `votes` (`title`, `description`, `user_account`) VALUES ('投票1', '这是投票1的描述', 'admin');
+INSERT INTO `votes` (`title`, `user_account`) VALUES ('投票2', '111');
 
 CREATE TABLE `questions` (
   `question_id` INT NOT NULL AUTO_INCREMENT,
