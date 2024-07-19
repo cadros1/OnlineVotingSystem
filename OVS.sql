@@ -57,6 +57,18 @@ INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '选
 INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '选项3', FALSE);
 INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '其它', TRUE);
 
+CREATE TABLE `answeredUsers` (
+  `vote_id` INT NOT NULL,
+  `user_account` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`vote_id`, `user_account`),
+  FOREIGN KEY (`vote_id`) REFERENCES `votes` (`vote_id`),
+  FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+
+INSERT INTO `answeredUsers` (`vote_id`, `user_account`) VALUES (1, '111');
+INSERT INTO `answeredUsers` (`vote_id`, `user_account`) VALUES (1, '222');
+INSERT INTO `answeredUsers` (`vote_id`, `user_account`) VALUES (1, '333');
+
 CREATE TABLE `answers` (
   `answer_id` INT NOT NULL AUTO_INCREMENT,
   `question_id` INT NOT NULL,
