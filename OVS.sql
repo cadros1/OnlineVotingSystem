@@ -31,15 +31,14 @@ CREATE TABLE `questions` (
   `question_text` VARCHAR(255) NOT NULL,
   `question_type` TINYINT NOT NULL,
   `required` BOOLEAN NOT NULL DEFAULT TRUE,
-  `sequence` INT,
   PRIMARY KEY (`question_id`),
   FOREIGN KEY (`vote_id`) REFERENCES `votes` (`vote_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`, `sequence`) VALUES (1, '单选题1', 0, TRUE, 1);
-INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`, `sequence`) VALUES (1, '多选题2', 1, TRUE, 2);
-INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`, `sequence`) VALUES (1, '填空题3', 2, TRUE, 3);
-INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`, `sequence`) VALUES (1, '简述题4', 3, FALSE, 4);
+INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`) VALUES (1, '单选题1', 0, TRUE);
+INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`) VALUES (1, '多选题2', 1, TRUE);
+INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`) VALUES (1, '填空题3', 2, TRUE);
+INSERT INTO `questions` (`vote_id`, `question_text`, `question_type`, `required`) VALUES (1, '简述题4', 3, FALSE);
 
 CREATE TABLE `options` (
   `option_id` INT NOT NULL AUTO_INCREMENT,
@@ -82,15 +81,15 @@ INSERT INTO `answers` (`question_id`, `user_account`, `custom_answer`) VALUES (4
 
 CREATE TABLE `question_dependencies` (
   `dependency_id` INT NOT NULL AUTO_INCREMENT,
+  `question_id` INT NOT NULL,
   `parent_question_id` INT NOT NULL,
-  `child_question_id` INT NOT NULL,
   `trigger_option_id` INT,
   PRIMARY KEY (`dependency_id`),
   FOREIGN KEY (`parent_question_id`) REFERENCES `questions` (`question_id`),
-  FOREIGN KEY (`child_question_id`) REFERENCES `questions` (`question_id`),
+  FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
   FOREIGN KEY (`trigger_option_id`) REFERENCES `options` (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-INSERT INTO `question_dependencies` (`parent_question_id`, `child_question_id`) VALUES (1, 2);
-INSERT INTO `question_dependencies` (`parent_question_id`, `child_question_id`) VALUES (2, 3);
-INSERT INTO `question_dependencies` (`parent_question_id`, `child_question_id`, `trigger_option_id`) VALUES (1, 4, 3);
+INSERT INTO `question_dependencies` (`question_id`, `parent_question_id`) VALUES (2, 1);
+INSERT INTO `question_dependencies` (`question_id`, `parent_question_id`) VALUES (3, 2);
+INSERT INTO `question_dependencies` (`question_id`, `parent_question_id`, `trigger_option_id`) VALUES (1, 4, 3);
