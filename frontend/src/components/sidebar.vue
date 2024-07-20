@@ -9,7 +9,7 @@
           <button class="button" @click="goToAskPage">新建</button>
         </div>
         <div class="answer">
-          <button class="button" @click="goToAnswerPage">作答</button>
+          <button class="button" @click="goToAnswerPage">问卷</button>
         </div>
       </div>
       <div class="middle"></div>
