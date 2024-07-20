@@ -4,7 +4,7 @@ spring:
   datasource:
     url: ${DB_URL:jdbc:mysql://localhost:3306/OVS}
     username: ${DB_NAME:root}
-    password: ${DB_PASSWORD:123456}
+    password: ${DB_PASSWORD:800618}
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
     hikari:
       pool-name: HikariCP
