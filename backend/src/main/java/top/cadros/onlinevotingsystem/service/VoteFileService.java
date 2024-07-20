@@ -27,8 +27,11 @@ public class VoteFileService {
     }
 
     public static Vote readVoteFromFile(int vote_id) throws Exception{
-        String filePath=".\\src\\main\\resources\\voteFiles\\"+vote_id+".dat";
-        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(filePath))){
+        File file=new File(".\\src\\main\\resources\\voteFiles\\"+vote_id+".dat");
+        if(!file.exists()){
+            throw new Exception("文件不存在");
+        }
+        try(ObjectInputStream ois=new ObjectInputStream(new FileInputStream(file))){
             return (Vote)ois.readObject();
         }
     }

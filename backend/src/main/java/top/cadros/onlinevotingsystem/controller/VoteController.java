@@ -1,9 +1,11 @@
 package top.cadros.onlinevotingsystem.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,6 +24,16 @@ public class VoteController {
             vote.setQuestionTree(new QuestionTree(entity));
             VoteFileService.outputVoteToFile(vote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷保存成功", "OK", null));
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", "OK", null));
+        }
+    }
+
+    @GetMapping("/vote/{vote_id}")
+    public ResponseEntity<ApiResponse> sendQuestions(@RequestBody int vote_id){
+        try{
+            Vote vote = VoteFileService.readVoteFromFile(vote_id);
+            return ResponseEntity.ok(new ApiResponse(20000, "问卷读取成功", "OK", vote.getQuestionTree().generateQuestionMap(vote.getQuestionTree().getRootQuestionNode(), new HashMap<Integer,Question>())));
         }catch(Exception e){
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", "OK", null));
         }
