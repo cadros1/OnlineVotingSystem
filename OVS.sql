@@ -26,6 +26,7 @@ CREATE TABLE `votes` (
 INSERT INTO `votes` (`title`, `description`, `user_account`) VALUES ('投票1', '这是投票1的描述', 'admin');
 INSERT INTO `votes` (`title`, `user_account`) VALUES ('投票2', '111');
 
+```
 CREATE TABLE `questions` (
   `question_id` INT NOT NULL AUTO_INCREMENT,
   `vote_id` INT NOT NULL,
@@ -106,3 +107,4 @@ CREATE TABLE `question_dependencies` (
 INSERT INTO `question_dependencies` (`question_id`, `parent_question_id`) VALUES (2, 1);
 INSERT INTO `question_dependencies` (`question_id`, `parent_question_id`) VALUES (3, 2);
 INSERT INTO `question_dependencies` (`question_id`, `parent_question_id`, `trigger_option_id`) VALUES (1, 4, 3);
+```
