@@ -6,6 +6,7 @@ import ask from '../components/ask.vue';
 import answer from '../components/answer.vue';
 import manage from '../components/manage.vue';
 import user from '../components/user.vue';
+import edit from '../components/edit.vue';
 
 const routes = [
   { path: '/', component: main },
@@ -14,7 +15,8 @@ const routes = [
   { path: '/ask', component: ask },
   { path: '/answer' , component: answer },
   { path: '/manage', component: manage },
-  { path: '/user', component: user }
+  { path: '/user', component: user },
+  { path: '/ask/edit', component: edit },
 ];
 
 const router = createRouter({
