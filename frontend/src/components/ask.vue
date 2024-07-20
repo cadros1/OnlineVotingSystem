@@ -48,6 +48,10 @@ function autoResizeTextarea() {
 }
 </script>
 
+function startSurvey() {
+router.push('/ask/edit');
+}
+
 <style scoped>
 .background {
     position: fixed;

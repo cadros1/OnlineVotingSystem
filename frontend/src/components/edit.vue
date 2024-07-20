@@ -5,7 +5,15 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
+                <div class="buttons">
+                    <div class="actions">
+                        <button class="back" @click="$router.push('/ask')">Back</button>
+                        <button class="new" @click="addItem">New</button>
+                        <button class="save" @click="saveItems">Save</button>
+                    </div>
+                </div>
                 <div class="content">
+                    <!-- 新建和保存按钮 -->
                     <table class="table">
                         <thead>
                             <tr>
@@ -27,12 +35,6 @@
                             </tr>
                         </tbody>
                     </table>
-
-                    <!-- 新建和保存按钮 -->
-                    <div class="actions">
-                        <button class="new" @click="addItem">New</button>
-                        <button class="save" @click="saveItems">Save</button>
-                    </div>
                 </div>
             </div>
             <router-view />
@@ -116,27 +118,28 @@ function saveItems() {
     flex-grow: 1;
     height: 100%;
     border-radius: 10px;
+    display: flex;
+    flex-direction: row;
 }
 
 .content {
-    height: 80%;
+    height: 90%;
     width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
 .table {
     width: 100%;
-    max-height: 70%;
     border-collapse: collapse;
-    overflow-y: auto;
+
 }
 
 tbody {
     width: 100%;
-    max-height: 70%;
     border-collapse: collapse;
 }
 
@@ -156,6 +159,8 @@ th {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 button {
@@ -174,15 +179,21 @@ button.edit {
 
 button.delete {
     background-color: #dc3545;
-    margin-right: 10px;
+}
+
+button.back {
+    background-color: #6c757d;
+    margin-bottom: 10px;
 }
 
 button.new {
     background-color: #28a745;
+    margin-bottom: 10px;
 }
 
 button.save {
     background-color: #17a2b8;
+    margin-bottom: 10px;
 }
 
 button:hover {
