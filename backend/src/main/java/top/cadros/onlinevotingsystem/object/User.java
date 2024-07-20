@@ -1,6 +1,6 @@
 package top.cadros.onlinevotingsystem.object;
 
-public class User {
+public class User implements java.io.Serializable {
     private String account;
     private String password;
     private String username;

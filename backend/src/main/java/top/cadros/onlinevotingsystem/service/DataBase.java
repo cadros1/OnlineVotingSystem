@@ -52,4 +52,22 @@ public class DataBase {
             return votes;
         }
     }
+
+    public static Vote queryVoteByVoteId(int vote_id) throws Exception {
+        String sql = "SELECT * FROM votes "+
+                     "JOIN users ON votes.user_account=users.account "+
+                     "WHERE vote_id = ?";
+        RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
+                                                             rs.getString("title"),
+                                                             rs.getString("description"),
+                                                             new User(rs.getString("user_account"),
+                                                                      rs.getString("username")));
+        
+        List<Vote> votes = jdbcTemplate.query(sql, rowMapper, vote_id);
+        if (votes.size()==0) {
+            throw new Exception("此问卷不存在");
+        } else {
+            return votes.get(0);
+        }
+    }
 }
