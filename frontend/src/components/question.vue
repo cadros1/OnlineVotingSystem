@@ -61,7 +61,7 @@ onMounted(() => {
 
 function editItem(item) {
     // 使用 Vue Router 导航到编辑页面
-    router.push({ name: 'EditQuestion', params: { questionId: item.id } });
+    router.push({ path: 'EditQuestion', params: { questionId: item.id } });
 }
 
 function deleteItem(item) {

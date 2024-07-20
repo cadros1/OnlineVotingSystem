@@ -8,11 +8,12 @@
                 <div class="questionnaire">
                     <div class="input-group">
                         <label for="title">问卷标题：</label>
-                        <input type="text" id="title" v-model="title" required />
+                        <input type="text" id="title" v-model="title" required></input>
                     </div>
                     <div class="input-group">
                         <label for="description">问卷说明：</label>
-                        <textarea type="textarea" ref="textareaRef" id="description" v-model="description" required />
+                        <textarea id="description" v-model="description" required ref="textareaRef"></textarea>
+
                     </div>
                     <button @click="startSurvey">开始创建</button>
                 </div>
@@ -26,9 +27,14 @@
 import Sidebar from './sidebar.vue';
 import { onMounted, watch } from 'vue';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 
-
+const router = useRouter();
 const textareaRef = ref(null);
+
+
+const title = ref("");
 const description = ref('');
 
 onMounted(() => {
@@ -39,6 +45,10 @@ watch(description, () => {
     autoResizeTextarea();
 });
 
+function startSurvey() {
+    router.push('/ask/edit');
+}
+
 function autoResizeTextarea() {
     if (textareaRef.value) {
         const textarea = textareaRef.value;
@@ -46,11 +56,15 @@ function autoResizeTextarea() {
         textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // 设定最大高度为200px
     }
 }
-</script>
 
-function startSurvey() {
-router.push('/ask/edit');
-}
+onBeforeRouteLeave((to, from, next) => {
+    if (to.path === '/ask/edit') {
+        to.meta.formData = { title: title.value, description: description.value };
+    }
+    next();
+});
+
+</script>
 
 <style scoped>
 .background {
