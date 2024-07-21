@@ -94,7 +94,6 @@ import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { s } from 'vite/dist/node/types.d-aGj9QkWt';
 
 const router = useRouter();
 
