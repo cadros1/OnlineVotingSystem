@@ -4,6 +4,7 @@ public class Option implements java.io.Serializable{
     private int option_id;
     private String option_text;
     private boolean is_other;
+    private int nextQuestionId;
 
     public Option() {
     }
@@ -36,5 +37,13 @@ public class Option implements java.io.Serializable{
 
     public void setIs_other(boolean is_other) {
         this.is_other = is_other;
+    }
+
+    public int getNextQuestionId() {
+        return nextQuestionId;
+    }
+
+    public void setNextQuestionId(int nextQuestionId) {
+        this.nextQuestionId = nextQuestionId;
     }
 }
