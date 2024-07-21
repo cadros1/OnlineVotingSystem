@@ -13,7 +13,6 @@
                     <div class="input-group">
                         <label for="description">问卷说明：</label>
                         <textarea id="description" v-model="description" required ref="textareaRef"></textarea>
-
                     </div>
                     <button @click="startSurvey">开始创建</button>
                 </div>
@@ -25,14 +24,12 @@
 
 <script setup>
 import Sidebar from './sidebar.vue';
-import { onMounted, watch } from 'vue';
-import { ref } from 'vue';
+import { onMounted, watch, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { onBeforeRouteLeave } from 'vue-router';
 
 const router = useRouter();
 const textareaRef = ref(null);
-
 
 const title = ref("");
 const description = ref('');
@@ -46,7 +43,13 @@ watch(description, () => {
 });
 
 function startSurvey() {
-    router.push('/ask/edit');
+    router.push({
+        path: '/ask/edit',
+        query: {
+            title: title.value,
+            description: description.value
+        }
+    });
 }
 
 function autoResizeTextarea() {
@@ -63,7 +66,6 @@ onBeforeRouteLeave((to, from, next) => {
     }
     next();
 });
-
 </script>
 
 <style scoped>
@@ -75,9 +77,7 @@ onBeforeRouteLeave((to, from, next) => {
     bottom: 0;
     background-size: cover;
     background-position: center;
-
     background: linear-gradient(220.55deg, #FF9D7E 0%, #4D6AD0 100%);
-
     padding-left: 10px;
     padding-right: 8px;
     padding-top: 8px;
@@ -124,14 +124,12 @@ onBeforeRouteLeave((to, from, next) => {
 
 .input-group label {
     width: 80px;
-    /* 或者根据你的设计要求设置宽度 */
 }
 
 .input-group input,
 .input-group textarea {
     margin-left: 10px;
     width: 400px;
-    /* 或者设置为具体数值，如300px */
 }
 
 .input-group textarea {
@@ -154,3 +152,4 @@ button:hover {
     background-color: #0056b3;
 }
 </style>
+    

@@ -8,24 +8,27 @@
                 <div class="buttons">
                     <div class="actions">
                         <button class="back" @click="$router.push('/ask')">Back</button>
-                        <button class="new" @click="addItem">New</button>
+                        <button class="new" @click="showModal = true">New</button>
                         <button class="save" @click="saveItems">Save</button>
                     </div>
                 </div>
                 <div class="content">
-                    <!-- 新建和保存按钮 -->
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>题号</th>
+                                <th>类型</th>
                                 <th>问题</th>
+                                <th>必答</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in items" :key="item.id">
                                 <td>{{ item.id }}</td>
+                                <td>{{ item.type }}</td>
                                 <td>{{ item.name }}</td>
+                                <td>{{ item.isRequired ? '是' : '否' }}</td>
                                 <td>
                                     <button class="edit" @click="editItem(item)">Edit</button>
                                     <button class="delete" @click="deleteItem(item)">Delete</button>
@@ -38,6 +41,52 @@
             <router-view />
         </div>
     </div>
+
+    <!-- 模态框 -->
+    <div v-if="showModal" class="modal-overlay">
+        <div class="modal">
+            <h2>{{ editingItem ? '编辑题目' : '选择题目类型' }}</h2>
+            <div v-if="!editingItem" class="radio-group">
+                <label>
+                    <input type="radio" v-model="selectedType" value="单选"> 单选
+                </label>
+                <label>
+                    <input type="radio" v-model="selectedType" value="多选"> 多选
+                </label>
+                <label>
+                    <input type="radio" v-model="selectedType" value="判断"> 判断
+                </label>
+                <label>
+                    <input type="radio" v-model="selectedType" value="填空"> 填空
+                </label>
+                <button class="edit" @click="addItemWithType">确定</button>
+            </div>
+            <div v-else>
+                <label>
+                    题目类型: {{ editingItem.type }}
+                    <div></div>
+                </label>
+                <label>
+                    题目名称:
+                    <textarea v-model="editingItem.name" rows="4" style="width: 100%;"></textarea>
+                </label>
+                <div v-if="editingItem.type === '单选' || editingItem.type === '多选'">
+                    <div v-for="(option, index) in editingItem.options" :key="index">
+                        <input type="text" v-model="editingItem.options[index]">
+                        <input type="number" :value="editingItem.jumpLogic[index]"
+                            @input="validateJumpLogic($event, index)" min="0" max="99" placeholder="跳题逻辑">
+                        <button class="delete" @click="removeOption(index)">删除</button>
+
+                    </div>
+                    <button class="new" @click="addOption">添加选项</button>
+                    <button class="edit" @click="saveItem">确定</button>
+                </div>
+                <div v-if="editingItem.type === '判断' || editingItem.type === '填空'">
+                    <button class="edit" @click="saveItem">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
@@ -48,20 +97,23 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const items = ref([]);
+const showModal = ref(false);
+const selectedType = ref('');
+const editingItem = ref(null);
 
 // 模拟数据加载
 onMounted(() => {
     // 这里可以调用API获取数据
     items.value = [
-        { id: 1, name: 'Item 1', time: '2024-07-20' },
-        { id: 2, name: 'Item 2', time: '2024-07-19' },
+        { id: 1, type: '单选', name: 'Item 1', options: ['Option 1', 'Option 2'], jumpLogic: ['', ''] },
+        { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: ['', ''] },
         // 更多数据...
     ];
 });
 
 function editItem(item) {
-    // 使用 Vue Router 导航到编辑页面
-    router.push({ name: 'EditQuestion', params: { questionId: item.id } });
+    editingItem.value = { ...item, options: [...item.options], jumpLogic: [...item.jumpLogic] };
+    showModal.value = true;
 }
 
 function deleteItem(item) {
@@ -69,18 +121,65 @@ function deleteItem(item) {
     const index = items.value.findIndex(i => i.id === item.id);
     if (index !== -1) {
         items.value.splice(index, 1);
+        // 更新后续题目的题号
+        for (let i = index; i < items.value.length; i++) {
+            items.value[i].id -= 1;
+        }
     }
 }
 
-function addItem() {
-    // 新增功能实现
-    items.value.push({ id: Date.now(), name: '' });
+
+function addItemWithType() {
+    if (selectedType.value) {
+        const maxId = Math.max(...items.value.map(item => item.id), 0);
+        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [] });
+        showModal.value = false;
+    }
+}
+
+function validateJumpLogic(event, index) {
+    let value = event.target.value;
+    if (value < 0) {
+        value = 0;
+    } else if (value > 99) {
+        value = 99;
+    }
+    editingItem.value.jumpLogic[index] = value;
+}
+
+function saveItem() {
+    if (editingItem.value) {
+        const index = items.value.findIndex(i => i.id === editingItem.value.id);
+        if (index !== -1) {
+            items.value[index] = { ...editingItem.value };
+        }
+    } else if (selectedType.value) {
+        const maxId = Math.max(...items.value.map(item => item.id), 0);
+        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [] });
+    }
+    showModal.value = false;
+    editingItem.value = null;
+    selectedType.value = '';
+}
+
+function addOption() {
+    if (editingItem.value) {
+        editingItem.value.options.push('');
+        editingItem.value.jumpLogic.push('');
+    }
+}
+
+function removeOption(index) {
+    if (editingItem.value) {
+        editingItem.value.options.splice(index, 1);
+        editingItem.value.jumpLogic.splice(index, 1);
+    }
 }
 
 function saveItems() {
     // 保存功能实现
     console.log('Saving items:', items.value);
-}   
+}
 </script>
 
 <style scoped>
@@ -92,9 +191,7 @@ function saveItems() {
     bottom: 0;
     background-size: cover;
     background-position: center;
-
     background: linear-gradient(220.55deg, #FF9D7E 0%, #4D6AD0 100%);
-
     padding-left: 10px;
     padding-right: 8px;
     padding-top: 8px;
@@ -136,7 +233,6 @@ function saveItems() {
 .table {
     width: 100%;
     border-collapse: collapse;
-
 }
 
 tbody {
@@ -171,11 +267,11 @@ button {
     border: none;
     border-radius: 4px;
     color: #fff;
+    margin: 10px;
 }
 
 button.edit {
     background-color: #007bff;
-    margin-right: 10px;
 }
 
 button.delete {
@@ -184,23 +280,47 @@ button.delete {
 
 button.back {
     background-color: #6c757d;
-    margin-bottom: 10px;
-    margin-left: 10px;
 }
 
 button.new {
     background-color: #28a745;
-    margin-bottom: 10px;
-    margin-left: 10px;
 }
 
 button.save {
     background-color: #17a2b8;
-    margin-bottom: 10px;
-    margin-left: 10px;
 }
 
 button:hover {
     opacity: 0.8;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.radio-group label {
+    margin-bottom: 10px;
 }
 </style>
