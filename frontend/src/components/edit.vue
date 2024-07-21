@@ -93,6 +93,8 @@
 import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { s } from 'vite/dist/node/types.d-aGj9QkWt';
 
 const router = useRouter();
 
@@ -176,10 +178,48 @@ function removeOption(index) {
     }
 }
 
-function saveItems() {
-    // 保存功能实现
-    console.log('Saving items:', items.value);
-}
+
+const saveItems = async () => {
+    try {
+        const questionMap = new Map();
+        for (let i = 0; i < items.value.length; i++) {
+            const item = items.value[i];
+            const question = {
+                question_id: item.id,
+                question_type: item.type,
+                question_text: item.name,
+                required: item.isRequired,
+                options: item.options,
+                nextQuestionId: item.jumpLogic
+            };
+            questionMap.set(item.id, question);
+        }
+        const response = await axios.post('http://localhost:5173/ask/edit', {
+            title: router.currentRoute.value.params.title,
+            description: router.currentRoute.value.params.description,
+            userid: sessionStorage.getItem('userId'),
+            rootQuestionId: "1",
+            questions: questionMap
+        });
+
+        if (response.data.code === 20000) {
+            // 保存成功处理
+            console.log('问卷标题和说明保存成功');
+            window.alert('问卷标题和说明保存成功');
+        } else {
+            // 错误处理
+            console.log('HTTP状态码:', response.status);
+            console.log('业务逻辑状态码:', response.data.code);
+            console.log('错误信息:', response.data.message);
+            window.alert('保存失败，请检查输入信息');
+        }
+    } catch (error) {
+        if (error.response) {
+            window.alert('保存失败，请检查连接:', error);
+        }
+    }
+};
+
 </script>
 
 <style scoped>
