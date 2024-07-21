@@ -194,13 +194,21 @@ const saveItems = async () => {
             };
             questionMap.set(item.id, question);
         }
+        //头部带token
+
+        const token = sessionStorage.getItem('token');
+
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+
         const response = await axios.post('http://localhost:5173/ask/edit', {
             title: router.currentRoute.value.params.title,
             description: router.currentRoute.value.params.description,
             userid: sessionStorage.getItem('userId'),
             rootQuestionId: "1",
             questions: questionMap
-        });
+        },{ headers });
 
         if (response.data.code === 20000) {
             // 保存成功处理
