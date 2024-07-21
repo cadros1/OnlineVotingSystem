@@ -1,21 +1,25 @@
 package top.cadros.onlinevotingsystem.object;
 
+import java.util.Map;
+
 public class Vote implements java.io.Serializable {
     private int vote_id;
     private String title;
     private String description;
     private User user;
-    private QuestionTree questionTree;
+    private int rootQuestionId;
+    private Map<Integer,Question> questionMap;
 
     public Vote() {
     }
 
-    public Vote(int vote_id, String title, String description, User user) {
+    public Vote(int vote_id, String title, String description, User user, int rootQuestionId, Map<Integer, Question> questionMap) {
         this.vote_id = vote_id;
         this.title = title;
         this.description = description;
         this.user = user;
-        this.questionTree =null;
+        this.rootQuestionId = rootQuestionId;
+        this.questionMap = questionMap;
     }
 
     public Vote(String title, String description, User user) {
@@ -24,16 +28,12 @@ public class Vote implements java.io.Serializable {
         this.user = user;
     }
 
+    public Vote(int vote_id,User user){
+        this.vote_id = vote_id;
+        this.user = user;
+    }
 
     // Getters and Setters
-    public void setQuestionTree(QuestionTree questionTree) {
-        this.questionTree = questionTree;
-    }
-
-    public QuestionTree getQuestionTree() {
-        return questionTree;
-    }
-
     public int getVote_id() {
         return vote_id;
     }
@@ -72,5 +72,13 @@ public class Vote implements java.io.Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Map<Integer, Question> getQuestionMap() {
+        return questionMap;
+    }
+
+    public int getRootQuestionId() {
+        return rootQuestionId;
     }
 }

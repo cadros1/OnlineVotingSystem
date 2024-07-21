@@ -19,6 +19,7 @@ CREATE TABLE `votes` (
   `title` VARCHAR(50) NOT NULL,
   `description` VARCHAR(255) DEFAULT "该问卷暂时没有描述",
   `user_account` VARCHAR(20) NOT NULL,
+  `root_question_id` INT,
   PRIMARY KEY (`vote_id`),
   FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

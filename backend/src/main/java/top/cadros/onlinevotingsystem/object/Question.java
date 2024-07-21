@@ -1,33 +1,27 @@
 package top.cadros.onlinevotingsystem.object;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Question implements java.io.Serializable{
     private int question_id;
     private String question_text;
     private int question_type;
     private boolean required;
-    private Map<Integer,Integer> childrenDependencies;
+    private int nextQuestionId;
     private ArrayList<Option> options;
 
     public Question() {
     }
 
-    public Question(int question_id,  String question_text, int question_type, boolean required, Map<Integer,Integer> childrenDependencies) {
+    public Question(int question_id,  String question_text, int question_type, boolean required) {
         this.question_id = question_id;
         this.question_text = question_text;
         this.question_type = question_type;
         this.required = required;
-        this.childrenDependencies = childrenDependencies;
     }
 
     public void addOption(Option option) {
         this.options.add(option);
-    }
-
-    public void addChildDependency(int childId, int dependentOptionId) {
-        this.childrenDependencies.put(childId, dependentOptionId);
     }
 
 
@@ -63,15 +57,6 @@ public class Question implements java.io.Serializable{
     public void setRequired(boolean required) {
         this.required = required;
     }
-
-    public Map<Integer,Integer> getchildrenDependencies() {
-        return childrenDependencies;
-    }
-
-    public void setChildrenId(Map<Integer,Integer> childrenDependencies) {
-        this.childrenDependencies = childrenDependencies;
-    }
-
     public ArrayList<Option> getOptions() {
         return options;
     }
@@ -80,5 +65,11 @@ public class Question implements java.io.Serializable{
         this.options = options;
     }
 
-    
+    public int getNextQuestionId() {
+        return nextQuestionId;
+    }
+
+    public void setNextQuestionId(int nextQuestionId) {
+        this.nextQuestionId = nextQuestionId;
+    }
 }
