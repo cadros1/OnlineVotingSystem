@@ -47,7 +47,7 @@ const goToAskPage = () => {
 }
 const goToAnswerPage = () => {
   // 跳转到回答页面
-  router.push('/answer');
+  router.push('/search');
 }
 const goToManagePage = () => {
   if (sessionStorage.getItem('token')) {

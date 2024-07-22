@@ -7,7 +7,7 @@
             <div class="right">
                 <div class="questionnaire">
                     <div class="input-group">
-                        <label for="voteID">输入问卷id:</label>
+                        <label for="voteID">问卷id:</label>
                         <input type="text" id="voteID" v-model="voteID" required></input>
                     </div>
                     <button @click="SearchVote">查找问卷</button>
@@ -26,7 +26,7 @@
                 <p>问卷标题: {{ title }}</p>
                 <p>问卷描述: {{ description }}</p>
                 <button @click="showModal = false">关闭</button>
-                <button class="edit" @click="startAnswer(voteID)">开始作答</button>
+                <button class="edit" @click="startAnswer()">开始作答</button>
             </div>
             <div v-else>
                 <h2>查找失败！</h2>
@@ -39,39 +39,46 @@
 
 <script setup>
 import Sidebar from './sidebar.vue';
-import { onMounted, watch, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { onBeforeRouteLeave } from 'vue-router';
-import { axios } from 'axios';
+import axios from 'axios';
 
 const router = useRouter();
-const textareaRef = ref(null);
 const SearchVoteSuccess = ref(null);
 const showModal = ref(false);
 const voteID = ref("");
 const title = ref("");
 const description = ref('');
+const error = ref("");
 
 
 function SearchVote() {
-    axios.get('/api/vote/' + voteID.value)
-        .then(res => {
-            if (res.data.success) {
-                showModal.value = true;
-                SearchVoteSuccess.value = true;
-                title.value = res.data.data.title;
-                description.value = res.data.data.description;
-            } else {
-                showModal.value = true;
+    try {
+        axios.get('/vote/' + voteID.value)
+            .then(res => {
+                if (res.data.code === 20000) {
+                    showModal.value = true;
+                    SearchVoteSuccess.value = true;
+                    title.value = res.data.data.title;
+                    description.value = res.data.data.description;
+                } else {
+                    showModal.value = true;
+                    SearchVoteSuccess.value = false;
+                }
+            })
+            .catch(err => {
+                console.log(err);
                 SearchVoteSuccess.value = false;
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+            });
+    } catch (e) {
+        SearchVoteSuccess.value = false;
+        alert("请输入正确的问卷id！");
+        return;
+    }
+    showModal.value = true;
 }
 
-function startAnswer(voteID) {
+function startAnswer() {
     router.push({
         //路径为/vote？voteid=1&questionid=1
         path: '/vote',
@@ -82,14 +89,6 @@ function startAnswer(voteID) {
     });
 }
 
-
-
-onBeforeRouteLeave((to, from, next) => {
-    if (to.path === '/ask/edit') {
-        to.meta.formData = { title: title.value, description: description.value };
-    }
-    next();
-});
 </script>
 
 <style scoped>
@@ -150,15 +149,9 @@ onBeforeRouteLeave((to, from, next) => {
     width: 80px;
 }
 
-.input-group input,
-.input-group textarea {
+.input-group input {
     margin-left: 10px;
     width: 400px;
-}
-
-.input-group textarea {
-    overflow-y: auto;
-    resize: none;
 }
 
 button {
@@ -174,5 +167,24 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
 }
 </style>

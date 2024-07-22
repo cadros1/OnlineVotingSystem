@@ -8,6 +8,7 @@ import manage from '../components/manage.vue';
 import user from '../components/user.vue';
 import edit from '../components/edit.vue';
 import question from '../components/question.vue';
+import search from '../components/search.vue';
 
 const routes = [
   { path: '/', component: main },
@@ -18,7 +19,8 @@ const routes = [
   { path: '/manage', component: manage },
   { path: '/user', component: user },
   { path: '/ask/edit', component: edit },
-  { path: '/ask/edit/:questionId', name: '  ', component: question, props: true }
+  { path: '/ask/edit/:questionId', name: '  ', component: question, props: true },
+  { path: '/search', component: search }
 ];
 
 const router = createRouter({
