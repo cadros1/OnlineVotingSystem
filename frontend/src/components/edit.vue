@@ -92,15 +92,18 @@
 <script setup>
 import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
 
 const items = ref([]);
 const showModal = ref(false);
 const selectedType = ref('');
 const editingItem = ref(null);
+const title = ref('');
+const description = ref('');
 
 // 模拟数据加载
 onMounted(() => {
@@ -110,6 +113,8 @@ onMounted(() => {
         { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: ['', ''] },
         // 更多数据...
     ];
+    title.value = route.query.title||'0000';
+    description.value = route.query.description||'0000';
 });
 
 function editItem(item) {
@@ -200,14 +205,25 @@ const saveItems = async () => {
         const headers = {
             'Authorization': `Bearer ${token}`
         };
+        console.log('headers:', headers);
+        console.log('title:', title.value);
+        console.log('description:', description.value);
+        console.log('account:', sessionStorage.getItem('account'));
+        console.log('rootQuestionId:', "1");
+        console.log('questions:', questionMap);
+        console.log('questionMap:', JSON.stringify(Array.from(questionMap.entries())));
+        
 
-        const response = await axios.post('http://localhost:5173/ask/edit', {
-            title: router.currentRoute.value.params.title,
-            description: router.currentRoute.value.params.description,
-            userid: sessionStorage.getItem('userId'),
+        const response = await axios.post('/vote/newvote', 
+        {
+            title: title.value,
+            description: description.value,
+            account: sessionStorage.getItem('account'),
             rootQuestionId: "1",
-            questions: questionMap
-        },{ headers });
+            questionMap: JSON.stringify(Array.from(questionMap.entries()))
+        },
+        { headers }
+        );
 
         if (response.data.code === 20000) {
             // 保存成功处理

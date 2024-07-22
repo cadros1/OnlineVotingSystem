@@ -42,14 +42,19 @@ const handleSubmit = async () => {
 
     if (response.data.code === 20000) {
       // 登录成功处理
-      goToMainPage();
-      // 跳转到主页面
+      
       sessionStorage.setItem('token', response.data.authorization);
       // 将token存入sessionStorage
-      sessionStorage.setItem('username', response.data.username);
+      console.log('登录成功，token:', response.data.authorization);
+      sessionStorage.setItem('username', response.data.data.username);
       // 将用户名存入sessionStorage'
-      sessionStorage.setItem('account', response.data.account);
+      console.log('用户名:', response.data.data.username)
+      sessionStorage.setItem('account', response.data.data.account);
       // 将账户存入sessionStorage'
+      console.log('账户:', response.data.data.account)
+
+      goToMainPage();
+      // 跳转到主页面
     } else {
       // 错误处理
       console.log('HTTP状态码:', response.status);

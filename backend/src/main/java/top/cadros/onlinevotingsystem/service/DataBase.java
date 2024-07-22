@@ -39,26 +39,33 @@ public class DataBase {
         jdbcTemplate.update(sql, user.getAccount(), user.getPassword(), user.getUsername());
     }
 
-    public static Vote insertVote(Vote vote) throws Exception {
+    public static User queryUserByAccount(String account) throws Exception {
+        String sql = "SELECT * FROM users WHERE account = ?";
+        RowMapper<User> rowMapper = (rs, rowNum) -> new User(rs.getString("account"), rs.getString("password"), rs.getString("username"));
+        
+        List<User> users = jdbcTemplate.query(sql, rowMapper, account);
+        if (users.isEmpty()) {
+            throw new Exception("此用户不存在");
+        }
+        return users.get(0);
+    }
+
+    public static int insertVote(String vote_title, String vote_descruption, int root_question_id, String user_account) throws Exception {
         final String sql = "INSERT INTO votes(title, description, user_account, root_question_id) VALUES(?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, vote.getTitle());
-            ps.setString(2, vote.getDescription());
-            ps.setString(3, vote.getUser().getAccount());
-            ps.setInt(4, vote.getRootQuestionId());
+            ps.setString(1, vote_title);
+            ps.setString(2, vote_descruption);
+            ps.setString(3, user_account);
+            ps.setInt(4, root_question_id);
             return ps;
         }, keyHolder);
 
         // 获取生成的自增ID
         Number key = keyHolder.getKey();
-        if (key != null) {
-            int generatedId = key.intValue();
-            vote.setVote_id(generatedId);
-        }
-        return vote;
+        return key.intValue();
     }
 
     public static Vote queryVoteByVoteId(int vote_id) throws Exception{

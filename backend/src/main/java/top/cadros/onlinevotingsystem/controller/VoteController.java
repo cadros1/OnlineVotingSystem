@@ -1,10 +1,17 @@
 package top.cadros.onlinevotingsystem.controller;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 import top.cadros.onlinevotingsystem.object.*;
@@ -36,9 +43,22 @@ public class VoteController {
     }
 
     @PostMapping("/vote/newvote")
-    public ResponseEntity<ApiResponse> createVote(@RequestBody Vote vote){
+    public ResponseEntity<ApiResponse> createVote(@RequestBody VoteRequestBody voteRequestBody) {
         try{
-            Vote newVote = DataBase.insertVote(vote);
+            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(), voteRequestBody.getDescription(), voteRequestBody.getRootQuestionId(), voteRequestBody.getAccount());
+            Vote newVote=new Vote();
+            ObjectMapper mapper = new ObjectMapper();
+            List<List<String>> keyValuePairs = mapper.readValue(voteRequestBody.getQuestionMap(), List.class);
+            Map<Integer, Question> map = new LinkedHashMap<>();
+            for (List<String> pair : keyValuePairs) {
+                map.put(Integer.parseInt(pair.get(0)), mapper.convertValue(pair.get(1), Question.class));
+            }
+            newVote.setVote_id(vote_id);
+            newVote.setTitle(voteRequestBody.getTitle());
+            newVote.setDescription(voteRequestBody.getDescription());
+            newVote.setRootQuestionId(voteRequestBody.getRootQuestionId());
+            newVote.setQuestionMap(map);
+            newVote.setUser(DataBase.queryUserByAccount(voteRequestBody.getAccount()));
             VoteFileService.outputVoteToFile(newVote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
         }catch(Exception e){
@@ -50,6 +70,45 @@ public class VoteController {
     @GetMapping("/vote")
     public String sendVoteList(@RequestParam int page) {
         return new String();//TODO
+    }
+    
+}
+
+class VoteRequestBody{
+    String title;
+    String description;
+    int rootQuestionId;
+    String questionMap;
+    String account;
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String Description) {
+        this.description = Description;
+    }
+    public int getRootQuestionId() {
+        return rootQuestionId;
+    }
+    public void setRootQuestionId(int rootQuestionId) {
+        this.rootQuestionId = rootQuestionId;
+    }
+    public String getAccount() {
+        return account;
+    }
+    public void setAccount(String account) {
+        this.account = account;
+    }
+    public String getQuestionMap() {
+        return questionMap;
+    }
+    public void setQuestionMap(String questionMap) {
+        this.questionMap = questionMap;
     }
     
 }

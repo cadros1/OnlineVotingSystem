@@ -58,14 +58,6 @@ public class Vote implements java.io.Serializable {
         this.description = description;
     }
 
-    public User getuser() {
-        return user;
-    }
-
-    public void setuser(User user) {
-        this.user = user;
-    }
-
     public User getUser() {
         return user;
     }
@@ -80,5 +72,13 @@ public class Vote implements java.io.Serializable {
 
     public int getRootQuestionId() {
         return rootQuestionId;
+    }
+
+    public void setRootQuestionId(int rootQuestionId) {
+        this.rootQuestionId = rootQuestionId;
+    }
+
+    public void setQuestionMap(Map<Integer, Question> questionMap) {
+        this.questionMap = questionMap;
     }
 }
