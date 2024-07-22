@@ -27,7 +27,10 @@
                             <tr v-for="item in items" :key="item.id">
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.type }}</td>
-                                <td>{{ item.name }}</td>
+                                <td
+                                    style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    {{ item.name }}</td>
+
                                 <td>{{ item.isRequired ? '是' : '否' }}</td>
                                 <td>
                                     <button class="edit" @click="editItem(item)">Edit</button>
@@ -249,6 +252,7 @@ const saveItems = async () => {
             // 保存成功处理
             console.log('问卷标题和说明保存成功');
             window.alert('问卷标题和说明保存成功');
+            router.push('/');
         } else {
             // 错误处理
             console.log('HTTP状态码:', response.status);
@@ -300,6 +304,8 @@ const saveItems = async () => {
     height: auto;
     border-radius: 10px;
     padding: 20px;
+    display: flex;
+    flex-direction: row;
 }
 
 .content {
