@@ -188,19 +188,24 @@ const saveItems = async () => {
         const questionMap = new Map();
         for (let i = 0; i < items.value.length; i++) {
             const item = items.value[i];
-            if (item.type === '单选') {
-                type = 0;
-            }
-            else if (item.type === '多选') {
-                type = 1;
-            }
-
-            else if (item.type === '判断') {
-                type = 2;
-            }
-
-            else if (item.type === '填空') {
-                type = 3;
+            const type = '';
+            switch (item.type) {
+                case '单选':
+                    type = 0;
+                    break;
+                case '多选':
+                    type = 1;
+                    break;
+                case '判断':
+                    type = 2;
+                    break;
+                case '填空':
+                    type = 3;
+                    break;
+                default:
+                    type = -1; // 设置一个默认值或抛出一个错误
+                    console.error('未知的题目类型:', item.type);
+                    break;
             }
 
             const question = {
