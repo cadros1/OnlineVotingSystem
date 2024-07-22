@@ -85,6 +85,11 @@ public class DataBase {
         }
     }
 
+    public static void deleteVoteByVoteId(int vote_id){
+        String sql = "DELETE FROM votes WHERE vote_id = ?";
+        jdbcTemplate.update(sql, vote_id);
+    }
+
     //public static List<Vote> queryVotesByAccount(User user) throws Exception {
     //    String sql = "SELECT * FROM votes "+
     //                 "JOIN users ON votes.user_account = users.account "+

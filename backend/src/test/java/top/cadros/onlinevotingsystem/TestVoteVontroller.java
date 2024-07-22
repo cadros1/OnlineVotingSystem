@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 import top.cadros.onlinevotingsystem.controller.VoteController;
 import top.cadros.onlinevotingsystem.object.*;
@@ -31,5 +32,16 @@ public class TestVoteVontroller {
 //        }catch(Exception e){
 //            assert false:"\n\n#####\n"+e.getMessage()+"\n"+e.toString()+"\n#####\n\n";
 //        }
+    }
+
+    @Test
+    public void testSendVote(){
+        try{
+            VoteController voteController=new VoteController();
+            ResponseEntity<ApiResponse> responseEntity = voteController.sendVote(18);
+            return;
+        }catch(Exception e){
+            assert false:"\n\n#####\n"+e.getMessage()+"\n"+e.toString()+"\n#####\n\n";
+        }
     }
 }
