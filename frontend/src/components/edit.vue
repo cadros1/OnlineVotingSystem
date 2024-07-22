@@ -171,7 +171,7 @@ function saveItem() {
 function addOption() {
     if (editingItem.value) {
         editingItem.value.options.push('');
-        editingItem.value.jumpLogic.push('');
+        editingItem.value.jumpLogic.push(null);
     }
 }
 
@@ -213,7 +213,8 @@ const saveItems = async () => {
                 question_text: item.name,
                 required: item.isRequired,
                 options: item.options,
-                jumpLogic: item.jumpLogic
+                jumpLogic: item.jumpLogic,
+                hasOther: item.hasOther
             };
             questionMap.set(item.id, question);
         }
