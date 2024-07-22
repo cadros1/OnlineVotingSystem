@@ -42,7 +42,7 @@ const handleSubmit = async () => {
 
     if (response.data.code === 20000) {
       // 登录成功处理
-      
+
       sessionStorage.setItem('token', response.data.authorization);
       // 将token存入sessionStorage
       console.log('登录成功，token:', response.data.authorization);
@@ -80,18 +80,22 @@ const goToMainPage = () => {
 
 <style scoped>
 .background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url(../assets/bg/bg.jpg);
-  /* 替换为你的图片路径 */
   background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: linear-gradient(220.55deg, #FF9D7E 0%, #4D6AD0 100%);
+  padding-left: 10px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .login-container {
@@ -100,10 +104,6 @@ const goToMainPage = () => {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  filter: blur(1px);
-  /* 添加高斯模糊效果 */
-  transition: filter 0.3s ease-in-out;
-  /* 模糊过渡效果 */
 
   display: flex;
   flex-direction: column;
@@ -121,9 +121,16 @@ const goToMainPage = () => {
   margin-bottom: 15px;
 }
 
+.login-container::before {
+  content: '';
+  position: absolute;
+  background-color: aqua;
+  filter: blur(1px);
+  z-index: -1;
+  /* 确保伪元素在内容层之下 */
+}
+
 .login-container:hover {
-  filter: blur(0);
-  /* 鼠标悬停时取消模糊 */
 }
 
 .input-group {

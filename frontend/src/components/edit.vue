@@ -109,8 +109,8 @@ const description = ref('');
 onMounted(() => {
     // 这里可以调用API获取数据
     items.value = [
-        { id: 1, type: '单选', name: 'Item 1', options: ['Option 1', 'Option 2'], jumpLogic: ['', ''] },
-        { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: ['', ''] },
+        { id: 1, type: '单选', name: 'Item 1', options: ['Option 1', 'Option 2'], jumpLogic: [null, null] },
+        { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: [null, null] },
         // 更多数据...
     ];
     title.value = route.query.title||'0000';
@@ -213,7 +213,7 @@ const saveItems = async () => {
                 question_text: item.name,
                 required: item.isRequired,
                 options: item.options,
-                nextQuestionId: item.jumpLogic
+                jumpLogic: item.jumpLogic
             };
             questionMap.set(item.id, question);
         }

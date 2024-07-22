@@ -79,7 +79,7 @@ const startAnswering = (questionnaire) => {
 }
 
 .left {
-    width: 60px;
+    width: 100px;
     height: 100%;
     margin-right: 10px;
 }
@@ -87,7 +87,7 @@ const startAnswering = (questionnaire) => {
 .right {
     background-color: white;
     flex-grow: 1;
-    height: 100%;
+    height: auto;
     border-radius: 10px;
     padding: 20px;
 }

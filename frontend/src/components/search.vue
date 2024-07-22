@@ -30,7 +30,7 @@
             </div>
             <div v-else>
                 <h2>查找失败！</h2>
-                <p>问卷id不存在或已删除。</p>
+                <p>{{ error }}</p>
                 <button @click="showModal = false">关闭</button>
             </div>
         </div>
@@ -64,15 +64,17 @@ function SearchVote() {
                 } else {
                     showModal.value = true;
                     SearchVoteSuccess.value = false;
+                    error.value = res.data.message;
                 }
             })
             .catch(err => {
                 console.log(err);
                 SearchVoteSuccess.value = false;
+                error.value = "请求失败，请检查网络连接或联系管理员。";
             });
     } catch (e) {
         SearchVoteSuccess.value = false;
-        alert("请输入正确的问卷id！");
+        error.value = "代码已退出";
         return;
     }
     showModal.value = true;
