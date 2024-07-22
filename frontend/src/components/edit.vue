@@ -109,8 +109,8 @@ const description = ref('');
 onMounted(() => {
     // 这里可以调用API获取数据
     items.value = [
-        { id: 1, type: '单选', name: 'Item 1', options: ['Option 1', 'Option 2'], jumpLogic: [null, null] },
-        { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: [null, null] },
+        { id: 1, type: '单选', name: 'Item 1', options: ['Option 1', 'Option 2'], jumpLogic: [null, null], isRequired: true, hasOther: false },
+        { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: [null, null], isRequired: false, hasOther: false },
         // 更多数据...
     ];
     title.value = route.query.title||'0000';
@@ -138,7 +138,7 @@ function deleteItem(item) {
 function addItemWithType() {
     if (selectedType.value) {
         const maxId = Math.max(...items.value.map(item => item.id), 0);
-        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [], isRequired: true });
+        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [], isRequired: true, hasOther: false });
         showModal.value = false;
     }
 }
