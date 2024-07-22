@@ -7,8 +7,9 @@ public class Question implements java.io.Serializable{
     private String question_text;
     private int question_type;
     private boolean required;
-    private int nextQuestionId;
-    private ArrayList<Option> options;
+    private ArrayList<String> options;
+    private ArrayList<Integer> jumpLogic;
+    private boolean hasOther;
 
     public Question() {
     }
@@ -19,11 +20,6 @@ public class Question implements java.io.Serializable{
         this.question_type = question_type;
         this.required = required;
     }
-
-    public void addOption(Option option) {
-        this.options.add(option);
-    }
-
 
     // Getters and Setters
     public int getQuestion_id() {
@@ -57,19 +53,28 @@ public class Question implements java.io.Serializable{
     public void setRequired(boolean required) {
         this.required = required;
     }
-    public ArrayList<Option> getOptions() {
+
+    public ArrayList<String> getOptions() {
         return options;
     }
 
-    public void setOptions(ArrayList<Option> options) {
+    public void setOptions(ArrayList<String> options) {
         this.options = options;
     }
 
-    public int getNextQuestionId() {
-        return nextQuestionId;
+    public ArrayList<Integer> getJumpLogic() {
+        return jumpLogic;
     }
 
-    public void setNextQuestionId(int nextQuestionId) {
-        this.nextQuestionId = nextQuestionId;
+    public void setJumpLogic(ArrayList<Integer> jumpLogic) {
+        this.jumpLogic = jumpLogic;
+    }
+
+    public boolean isHasOther() {
+        return hasOther;
+    }
+
+    public void setHasOther(boolean hasother) {
+        this.hasOther = hasother;
     }
 }
