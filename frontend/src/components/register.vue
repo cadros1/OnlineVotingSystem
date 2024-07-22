@@ -6,24 +6,24 @@
 
       <div class="input-group">
         <label for="account">账户:</label>
-        <input type="text" id="account" v-model="account" placeholder="请输入6-12位数字或字母" pattern="[a-zA-Z0-9]{6,12}"
-          maxlength="12" required />
+        <input type="text" id="account" class="form-control" v-model="account" placeholder="请输入6-12位数字或字母"
+          pattern="[a-zA-Z0-9]{6,12}" maxlength="12" required />
       </div>
 
       <div class="input-group">
         <label for="password">用户名:</label>
-        <input type="text" id="username" v-model="username" required />
+        <input type="text" id="username" class="form-control" v-model="username" required />
       </div>
 
       <div class="input-group">
         <label for="password">密码:</label>
-        <input type="password" id="password" v-model="password" placeholder="请输入6-12位数字或字母" pattern="[a-zA-Z0-9]{6,12}"
-          maxlength="12" required />
+        <input type="password" id="password" class="form-control" v-model="password" placeholder="请输入6-12位数字或字母"
+          pattern="[a-zA-Z0-9]{6,12}" maxlength="12" required />
       </div>
 
       <div class="input-group">
         <label for="password">再次输入:</label>
-        <input type="password" id="confirm-password" v-model="confirmPassword" required />
+        <input type="password" id="confirm-password" class="form-control" v-model="confirmPassword" required />
       </div>
 
       <div class="button-container">

@@ -106,9 +106,6 @@ onBeforeRouteLeave((to, from, next) => {
 }
 
 .questionnaire {
-    width: 100%;
-    height: 100%;
-    background-color: #f5f5f5;
     border-radius: 10px;
     padding: 20px;
     display: flex;

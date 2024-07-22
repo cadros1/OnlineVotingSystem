@@ -5,12 +5,14 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>问卷列表</h1>
-                <div class="questionnaire-list">
-                    <div class="questionnaire-box" v-for="(questionnaire, index) in questionnaires" :key="index">
-                        <h2>{{ questionnaire.title }}</h2>
-                        <p>{{ questionnaire.description }}</p>
-                        <button @click="startAnswering(questionnaire)">开始回答</button>
+                <div class="content">
+                    <h1>问卷列表</h1>
+                    <div class="questionnaire-list">
+                        <div class="questionnaire-box" v-for="(questionnaire, index) in questionnaires" :key="index">
+                            <h2>{{ questionnaire.title }}</h2>
+                            <p>{{ questionnaire.description }}</p>
+                            <button @click="startAnswering(questionnaire)">开始回答</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,7 +81,7 @@ const startAnswering = (questionnaire) => {
 }
 
 .left {
-    width: 100px;
+    width: 160px;
     height: 100%;
     margin-right: 10px;
 }
@@ -90,6 +92,15 @@ const startAnswering = (questionnaire) => {
     height: auto;
     border-radius: 10px;
     padding: 20px;
+}
+
+.content {
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .questionnaire-list {
