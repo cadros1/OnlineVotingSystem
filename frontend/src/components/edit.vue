@@ -188,29 +188,28 @@ const saveItems = async () => {
         const questionMap = new Map();
         for (let i = 0; i < items.value.length; i++) {
             const item = items.value[i];
-            const type = '';
             switch (item.type) {
                 case '单选':
-                    type = 0;
+                    item.typenumber = 0;
                     break;
                 case '多选':
-                    type = 1;
+                    item.typenumber = 1;
                     break;
                 case '判断':
-                    type = 2;
+                    item.typenumber = 2;
                     break;
                 case '填空':
-                    type = 3;
+                    item.typenumber = 3;
                     break;
                 default:
-                    type = -1; // 设置一个默认值或抛出一个错误
+                    item.typenumber = -1;
                     console.error('未知的题目类型:', item.type);
                     break;
             }
 
             const question = {
                 question_id: item.id,
-                question_type: type,
+                question_type: item.typenumber,
                 question_text: item.name,
                 required: item.isRequired,
                 options: item.options,
