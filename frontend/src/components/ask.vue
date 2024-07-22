@@ -14,6 +14,17 @@
                         <label for="description">问卷说明：</label>
                         <textarea id="description" v-model="description" required ref="textareaRef"></textarea>
                     </div>
+                    <div>
+                        <label for="description">是否公开：</label>
+                        <input type="checkbox" v-model="isPublic" />
+                    </div>
+                    <div>
+                        <label for="description">发布时间：</label>
+                        <input type="radio" value="now" v-model="publishTime" name="publishTime" />立即发布
+                        <input type="radio" value="later" v-model="publishTime" name="publishTime" />定时发布
+                        <input type="datetime-local" v-model="publishDate" />
+
+                    </div>
                     <button @click="startSurvey">开始创建</button>
                 </div>
             </div>
@@ -33,9 +44,13 @@ const textareaRef = ref(null);
 
 const title = ref("");
 const description = ref('');
+const isPublic = ref(false);
+const publishDate = ref('');
+const publishTime = ref('now');
 
 onMounted(() => {
     autoResizeTextarea();
+    setDefaultPublishDate();
 });
 
 watch(description, () => {
@@ -43,11 +58,17 @@ watch(description, () => {
 });
 
 function startSurvey() {
+    //如果立即发布，那么将publishDate设置为当前时间
+    if (publishTime.value === 'now') {
+        setDefaultPublishDate();
+    }
     router.push({
         path: '/ask/edit',
         query: {
             title: title.value,
-            description: description.value
+            description: description.value,
+            isPublic: isPublic.value,
+            publishTime: transformDateToUnix(publishDate.value)
         }
     });
 }
@@ -58,6 +79,22 @@ function autoResizeTextarea() {
         textarea.style.height = 'auto';
         textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`; // 设定最大高度为200px
     }
+}
+
+function setDefaultPublishDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    publishDate.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+//将YYYY-MM-DDTHH:mm格式的日期转换为Unix时间戳
+function transformDateToUnix(date) {
+    const dateObj = new Date(date);
+    return dateObj.getTime() / 1000;
 }
 
 onBeforeRouteLeave((to, from, next) => {
@@ -103,15 +140,17 @@ onBeforeRouteLeave((to, from, next) => {
     height: auto;
     border-radius: 10px;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .questionnaire {
+    width: 40%;
     border-radius: 10px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .input-group {
@@ -149,5 +188,12 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+input,
+textarea {
+    padding: 10px;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 20px;
+}
 </style>
-    

@@ -7,20 +7,21 @@
             <div class="right">
                 <div class="buttons">
                     <div class="actions">
-                        <button class="back" @click="$router.push('/ask')">Back</button>
-                        <button class="new" @click="showModal = true">New</button>
-                        <button class="save" @click="saveItems">Save</button>
+                        <button class="back" @click="$router.push('/ask')">返回</button>
+                        <button class="new" @click="showModal = true">新建</button>
+                        <button class="save" @click="saveItems">发布</button>
                     </div>
                 </div>
                 <div class="content">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>题号</th>
-                                <th>类型</th>
-                                <th>问题</th>
-                                <th>必答</th>
-                                <th>操作</th>
+                                <th style="width: 50px;">题号</th>
+                                <th style="width: 50px;">类型</th>
+                                <th style="width: 200px;">问题</th>
+                                <th style="width: 50px;">必答</th>
+                                <th style="width: 50px;">编辑</th>
+                                <th style="width: 50px;">删除</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,10 +32,15 @@
                                     style="max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                     {{ item.name }}</td>
 
-                                <td>{{ item.isRequired ? '是' : '否' }}</td>
                                 <td>
-                                    <button class="edit" @click="editItem(item)">Edit</button>
-                                    <button class="delete" @click="deleteItem(item)">Delete</button>
+                                    <input type="checkbox" v-model="item.isRequired" />
+                                </td>
+
+                                <td>
+                                    <button class="edit" @click="editItem(item)">编辑</button>
+                                </td>
+                                <td>
+                                    <button class="delete" @click="deleteItem(item)">删除</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -70,19 +76,20 @@
                     <div></div>
                 </label>
                 <label>
-                    题目名称:
+                    题目内容:
                     <textarea v-model="editingItem.name" rows="4" style="width: 100%;"></textarea>
                 </label>
                 <div v-if="editingItem.type === '单选' || editingItem.type === '多选'">
-                    <div v-for="(option, index) in editingItem.options" :key="index">
-                        <input type="text" v-model="editingItem.options[index]">
+                    <div v-for="(option, index) in editingItem.options" :key="index" class="option">
+                        <input type="text" class="option-input" v-model="editingItem.options[index]" placeholder="选项内容">
                         <input type="number" :value="editingItem.jumpLogic[index]"
-                            @input="validateJumpLogic($event, index)" min="0" max="99" placeholder="跳题逻辑">
+                            @input="validateJumpLogic($event, index)" min="0" max="9999" placeholder="跳题逻辑">
                         <button class="delete" @click="removeOption(index)">删除</button>
-
                     </div>
-                    <button class="new" @click="addOption">添加选项</button>
-                    <button class="edit" @click="saveItem">确定</button>
+                    <div class="option">
+                        <button class="newOp" @click="addOption">添加选项</button>
+                        <button class="edit" @click="saveItem">确定</button>
+                    </div>
                 </div>
                 <div v-if="editingItem.type === '判断' || editingItem.type === '填空'">
                     <button class="edit" @click="saveItem">确定</button>
@@ -107,17 +114,19 @@ const selectedType = ref('');
 const editingItem = ref(null);
 const title = ref('');
 const description = ref('');
+const isPublic = ref(false);
+const publishTime = ref();
 
 // 模拟数据加载
 onMounted(() => {
     // 这里可以调用API获取数据
     items.value = [
-        { id: 1, type: '单选', name: 'Item 1', options: ['Option 1', 'Option 2'], jumpLogic: [null, null], isRequired: true, hasOther: false },
-        { id: 2, type: '多选', name: 'Item 2', options: ['Option A', 'Option B'], jumpLogic: [null, null], isRequired: false, hasOther: false },
-        // 更多数据...
+        { id: 1, type: '单选', name: '示例问题', options: ['选项一', '选项二'], jumpLogic: [null, null], isRequired: true, hasOther: false }
     ];
-    title.value = route.query.title||'0000';
-    description.value = route.query.description||'0000';
+    title.value = route.query.title || 'error';
+    description.value = route.query.description || 'error';
+    isPublic.value = route.query.isPublic;
+    publishTime.value = route.query.publishtime;
 });
 
 function editItem(item) {
@@ -231,21 +240,24 @@ const saveItems = async () => {
         console.log('headers:', headers);
         console.log('title:', title.value);
         console.log('description:', description.value);
+        console.log('isPublic:', true)
         console.log('account:', sessionStorage.getItem('account'));
         console.log('rootQuestionId:', "1");
         console.log('questions:', questionMap);
         console.log('questionMap:', JSON.stringify(Array.from(questionMap.entries())));
-        
 
-        const response = await axios.post('/vote/newvote', 
-        {
-            title: title.value,
-            description: description.value,
-            account: sessionStorage.getItem('account'),
-            rootQuestionId: "1",
-            questionMap: JSON.stringify(Array.from(questionMap.entries()))
-        },
-        { headers }
+
+        const response = await axios.post('/vote/newvote',
+            {
+                title: title.value,
+                description: description.value,
+                isPublic: isPublic.value,
+                publishTime: publishTime.value,
+                account: sessionStorage.getItem('account'),
+                rootQuestionId: "1",
+                questionMap: JSON.stringify(Array.from(questionMap.entries()))
+            },
+            { headers }
         );
 
         if (response.data.code === 20000) {
@@ -348,14 +360,28 @@ th {
     flex-direction: column;
 }
 
+.option {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.option-input {
+    width: 60%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
 button {
-    padding: 8px 16px;
+    padding: 8px 12px;
     font-size: 14px;
     cursor: pointer;
     border: none;
     border-radius: 4px;
     color: #fff;
-    margin: 10px;
 }
 
 button.edit {
@@ -366,16 +392,29 @@ button.delete {
     background-color: #dc3545;
 }
 
+button.newOp {
+    background-color: #28a745;
+}
+
 button.back {
     background-color: #6c757d;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
 }
 
 button.new {
     background-color: #28a745;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
 }
 
 button.save {
     background-color: #17a2b8;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding: 10px 20px;
 }
 
 button:hover {
