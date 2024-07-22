@@ -82,6 +82,14 @@ function startAnswer(voteID) {
     });
 }
 
+
+
+onBeforeRouteLeave((to, from, next) => {
+    if (to.path === '/ask/edit') {
+        to.meta.formData = { title: title.value, description: description.value };
+    }
+    next();
+});
 </script>
 
 <style scoped>
@@ -142,9 +150,15 @@ function startAnswer(voteID) {
     width: 80px;
 }
 
-.input-group input {
+.input-group input,
+.input-group textarea {
     margin-left: 10px;
     width: 400px;
+}
+
+.input-group textarea {
+    overflow-y: auto;
+    resize: none;
 }
 
 button {
