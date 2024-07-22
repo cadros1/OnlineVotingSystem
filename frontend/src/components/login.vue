@@ -6,12 +6,12 @@
 
       <div class="input-group">
         <label for="account">账户:</label>
-        <input type="text" id="account" v-model="account" required />
+        <input type="text" class="form-control" id="account" v-model="account" required />
       </div>
 
       <div class=" input-group">
         <label for="password">密码:</label>
-        <input type="password" id="password" v-model="password" required />
+        <input type="password" class="form-control" id="password" v-model="password" required />
       </div>
 
       <div class="button-container">
@@ -99,7 +99,7 @@ const goToMainPage = () => {
 }
 
 .login-container {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.3);
   /* 半透明白色背景 */
   padding: 20px;
   border-radius: 10px;
@@ -130,9 +130,6 @@ const goToMainPage = () => {
   /* 确保伪元素在内容层之下 */
 }
 
-.login-container:hover {
-}
-
 .input-group {
   margin-bottom: 15px;
   margin-right: 20px;
@@ -143,6 +140,10 @@ const goToMainPage = () => {
   /* 确保.input-group占据其父容器的全部宽度 */
 }
 
+.form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .button-container {
   display: flex;
   /* 启用Flexbox布局 */
@@ -151,4 +152,22 @@ const goToMainPage = () => {
   width: 100%;
   /* 确保.button-container占据其父元素的完整宽度 */
 }
+
+button {
+  background-color:rgba(255, 255, 255, 0.2);
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* 使按钮有渐变效果 */
+}
+
+button:hover {
+  background-color: #334D8F;
+}
+
+
 </style>

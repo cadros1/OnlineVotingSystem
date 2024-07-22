@@ -92,9 +92,7 @@ function saveItems() {
     bottom: 0;
     background-size: cover;
     background-position: center;
-
     background: linear-gradient(220.55deg, #FF9D7E 0%, #4D6AD0 100%);
-
     padding-left: 10px;
     padding-right: 8px;
     padding-top: 8px;
@@ -109,18 +107,17 @@ function saveItems() {
 }
 
 .left {
-    width: 60px;
+    width: 100px;
     height: 100%;
     margin-right: 10px;
 }
 
 .right {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.65);
     flex-grow: 1;
-    height: 100%;
+    height: auto;
     border-radius: 10px;
-    display: flex;
-    flex-direction: row;
+    padding: 20px;
 }
 
 .content {

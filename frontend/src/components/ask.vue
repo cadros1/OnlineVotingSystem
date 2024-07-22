@@ -92,16 +92,17 @@ onBeforeRouteLeave((to, from, next) => {
 }
 
 .left {
-    width: 60px;
+    width: 100px;
     height: 100%;
     margin-right: 10px;
 }
 
 .right {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.65);
     flex-grow: 1;
-    height: 100%;
+    height: auto;
     border-radius: 10px;
+    padding: 20px;
 }
 
 .questionnaire {

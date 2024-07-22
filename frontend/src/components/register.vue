@@ -93,30 +93,30 @@ const handleRegister = async () => {
 
 <style scoped>
 .background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url(../assets/bg/bg.jpg);
-  /* 替换为你的图片路径 */
   background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: linear-gradient(220.55deg, #FF9D7E 0%, #4D6AD0 100%);
+  padding-left: 10px;
+  padding-right: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .login-container {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.3);
   /* 半透明白色背景 */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  filter: blur(1px);
-  /* 添加高斯模糊效果 */
-  transition: filter 0.3s ease-in-out;
-  /* 模糊过渡效果 */
 
   display: flex;
   flex-direction: column;
@@ -134,9 +134,13 @@ const handleRegister = async () => {
   margin-bottom: 15px;
 }
 
-.login-container:hover {
-  filter: blur(0);
-  /* 鼠标悬停时取消模糊 */
+.login-container::before {
+  content: '';
+  position: absolute;
+  background-color: aqua;
+  filter: blur(1px);
+  z-index: -1;
+  /* 确保伪元素在内容层之下 */
 }
 
 .input-group {
@@ -149,6 +153,10 @@ const handleRegister = async () => {
   /* 确保.input-group占据其父容器的全部宽度 */
 }
 
+.form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .button-container {
   display: flex;
   /* 启用Flexbox布局 */
@@ -156,5 +164,21 @@ const handleRegister = async () => {
   /* 在按钮之间分配空间，使它们水平均分 */
   width: 100%;
   /* 确保.button-container占据其父元素的完整宽度 */
+}
+
+button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  /* 使按钮有渐变效果 */
+}
+
+button:hover {
+  background-color: #334D8F;
 }
 </style>

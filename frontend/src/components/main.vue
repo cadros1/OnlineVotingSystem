@@ -85,7 +85,7 @@ const startAnswering = (questionnaire) => {
 }
 
 .right {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.65);
     flex-grow: 1;
     height: auto;
     border-radius: 10px;

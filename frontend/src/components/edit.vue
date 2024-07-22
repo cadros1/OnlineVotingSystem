@@ -118,7 +118,7 @@ onMounted(() => {
 });
 
 function editItem(item) {
-    editingItem.value = { ...item, options: [...item.options], jumpLogic: [...item.jumpLogic] };
+    editingItem.value = { ...item, options: [...item.options], jumpLogic: [...item.jumpLogic], isRequired: item.isRequired };
     showModal.value = true;
 }
 
@@ -138,7 +138,7 @@ function deleteItem(item) {
 function addItemWithType() {
     if (selectedType.value) {
         const maxId = Math.max(...items.value.map(item => item.id), 0);
-        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [] });
+        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [], isRequired: true });
         showModal.value = false;
     }
 }
@@ -289,18 +289,17 @@ const saveItems = async () => {
 }
 
 .left {
-    width: 60px;
+    width: 100px;
     height: 100%;
     margin-right: 10px;
 }
 
 .right {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.65);
     flex-grow: 1;
-    height: 100%;
+    height: auto;
     border-radius: 10px;
-    display: flex;
-    flex-direction: row;
+    padding: 20px;
 }
 
 .content {
