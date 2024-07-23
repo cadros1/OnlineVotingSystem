@@ -242,6 +242,23 @@ const submitAnswers = () => {
             console.log(`第${i + 1}题：${selectedOptions.value[i]}`);
         }
     }
+    // 提交答案
+    axios.post('/vote/' + voteID.value + '/answer', {
+        vote_id: voteID.value,
+        account: sessionStorage.getItem(account),
+        answers: selectedOptions.value
+    })
+        .then(res => {
+            if (res.data.code === 20000) {
+                alert('提交成功！');
+            } else {
+                alert('提交失败，请重试');
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            alert('提交失败，请重试。');
+        });
 };
 
 function SearchVote(voteID) {
