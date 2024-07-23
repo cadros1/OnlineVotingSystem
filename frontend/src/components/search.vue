@@ -128,18 +128,18 @@ function startAnswer() {
     height: auto;
     border-radius: 10px;
     padding: 20px;
-}
-
-.questionnaire {
-    width: 100%;
-    height: 100%;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.questionnaire {
+    width: 40%;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .input-group {
