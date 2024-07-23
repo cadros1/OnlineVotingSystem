@@ -47,6 +47,22 @@ const questionnaires = [
     {
         title: '问卷6',
         description: '这是问卷6的说明。'
+    },
+    {
+        title: '问卷6',
+        description: '这是问卷6的说明。'
+    },
+    {
+        title: '问卷6',
+        description: '这是问卷6的说明。'
+    },
+    {
+        title: '问卷6',
+        description: '这是问卷6的说明。'
+    },
+    {
+        title: '问卷6',
+        description: '这是问卷6的说明。'
     }
     // 可以添加更多的问卷
 ];
@@ -109,7 +125,7 @@ const startAnswering = (questionnaire) => {
     flex-wrap: wrap;
     justify-content: flex;
     overflow-y: auto;
-    max-height: 600px;
+    max-height: 700px;
 }
 
 .questionnaire-box {

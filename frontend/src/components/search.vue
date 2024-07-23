@@ -49,7 +49,7 @@ import axios from 'axios';
 const router = useRouter();
 const SearchVoteSuccess = ref(null);
 const showModal = ref(false);
-const voteID = ref("");
+const voteID = ref('');
 const title = ref("");
 const description = ref('');
 const isPublic = ref(false);
@@ -60,8 +60,8 @@ const usermame = ref("");
 
 function SearchVote() {
     try {
-        console.log('/vote/', voteID.value);
-        axios.get('/vote/' + voteID.value)
+        console.log('/vote/'+  voteID.value);
+        axios.get('/vote/'+voteID.value)
             .then(res => {
                 if (res.data.code === 20000) {
                     showModal.value = true;
@@ -74,7 +74,7 @@ function SearchVote() {
                 } else {
                     showModal.value = true;
                     SearchVoteSuccess.value = false;
-                    error.value = res.data.message;
+                    error.value = res.data.data.message;
                 }
             })
             .catch(err => {

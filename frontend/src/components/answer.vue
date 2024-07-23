@@ -20,6 +20,15 @@
                                     {{ option }}
                                 </label>
                             </div>
+                            <div v-if="questions[currentQuestionIndex].hasOther">
+                                <label>
+                                    <input type="radio" :name="`question-${currentQuestionIndex}`" value="其他"
+                                        v-model="selectedOptions[currentQuestionIndex]">
+                                    其他（请补充）
+                                </label>
+                                <input type="text" v-model="otherOptions[currentQuestionIndex]"
+                                    v-if="selectedOptions[currentQuestionIndex] === '其他'">
+                            </div>
                         </div>
                         <div v-else-if="questions[currentQuestionIndex].question_type === 1">
                             <div v-for="(option, index) in questions[currentQuestionIndex].options" :key="index">
@@ -28,6 +37,14 @@
                                         v-model="selectedOptions[currentQuestionIndex]" />
                                     {{ option }}
                                 </label>
+                            </div>
+                            <div v-if="questions[currentQuestionIndex].hasOther">
+                                <label>
+                                    <input type="checkbox" value="其他" v-model="selectedOptions[currentQuestionIndex]" />
+                                    其他（请补充）
+                                </label>
+                                <input type="text" v-model="otherOptions[currentQuestionIndex]"
+                                    v-if="selectedOptions[currentQuestionIndex].includes('其他')">
                             </div>
                         </div>
                         <div v-else-if="questions[currentQuestionIndex].question_type === 2">
@@ -81,6 +98,7 @@ const vote = {
 const questions = ref([]);
 const currentQuestionIndex = ref(0);
 const selectedOptions = ref({});
+const otherOptions = ref({});
 
 onMounted(() => {
     questions.value = vote.questionMap.map(item => item[1]);
@@ -164,7 +182,11 @@ const submitAnswers = () => {
     // 打印答案
     console.log('答案：');
     for (let i = 0; i < questions.value.length; i++) {
-        console.log(`第${i + 1}题：${selectedOptions.value[i]}`);
+        if (selectedOptions.value[i] === '其他') {
+            console.log(`第${i + 1}题：${selectedOptions.value[i]} - ${otherOptions.value[i]}`);
+        } else {
+            console.log(`第${i + 1}题：${selectedOptions.value[i]}`);
+        }
     }
 };
 </script>
