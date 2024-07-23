@@ -1,7 +1,6 @@
 package top.cadros.onlinevotingsystem.service;
 
-import top.cadros.onlinevotingsystem.object.User;
-import top.cadros.onlinevotingsystem.object.Vote;
+import top.cadros.onlinevotingsystem.object.*;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -116,6 +115,14 @@ public class DataBase {
     public static void insertAnswerLog(int vote_id, String user_account) throws DuplicateKeyException{
         String sql = "INSERT INTO answer_logs(vote_id, user_account) VALUES(?, ?)";
         jdbcTemplate.update(sql, vote_id, user_account);
+    }
+
+    public static List<AnswerLog> queryAnswerLogsByVoteId(int vote_id){
+        String sql = "SELECT * FROM answer_logs WHERE vote_id = ?";
+        RowMapper<AnswerLog> rowMapper = (rs, rowNum) -> new AnswerLog(rs.getInt("vote_id"),
+                                                                      rs.getString("user_account"),
+                                                                      rs.getTimestamp("answer_time").toInstant());
+        return jdbcTemplate.query(sql, rowMapper, vote_id);
     }
 
     //public static List<Vote> queryVotesByAccount(User user) throws Exception {
