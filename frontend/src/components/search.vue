@@ -52,6 +52,7 @@ const description = ref('');
 const isPublic = ref(false);
 const publishTime = ref("");
 const error = ref("");
+const usermame = ref("");
 
 
 function SearchVote() {
@@ -66,6 +67,7 @@ function SearchVote() {
                     description.value = res.data.data.description;
                     isPublic.value = res.data.data.isPublic;
                     publishTime.value = res.data.data.publishTime;
+                    usermame.value = res.data.data.user.username;
                 } else {
                     showModal.value = true;
                     SearchVoteSuccess.value = false;
