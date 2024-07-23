@@ -209,6 +209,15 @@ function SearchVote(voteID) {
                     vote.username = res.data.data.user.username;
                     vote.rootQuestionId = res.data.data.rootQuestionId;
                     vote.questionMap = res.data.data.questionMap;
+
+                    // 检查 vote.questionMap 类型
+                    if (!Array.isArray(vote.questionMap)) {
+                        console.error('vote.questionMap 不是数组类型');
+                        SearchVoteSuccess.value = false;
+                        error.value = '问卷数据格式错误';
+                        return;
+                    }
+
                     questions.value = vote.questionMap.map(item => item[1]);
                     questions.value.forEach((question, index) => {
                         if (question.question_type === 1) {
@@ -233,6 +242,7 @@ function SearchVote(voteID) {
     }
     showModal.value = true;
 }
+
 
 </script>
 
