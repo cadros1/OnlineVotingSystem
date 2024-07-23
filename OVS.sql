@@ -20,12 +20,10 @@ CREATE TABLE `votes` (
   `description` VARCHAR(255) DEFAULT "该问卷暂时没有描述",
   `user_account` VARCHAR(20) NOT NULL,
   `root_question_id` INT,
+  `is_public` BOOLEAN NOT NULL,
   PRIMARY KEY (`vote_id`),
   FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-INSERT INTO `votes` (`title`, `description`, `user_account`) VALUES ('投票1', '这是投票1的描述', 'admin');
-INSERT INTO `votes` (`title`, `user_account`) VALUES ('投票2', '111');
 
 ```
 CREATE TABLE `questions` (

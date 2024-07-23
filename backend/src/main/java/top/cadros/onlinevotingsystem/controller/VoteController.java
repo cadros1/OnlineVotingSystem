@@ -45,7 +45,7 @@ public class VoteController {
     @PostMapping("/vote/newvote")
     public ResponseEntity<ApiResponse> createVote(@RequestBody VoteRequestBody voteRequestBody) {
         try{
-            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(), voteRequestBody.getDescription(), voteRequestBody.getRootQuestionId(), voteRequestBody.getAccount());
+            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(), voteRequestBody.getDescription(), voteRequestBody.getRootQuestionId(), voteRequestBody.getAccount(), voteRequestBody.isPublic());
             Vote newVote=new Vote();
             ObjectMapper mapper = new ObjectMapper();
             List<List<String>> keyValuePairs = mapper.readValue(voteRequestBody.getQuestionMap(), List.class);
@@ -59,6 +59,7 @@ public class VoteController {
             newVote.setRootQuestionId(voteRequestBody.getRootQuestionId());
             newVote.setQuestionMap(map);
             newVote.setUser(DataBase.queryUserByAccount(voteRequestBody.getAccount()));
+            newVote.setPublic(voteRequestBody.isPublic());
             VoteFileService.outputVoteToFile(newVote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
         }catch(Exception e){
@@ -80,6 +81,7 @@ class VoteRequestBody{
     int rootQuestionId;
     String questionMap;
     String account;
+    boolean isPublic;
     public String getTitle() {
         return title;
     }
@@ -110,5 +112,10 @@ class VoteRequestBody{
     public void setQuestionMap(String questionMap) {
         this.questionMap = questionMap;
     }
-    
+    public boolean isPublic() {
+        return isPublic;
+    }
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 }
