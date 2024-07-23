@@ -88,12 +88,63 @@ const vote = {
     publishTime: 1721704188,
     username: '示例用户',
     rootQuestionId: 1,
-    questionMap: [
-        [1, { "question_id": 1, "question_type": 0, "question_text": "示例单选题", "required": true, "options": ["选项一", "选项二"], "jumpLogic": ["3", null], "hasOther": true }],
-        [2, { "question_id": 2, "question_type": 1, "question_text": "示例多选题", "required": true, "options": ["选项一", "选项二", "选项三", "选项四", "选项五", "选项六"], "jumpLogic": [null, 1, null, null, null, null], "hasOther": false }],
-        [3, { "question_id": 3, "question_type": 2, "question_text": "示例判断题", "required": true, "options": [], "jumpLogic": [null, 1], "hasOther": false }],
-        [4, { "question_id": 4, "question_type": 3, "question_text": "示例填空题", "required": false, "options": [], "jumpLogic": [null], "hasOther": false }]
-    ]
+    questionMap: {
+        "1": {
+            "question_id": 1,
+            "question_text": "示例问题",
+            "question_type": 0,
+            "required": true,
+            "options": [
+                "选项一",
+                "选项二"
+            ],
+            "jumpLogic": [
+                null,
+                null
+            ],
+            "hasOther": false
+        },
+        "2": {
+            "question_id": 2,
+            "question_text": "新建问题",
+            "question_type": 1,
+            "required": true,
+            "options": [
+                "选项一",
+                "选项二"
+            ],
+            "jumpLogic": [
+                null,
+                null
+            ],
+            "hasOther": false
+        },
+        "3": {
+            "question_id": 3,
+            "question_text": "新建问题",
+            "question_type": 2,
+            "required": true,
+            "options": [
+                "对",
+                "错"
+            ],
+            "jumpLogic": [
+                null
+            ],
+            "hasOther": false
+        },
+        "4": {
+            "question_id": 4,
+            "question_text": "新建问题",
+            "question_type": 3,
+            "required": true,
+            "options": [],
+            "jumpLogic": [
+                null
+            ],
+            "hasOther": false
+        }
+    }
 }
 
 const questions = ref([]);
@@ -105,7 +156,6 @@ let voteID = ref(0);
 const showModal = ref(false);
 const SearchVoteSuccess = ref(false);
 const error = ref("");
-
 
 onMounted(() => {
     voteID.value = route.query.voteID;
@@ -211,14 +261,14 @@ function SearchVote(voteID) {
                     vote.questionMap = res.data.data.questionMap;
 
                     // 检查 vote.questionMap 类型
-                    if (!Array.isArray(vote.questionMap)) {
-                        console.error('vote.questionMap 不是数组类型');
+                    if (typeof vote.questionMap !== 'object' || vote.questionMap === null) {
+                        console.error('vote.questionMap 不是对象类型');
                         SearchVoteSuccess.value = false;
                         error.value = '问卷数据格式错误';
                         return;
                     }
 
-                    questions.value = vote.questionMap.map(item => item[1]);
+                    questions.value = Object.values(vote.questionMap);
                     questions.value.forEach((question, index) => {
                         if (question.question_type === 1) {
                             selectedOptions.value[index] = [];
