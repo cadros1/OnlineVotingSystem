@@ -101,7 +101,11 @@ const currentQuestionIndex = ref(0);
 const selectedOptions = ref({});
 const otherOptions = ref({});
 const route = useRoute();
-const voteID = ref(0);
+let voteID = ref(0);
+const showModal = ref(false);
+const SearchVoteSuccess = ref(false);
+const error = ref("");
+
 
 onMounted(() => {
     voteID.value = route.query.voteID;
