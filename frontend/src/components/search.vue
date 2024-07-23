@@ -60,8 +60,8 @@ const usermame = ref("");
 
 function SearchVote() {
     try {
-        console.log('/vote/'+  voteID.value);
-        axios.get('/vote/'+voteID.value)
+        console.log('/vote/' + voteID.value);
+        axios.get('/vote/' + voteID.value)
             .then(res => {
                 if (res.data.code === 20000) {
                     showModal.value = true;
@@ -94,7 +94,7 @@ function startAnswer() {
     router.push({
         path: '/answer',
         query: {
-            voteid: voteID,
+            voteID: voteID,
         }
     });
 }
