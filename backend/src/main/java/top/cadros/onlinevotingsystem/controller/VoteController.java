@@ -100,6 +100,20 @@ public class VoteController {
         }
         return ResponseEntity.ok(new ApiResponse(20000, "回答提交成功", "OK", null));
     }
+
+    /**
+     * 前端使用get请求某个问卷的回答者列表
+     * @url /vote/{vote_id}/answer
+     */
+    @GetMapping("/vote/{vote_id}/answer")
+    public ResponseEntity<ApiResponse> getAnswerList(@RequestParam String param) {
+        try{
+            List<AnswerLog> answerLogs = DataBase.queryAnswerLogsByVoteId(Integer.parseInt(param));
+            return ResponseEntity.ok(new ApiResponse(20000, "回答列表获取成功", "OK", answerLogs));
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, null));
+        }
+    }
     
     
     @GetMapping("/vote")
