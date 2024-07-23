@@ -7,7 +7,11 @@
             <div class="right">
                 <div class="content">
                     <div v-if="currentQuestionIndex < questions.length">
+                        <h1>{{ questions[currentQuestionIndex].question_id }}</h1>
                         <h1>{{ questions[currentQuestionIndex].question_text }}</h1>
+                        <div v-if="questions[currentQuestionIndex].required == true">
+                            <label> 必答题 </label>
+                        </div>
                         <div v-if="questions[currentQuestionIndex].question_type === 0">
                             <div v-for="(option, index) in questions[currentQuestionIndex].options" :key="index">
                                 <label>
@@ -21,7 +25,7 @@
                             <div v-for="(option, index) in questions[currentQuestionIndex].options" :key="index">
                                 <label>
                                     <input type="checkbox" :value="option"
-                                        @change="handleMultiSelectChange(currentQuestionIndex, option)" />
+                                        v-model="selectedOptions[currentQuestionIndex]" />
                                     {{ option }}
                                 </label>
                             </div>
@@ -63,6 +67,7 @@ const vote = {
     title: '示例问卷标题',
     description: '示例问卷说明',
     isPublic: true,
+    publishTime: 1721704188,
     account: '示例用户',
     rootQuestionId: 1,
     questionMap: [
@@ -79,13 +84,12 @@ const selectedOptions = ref({});
 
 onMounted(() => {
     questions.value = vote.questionMap.map(item => item[1]);
+    questions.value.forEach((question, index) => {
+        if (question.question_type === 1) {
+            selectedOptions.value[index] = [];
+        }
+    });
 });
-
-const lastQuestion = () => {
-    if (currentQuestionIndex.value > 0) {
-        currentQuestionIndex.value--;
-    }
-};
 
 const nextQuestion = () => {
     // 如果题目必选，但没有选择答案
@@ -112,7 +116,6 @@ const nextQuestion = () => {
                 currentQuestionIndex.value = nextQuestionId - 1;
                 return;
             }
-
         }
     }
     //多选题
@@ -150,20 +153,18 @@ const nextQuestion = () => {
     console.log('填空题，但没有指定合法的跳题逻辑');
     return;
 }
-const submitAnswers = () => {
-    console.log('提交答案', selectedOptions.value);
-    // 这里可以添加提交答案的逻辑
+
+const lastQuestion = () => {
+    if (currentQuestionIndex.value > 0) {
+        currentQuestionIndex.value--;
+    }
 };
 
-const handleMultiSelectChange = (questionIndex, option) => {
-    if (!selectedOptions.value[questionIndex]) {
-        selectedOptions.value[questionIndex] = [];
-    }
-    const index = selectedOptions.value[questionIndex].indexOf(option);
-    if (index === -1) {
-        selectedOptions.value[questionIndex].push(option);
-    } else {
-        selectedOptions.value[questionIndex].splice(index, 1);
+const submitAnswers = () => {
+    // 打印答案
+    console.log('答案：');
+    for (let i = 0; i < questions.value.length; i++) {
+        console.log(`第${i + 1}题：${selectedOptions.value[i]}`);
     }
 };
 </script>
