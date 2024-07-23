@@ -57,7 +57,7 @@ INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '选
 INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '选项2', FALSE);
 INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '选项3', FALSE);
 INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '其它', TRUE);
-
+```
 CREATE TABLE `answeredUsers` (
   `vote_id` INT NOT NULL,
   `user_account` VARCHAR(20) NOT NULL,
@@ -66,32 +66,17 @@ CREATE TABLE `answeredUsers` (
   FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-INSERT INTO `answeredUsers` (`vote_id`, `user_account`) VALUES (1, '111');
-INSERT INTO `answeredUsers` (`vote_id`, `user_account`) VALUES (1, '222');
-INSERT INTO `answeredUsers` (`vote_id`, `user_account`) VALUES (1, '333');
-
 CREATE TABLE `answers` (
-  `answer_id` INT NOT NULL AUTO_INCREMENT,
+  `vote_id` INT NOT NULL,
   `question_id` INT NOT NULL,
   `user_account` VARCHAR(20) NOT NULL,
   `selected_option_id` INT,
   `custom_answer` VARCHAR(255),
-  PRIMARY KEY (`answer_id`),
-  FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  FOREIGN KEY (`user_account`) REFERENCES `users` (`account`),
-  FOREIGN KEY (`selected_option_id`) REFERENCES `options` (`option_id`)
+  PRIMARY KEY (`vote_id`, `question_id`, `user_account`),
+  FOREIGN KEY (`vote_id`) REFERENCES `votes` (`vote_id`),
+  FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-INSERT INTO `answers` (`question_id`, `user_account`, `selected_option_id`) VALUES (1, '111', 1);
-INSERT INTO `answers` (`question_id`, `user_account`, `selected_option_id`) VALUES (1, '222', 2);
-INSERT INTO `answers` (`question_id`, `user_account`, `selected_option_id`) VALUES (1, '333', 3);
-INSERT INTO `answers` (`question_id`, `user_account`, `selected_option_id`) VALUES (2, '111', 1);
-INSERT INTO `answers` (`question_id`, `user_account`, `selected_option_id`) VALUES (2, '111', 2);
-INSERT INTO `answers` (`question_id`, `user_account`, `custom_answer`) VALUES (3, '111', '填空题答案1');
-INSERT INTO `answers` (`question_id`, `user_account`, `custom_answer`) VALUES (3, '222', '填空题答案2');
-INSERT INTO `answers` (`question_id`, `user_account`, `custom_answer`) VALUES (3, '333', '填空题答案3');
-INSERT INTO `answers` (`question_id`, `user_account`, `custom_answer`) VALUES (4, '111', '简述题答案1');
-
+```
 CREATE TABLE `question_dependencies` (
   `dependency_id` INT NOT NULL AUTO_INCREMENT,
   `question_id` INT NOT NULL,
