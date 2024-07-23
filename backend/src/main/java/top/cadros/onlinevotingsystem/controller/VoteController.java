@@ -110,6 +110,8 @@ public class VoteController {
         try{
             List<AnswerLog> answerLogs = DataBase.queryAnswerLogsByVoteId(Integer.parseInt(param));
             return ResponseEntity.ok(new ApiResponse(20000, "回答列表获取成功", "OK", answerLogs));
+        }catch(NoSuchElementException e){
+            return ResponseEntity.status(400).body(new ApiResponse(40004, "请求的问卷没有回答记录", null, null));
         }catch(Exception e){
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, null));
         }

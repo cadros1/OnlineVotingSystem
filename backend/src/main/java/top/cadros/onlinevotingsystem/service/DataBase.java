@@ -122,7 +122,12 @@ public class DataBase {
         RowMapper<AnswerLog> rowMapper = (rs, rowNum) -> new AnswerLog(rs.getInt("vote_id"),
                                                                       rs.getString("user_account"),
                                                                       rs.getTimestamp("answer_time").toInstant());
-        return jdbcTemplate.query(sql, rowMapper, vote_id);
+        List<AnswerLog> answerLogs= jdbcTemplate.query(sql, rowMapper, vote_id);
+        if(answerLogs.isEmpty()){
+            throw new NoSuchElementException("请求的问卷没有回答记录");
+        }else{
+            return answerLogs;
+        }
     }
 
     //public static List<Vote> queryVotesByAccount(User user) throws Exception {
