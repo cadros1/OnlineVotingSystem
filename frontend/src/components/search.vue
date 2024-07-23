@@ -49,11 +49,14 @@ const showModal = ref(false);
 const voteID = ref("");
 const title = ref("");
 const description = ref('');
+const isPublic = ref(false);
+const publishTime = ref("");
 const error = ref("");
 
 
 function SearchVote() {
     try {
+        console.log('/vote/', voteID.value);
         axios.get('/vote/' + voteID.value)
             .then(res => {
                 if (res.data.code === 20000) {
@@ -61,6 +64,8 @@ function SearchVote() {
                     SearchVoteSuccess.value = true;
                     title.value = res.data.data.title;
                     description.value = res.data.data.description;
+                    isPublic.value = res.data.data.isPublic;
+                    publishTime.value = res.data.data.publishTime;
                 } else {
                     showModal.value = true;
                     SearchVoteSuccess.value = false;
@@ -171,6 +176,7 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
 .modal-overlay {
     position: fixed;
     top: 0;

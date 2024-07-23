@@ -107,6 +107,9 @@ const startAnswering = (questionnaire) => {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    justify-content: flex;
+    overflow-y: auto;
+    max-height: 600px;
 }
 
 .questionnaire-box {
@@ -114,7 +117,7 @@ const startAnswering = (questionnaire) => {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 250px;
 }
 
 .questionnaire-box h2 {
