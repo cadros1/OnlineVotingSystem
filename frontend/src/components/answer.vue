@@ -86,7 +86,7 @@ const vote = {
     description: '示例问卷说明',
     isPublic: true,
     publishTime: 1721704188,
-    account: '示例用户',
+    username: '示例用户',
     rootQuestionId: 1,
     questionMap: [
         [1, { "question_id": 1, "question_type": 0, "question_text": "示例单选题", "required": true, "options": ["选项一", "选项二"], "jumpLogic": ["3", null], "hasOther": true }],
@@ -206,7 +206,7 @@ function SearchVote(voteID) {
                     vote.description = res.data.data.description;
                     vote.isPublic = res.data.data.isPublic;
                     vote.publishTime = res.data.data.publishTime;
-                    vote.usermame = res.data.data.user.username;
+                    vote.username = res.data.data.user.username;
                     vote.rootQuestionId = res.data.data.rootQuestionId;
                     vote.questionMap = res.data.data.questionMap;
                     questions.value = vote.questionMap.map(item => item[1]);
