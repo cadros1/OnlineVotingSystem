@@ -245,7 +245,7 @@ const submitAnswers = () => {
     // 提交答案
     axios.post('/vote/' + voteID.value + '/answer', {
         vote_id: voteID.value,
-        account: sessionStorage.getItem(account),
+        account: sessionStorage.getItem('account'),
         answers: selectedOptions.value
     })
         .then(res => {
