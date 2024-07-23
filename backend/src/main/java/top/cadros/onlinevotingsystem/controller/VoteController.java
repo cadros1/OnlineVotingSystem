@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -116,6 +117,25 @@ public class VoteController {
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, null));
         }
     }
+
+    /**
+     * 前端使用get请求某个问卷的某个回答者的具体回答
+     * @url /vote/{vote_id}/answer/{user_account}
+     */
+    @GetMapping("/vote/{vote_id}/answer/{user_account}")
+    public ResponseEntity<ApiResponse> getAnswer(@PathVariable("vote_id") int vote_id, @PathVariable("user_account") String user_account) {
+        try{
+            if(DataBase.confirmAnswerLog(vote_id, user_account)){
+                return ResponseEntity.status(400).body(new ApiResponse(40005, "请求的用户没有该问卷的回答记录", null, null));
+            }else{
+                List<Answer> answers = DataBase.queryAnswersByVoteIdAndUserAccount(vote_id, user_account);
+                return ResponseEntity.ok(new ApiResponse(20000, "回答获取成功", "OK", answers));
+            }
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, null));
+        }
+    }
+    
     
     
     @GetMapping("/vote")
