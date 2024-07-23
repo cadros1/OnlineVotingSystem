@@ -1,14 +1,14 @@
 package top.cadros.onlinevotingsystem.object;
 
 public class Answer {
-    private int answer_id;
+    private int vote_id;
     private int question_id;
     private String user_account;
     private int selected_option_id;
     private String custom_answer;
 
-    public Answer(int answer_id, int question_id, String user_account, int selected_option_id, String custom_answer) {
-        this.answer_id = answer_id;
+    public Answer(int vote_id, int question_id, String user_account, int selected_option_id, String custom_answer) {
+        this.vote_id=vote_id;
         this.question_id = question_id;
         this.user_account = user_account;
         this.selected_option_id = selected_option_id;
@@ -22,14 +22,7 @@ public class Answer {
         this.custom_answer = custom_answer;
     }
 
-    public int getAnswer_id() {
-        return answer_id;
-    }
-
-    public void setAnswer_id(int answer_id) {
-        this.answer_id = answer_id;
-    }
-
+    // Getters and Setters
     public int getQuestion_id() {
         return question_id;
     }
@@ -60,5 +53,13 @@ public class Answer {
 
     public void setCustom_answer(String custom_answer) {
         this.custom_answer = custom_answer;
+    }
+
+    public int getVote_id() {
+        return vote_id;
+    }
+
+    public void setVote_id(int vote_id) {
+        this.vote_id = vote_id;
     }
 }

@@ -3,7 +3,9 @@ package top.cadros.onlinevotingsystem.controller;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,19 +35,19 @@ public class VoteController {
     }
 
     @GetMapping("/vote/{vote_id}")
-    public ResponseEntity<ApiResponse> sendVote(@RequestBody int vote_id){
+    public ResponseEntity<ApiResponse> sendVote(@RequestParam int vote_id){
         try{
             Vote vote = VoteFileService.readVoteFromFile(vote_id);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷读取成功", "OK", vote));
         }catch(Exception e){
-            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", "OK", null));
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
         }
     }
 
     @PostMapping("/vote/newvote")
     public ResponseEntity<ApiResponse> createVote(@RequestBody VoteRequestBody voteRequestBody) {
         try{
-            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(), voteRequestBody.getDescription(), voteRequestBody.getRootQuestionId(), voteRequestBody.getAccount());
+            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(), voteRequestBody.getDescription(), voteRequestBody.getRootQuestionId(), voteRequestBody.getAccount(), voteRequestBody.isPublic());
             Vote newVote=new Vote();
             ObjectMapper mapper = new ObjectMapper();
             List<List<String>> keyValuePairs = mapper.readValue(voteRequestBody.getQuestionMap(), List.class);
@@ -59,6 +61,7 @@ public class VoteController {
             newVote.setRootQuestionId(voteRequestBody.getRootQuestionId());
             newVote.setQuestionMap(map);
             newVote.setUser(DataBase.queryUserByAccount(voteRequestBody.getAccount()));
+            newVote.setPublic(voteRequestBody.isPublic());
             VoteFileService.outputVoteToFile(newVote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
         }catch(Exception e){
@@ -66,6 +69,32 @@ public class VoteController {
         }
     }
 
+    @PostMapping("/vote/{vote_id}/answer")
+    public ResponseEntity<ApiResponse> postAnswer(@RequestBody AnswerRequestBody answerRequestBody) {
+        try{//尝试检查问卷是否存在
+            DataBase.queryVoteByVoteId(answerRequestBody.getVote_id());
+        }catch(NoSuchElementException e){
+            return ResponseEntity.status(400).body(new ApiResponse(40001, "问卷不存在", null, null));
+        }
+        try{//尝试插入回答记录
+            DataBase.insertAnswerLog(0, null);
+        }catch(DuplicateKeyException e){
+            return ResponseEntity.status(400).body(new ApiResponse(40002, "您已经回答过此问卷", null, null));
+        }
+        try{//尝试插入回答答案
+            for(Answer answer: answerRequestBody.getAnswers()){
+                DataBase.insertAnswer(answerRequestBody.getVote_id(),
+                                      answer.getQuestion_id(),
+                                      answerRequestBody.getUserAccount(),
+                                      answer.getSelected_option_id(),
+                                      answer.getCustom_answer());
+            }
+        }catch(DuplicateKeyException e){
+            return ResponseEntity.status(400).body(new ApiResponse(40003, "answer数据有误", null, null));
+        }
+        return ResponseEntity.ok(new ApiResponse(20000, "回答提交成功", "OK", null));
+    }
+    
     
     @GetMapping("/vote")
     public String sendVoteList(@RequestParam int page) {
@@ -80,6 +109,7 @@ class VoteRequestBody{
     int rootQuestionId;
     String questionMap;
     String account;
+    boolean isPublic;
     public String getTitle() {
         return title;
     }
@@ -110,5 +140,36 @@ class VoteRequestBody{
     public void setQuestionMap(String questionMap) {
         this.questionMap = questionMap;
     }
-    
+    public boolean isPublic() {
+        return isPublic;
+    }
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+}
+
+class AnswerRequestBody{
+    int vote_id;
+    String userAccount;
+    Answer[] answers;
+
+    //getter and setter
+    public int getVote_id() {
+        return vote_id;
+    }
+    public void setVote_id(int vote_id) {
+        this.vote_id = vote_id;
+    }
+    public String getUserAccount() {
+        return userAccount;
+    }
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+    public Answer[] getAnswers() {
+        return answers;
+    }
+    public void setAnswers(Answer[] answers) {
+        this.answers = answers;
+    }
 }

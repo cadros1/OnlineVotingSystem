@@ -8,6 +8,7 @@ public class Vote implements java.io.Serializable {
     private String description;
     private User user;
     private int rootQuestionId;
+    private boolean isPublic;
     private Map<Integer,Question> questionMap;
 
     public Vote() {
@@ -80,5 +81,13 @@ public class Vote implements java.io.Serializable {
 
     public void setQuestionMap(Map<Integer, Question> questionMap) {
         this.questionMap = questionMap;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }
