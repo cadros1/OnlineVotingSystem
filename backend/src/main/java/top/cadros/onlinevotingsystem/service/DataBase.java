@@ -1,10 +1,10 @@
 package top.cadros.onlinevotingsystem.service;
 
-import top.cadros.onlinevotingsystem.object.User;
-import top.cadros.onlinevotingsystem.object.Vote;
+import top.cadros.onlinevotingsystem.object.*;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -52,8 +52,8 @@ public class DataBase {
         return users.get(0);
     }
 
-    public static int insertVote(String vote_title, String vote_descruption, int root_question_id, String user_account, boolean isPublic) throws Exception {
-        final String sql = "INSERT INTO votes(title, description, user_account, root_question_id, is_public) VALUES(?, ?, ?, ?, ?)";
+    public static int insertVote(String vote_title, String vote_descruption, int root_question_id, String user_account, boolean isPublic, Instant publishTime) throws Exception {
+        final String sql = "INSERT INTO votes(title, description, user_account, root_question_id, is_public, publish_time) VALUES(?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -63,6 +63,7 @@ public class DataBase {
             ps.setString(3, user_account);
             ps.setInt(4, root_question_id);
             ps.setBoolean(5, isPublic);
+            ps.setTimestamp(6, java.sql.Timestamp.from(publishTime));
             return ps;
         }, keyHolder);
 
@@ -114,6 +115,19 @@ public class DataBase {
     public static void insertAnswerLog(int vote_id, String user_account) throws DuplicateKeyException{
         String sql = "INSERT INTO answer_logs(vote_id, user_account) VALUES(?, ?)";
         jdbcTemplate.update(sql, vote_id, user_account);
+    }
+
+    public static List<AnswerLog> queryAnswerLogsByVoteId(int vote_id){
+        String sql = "SELECT * FROM answer_logs WHERE vote_id = ?";
+        RowMapper<AnswerLog> rowMapper = (rs, rowNum) -> new AnswerLog(rs.getInt("vote_id"),
+                                                                      rs.getString("user_account"),
+                                                                      rs.getTimestamp("answer_time").toInstant());
+        List<AnswerLog> answerLogs= jdbcTemplate.query(sql, rowMapper, vote_id);
+        if(answerLogs.isEmpty()){
+            throw new NoSuchElementException("请求的问卷没有回答记录");
+        }else{
+            return answerLogs;
+        }
     }
 
     //public static List<Vote> queryVotesByAccount(User user) throws Exception {
