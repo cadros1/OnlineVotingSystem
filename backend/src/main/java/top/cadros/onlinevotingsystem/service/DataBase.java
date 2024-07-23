@@ -130,6 +130,29 @@ public class DataBase {
         }
     }
 
+    /**
+     * 确认用户是否已经回答过某个问卷
+     */
+    public static boolean confirmAnswerLog(int vote_id,String user_account){
+        String sql = "SELECT * FROM answer_logs WHERE vote_id = ? AND user_account = ?";
+        RowMapper<AnswerLog> rowMapper = (rs, rowNum) -> new AnswerLog(rs.getInt("vote_id"),
+                                                                      rs.getString("user_account"),
+                                                                      rs.getTimestamp("answer_time").toInstant());
+        List<AnswerLog> answerLogs= jdbcTemplate.query(sql, rowMapper, vote_id, user_account);
+        return !answerLogs.isEmpty();
+    }
+
+    public static List<Answer> queryAnswersByVoteIdAndUserAccount(int vote_id, String user_account){
+        String sql = "SELECT * FROM answers WHERE vote_id = ? AND user_account = ?";
+        RowMapper<Answer> rowMapper = (rs, rowNum) -> new Answer(rs.getInt("vote_id"),
+                                                              rs.getInt("question_id"),
+                                                              rs.getString("user_account"),
+                                                              rs.getInt("select_option_id"),
+                                                              rs.getString("custom_answer"));
+        List<Answer> answers = jdbcTemplate.query(sql, rowMapper, vote_id, user_account);
+        return answers;
+    }
+
     //public static List<Vote> queryVotesByAccount(User user) throws Exception {
     //    String sql = "SELECT * FROM votes "+
     //                 "JOIN users ON votes.user_account = users.account "+
