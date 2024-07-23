@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.websocket.server.PathParam;
 import top.cadros.onlinevotingsystem.object.*;
 import top.cadros.onlinevotingsystem.service.DataBase;
 import top.cadros.onlinevotingsystem.service.VoteFileService;
@@ -36,7 +37,7 @@ public class VoteController {
     }
 
     @GetMapping("/vote/{vote_id}")
-    public ResponseEntity<ApiResponse> sendVote(@RequestParam int vote_id){
+    public ResponseEntity<ApiResponse> sendVote(@PathVariable int vote_id){
         try{
             Vote vote = VoteFileService.readVoteFromFile(vote_id);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷读取成功", "OK", vote));
@@ -56,10 +57,10 @@ public class VoteController {
                                               voteRequestBody.getPublishTime());
             Vote newVote=new Vote();
             ObjectMapper mapper = new ObjectMapper();
-            List<List<String>> keyValuePairs = mapper.readValue(voteRequestBody.getQuestionMap(), List.class);
+            List<List<Object>> keyValuePairs = mapper.readValue(voteRequestBody.getQuestionMap(), List.class);
             Map<Integer, Question> map = new LinkedHashMap<>();
-            for (List<String> pair : keyValuePairs) {
-                map.put(Integer.parseInt(pair.get(0)), mapper.convertValue(pair.get(1), Question.class));
+            for (List<Object> pair : keyValuePairs) {
+                map.put((int)pair.get(0), mapper.convertValue(pair.get(1), Question.class));
             }
             newVote.setVote_id(vote_id);
             newVote.setTitle(voteRequestBody.getTitle());
@@ -107,9 +108,9 @@ public class VoteController {
      * @url /vote/{vote_id}/answer
      */
     @GetMapping("/vote/{vote_id}/answer")
-    public ResponseEntity<ApiResponse> getAnswerList(@RequestParam String param) {
+    public ResponseEntity<ApiResponse> getAnswerList(@PathVariable int vote_id) {
         try{
-            List<AnswerLog> answerLogs = DataBase.queryAnswerLogsByVoteId(Integer.parseInt(param));
+            List<AnswerLog> answerLogs = DataBase.queryAnswerLogsByVoteId(vote_id);
             return ResponseEntity.ok(new ApiResponse(20000, "回答列表获取成功", "OK", answerLogs));
         }catch(NoSuchElementException e){
             return ResponseEntity.status(400).body(new ApiResponse(40004, "请求的问卷没有回答记录", null, null));
