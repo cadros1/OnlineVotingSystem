@@ -86,7 +86,7 @@
                             @input="validateJumpLogic($event, index)" min="0" max="9999" placeholder="跳题逻辑">
                         <button class="delete" @click="removeOption(index)">删除</button>
                     </div>
-                    <div >
+                    <div>
                         <input type="checkbox" v-model="editingItem.hasOther" />
                         <label>
                             允许其他选项
@@ -98,7 +98,16 @@
                         <button class="edit" @click="saveItem">确定</button>
                     </div>
                 </div>
-                <div v-if="editingItem.type === '判断' || editingItem.type === '填空'">
+                <div v-if="editingItem.type === '填空'">
+                    <button class="edit" @click="saveItem">确定</button>
+                </div>
+                <div v-if="editingItem.type === '判断'">
+                    <label>对</label>
+                    <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 0)"
+                        min="0" max="9999" placeholder="跳题逻辑">
+                    <label>错</label>
+                    <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 1)"
+                        min="0" max="9999" placeholder="跳题逻辑">
                     <button class="edit" @click="saveItem">确定</button>
                 </div>
             </div>
@@ -122,7 +131,7 @@ const editingItem = ref(null);
 const title = ref('');
 const description = ref('');
 const isPublic = ref(false);
-const publishTime = ref();
+const publishTime = ref('');
 
 // 模拟数据加载
 onMounted(() => {
@@ -133,7 +142,7 @@ onMounted(() => {
     title.value = route.query.title || 'error';
     description.value = route.query.description || 'error';
     isPublic.value = route.query.isPublic;
-    publishTime.value = route.query.publishtime;
+    publishTime.value = route.query.publishTime;
 });
 
 function editItem(item) {
@@ -157,7 +166,14 @@ function deleteItem(item) {
 function addItemWithType() {
     if (selectedType.value) {
         const maxId = Math.max(...items.value.map(item => item.id), 0);
-        items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: [], jumpLogic: [null], isRequired: true, hasOther: false });
+        if (selectedType.value === '判断') {
+            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['对', '错'], jumpLogic: [null], isRequired: true, hasOther: false });
+        }
+        else if (selectedType.value === '单选' || selectedType.value === '多选') {
+            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['选项一', '选项二'], jumpLogic: [null, null], isRequired: true, hasOther: false });
+        } else {
+            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: [], jumpLogic: [null], isRequired: true, hasOther: false });
+        }
         showModal.value = false;
     }
 }
@@ -178,20 +194,17 @@ function saveItem() {
         if (index !== -1) {
             items.value[index] = { ...editingItem.value };
         }
-    } else if (selectedType.value) {
-        const maxId = Math.max(...items.value.map(item => item.id), 0);
-        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [] });
     }
     showModal.value = false;
     editingItem.value = null;
     selectedType.value = '';
 }
 
+
 function addOption() {
     if (editingItem.value) {
         editingItem.value.options.push('');
         editingItem.value.jumpLogic.push(null);
-        editingItem.value.hasOther = true;
     }
 }
 
@@ -249,6 +262,7 @@ const saveItems = async () => {
         console.log('title:', title.value);
         console.log('description:', description.value);
         console.log('isPublic:', true)
+        console.log('publishTime:', publishTime.value);
         console.log('account:', sessionStorage.getItem('account'));
         console.log('rootQuestionId:', "1");
         console.log('questions:', questionMap);
