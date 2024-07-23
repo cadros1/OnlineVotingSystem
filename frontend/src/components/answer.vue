@@ -101,11 +101,12 @@ const currentQuestionIndex = ref(0);
 const selectedOptions = ref({});
 const otherOptions = ref({});
 const route = useRoute();
+const voteID = ref(0);
 
 onMounted(() => {
     voteID = route.query.voteID;
     // 获取问卷信息
-    SearchVote(voteID);
+    SearchVote(voteID.value);
 });
 
 const nextQuestion = () => {
