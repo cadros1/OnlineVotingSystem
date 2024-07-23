@@ -94,7 +94,7 @@ function startAnswer() {
     router.push({
         path: '/answer',
         query: {
-            voteID: voteID,
+            voteID: voteID.value,
         }
     });
 }

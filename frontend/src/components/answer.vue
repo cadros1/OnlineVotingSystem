@@ -104,7 +104,7 @@ const route = useRoute();
 const voteID = ref(0);
 
 onMounted(() => {
-    voteID = route.query.voteID;
+    voteID.value = route.query.voteID;
     // 获取问卷信息
     SearchVote(voteID.value);
 });
@@ -190,10 +190,10 @@ const submitAnswers = () => {
     }
 };
 
-function SearchVote() {
+function SearchVote(voteID) {
     try {
-        console.log('/vote/' + voteID.value);
-        axios.get('/vote/' + voteID.value)
+        console.log('/vote/' + voteID);
+        axios.get('/vote/' + voteID)
             .then(res => {
                 if (res.data.code === 20000) {
                     showModal.value = true;
@@ -229,6 +229,7 @@ function SearchVote() {
     }
     showModal.value = true;
 }
+
 </script>
 
 <style scoped>
