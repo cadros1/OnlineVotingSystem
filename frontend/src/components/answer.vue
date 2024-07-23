@@ -245,7 +245,7 @@ const submitAnswers = () => {
     // 提交答案
     axios.post('/vote/' + voteID.value + '/answer', {
         vote_id: voteID.value,
-        account: sessionStorage.getItem('account'),
+        userAccount: sessionStorage.getItem('account'),
         //将selectedOptions.value转换为数组
         // public class Answer {
         // private int question_id;
