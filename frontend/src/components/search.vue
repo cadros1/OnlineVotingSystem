@@ -25,6 +25,9 @@
                 <h2>查找成功！</h2>
                 <p>问卷标题: {{ title }}</p>
                 <p>问卷描述: {{ description }}</p>
+                <p>发布时间: {{ publishTime }}</p>
+                <p>发布人: {{ usermame }}</p>
+                <p>是否公开: {{ isPublic }}</p>
                 <button @click="showModal = false">关闭</button>
                 <button class="edit" @click="startAnswer()">开始作答</button>
             </div>
