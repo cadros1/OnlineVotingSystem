@@ -79,6 +79,7 @@
 import axios from 'axios';
 import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 const vote = {
     title: '示例问卷标题',
@@ -99,14 +100,12 @@ const questions = ref([]);
 const currentQuestionIndex = ref(0);
 const selectedOptions = ref({});
 const otherOptions = ref({});
+const route = useRoute();
 
 onMounted(() => {
-    questions.value = vote.questionMap.map(item => item[1]);
-    questions.value.forEach((question, index) => {
-        if (question.question_type === 1) {
-            selectedOptions.value[index] = [];
-        }
-    });
+    voteID = route.query.voteID;
+    // 获取问卷信息
+    SearchVote(voteID);
 });
 
 const nextQuestion = () => {
@@ -189,6 +188,46 @@ const submitAnswers = () => {
         }
     }
 };
+
+function SearchVote() {
+    try {
+        console.log('/vote/' + voteID.value);
+        axios.get('/vote/' + voteID.value)
+            .then(res => {
+                if (res.data.code === 20000) {
+                    showModal.value = true;
+                    SearchVoteSuccess.value = true;
+                    vote.title = res.data.data.title;
+                    vote.description = res.data.data.description;
+                    vote.isPublic = res.data.data.isPublic;
+                    vote.publishTime = res.data.data.publishTime;
+                    vote.usermame = res.data.data.user.username;
+                    vote.rootQuestionId = res.data.data.rootQuestionId;
+                    vote.questionMap = res.data.data.questionMap;
+                    questions.value = vote.questionMap.map(item => item[1]);
+                    questions.value.forEach((question, index) => {
+                        if (question.question_type === 1) {
+                            selectedOptions.value[index] = [];
+                        }
+                    });
+                } else {
+                    showModal.value = true;
+                    SearchVoteSuccess.value = false;
+                    error.value = res.data.data.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                SearchVoteSuccess.value = false;
+                error.value = "请求失败，请检查网络连接或联系管理员。";
+            });
+    } catch (e) {
+        SearchVoteSuccess.value = false;
+        error.value = "代码已退出";
+        return;
+    }
+    showModal.value = true;
+}
 </script>
 
 <style scoped>

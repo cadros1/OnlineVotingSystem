@@ -21,8 +21,8 @@
     <div v-if="showModal" class="modal-overlay">
         <div class="modal">
             <div v-if="SearchVoteSuccess">
-
                 <h2>查找成功！</h2>
+                <p>问卷id: {{ voteID }}</p>
                 <p>问卷标题: {{ title }}</p>
                 <p>问卷描述: {{ description }}</p>
                 <p>发布时间: {{ publishTime }}</p>
@@ -92,11 +92,9 @@ function SearchVote() {
 
 function startAnswer() {
     router.push({
-        //路径为/vote？voteid=1&questionid=1
-        path: '/vote',
+        path: '/answer',
         query: {
             voteid: voteID,
-            questionid: 1
         }
     });
 }

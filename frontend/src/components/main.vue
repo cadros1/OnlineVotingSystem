@@ -25,44 +25,54 @@ import Sidebar from './sidebar.vue';
 
 const questionnaires = [
     {
+        voteID: 1,
         title: '问卷1',
         description: '这是问卷1的说明。'
     },
     {
+        voteID: 2,
         title: '问卷2',
         description: '这是问卷2的说明。'
     },
     {
+        voteID: 3,
         title: '问卷3',
         description: '这是问卷3的说明。'
     },
     {
+        voteID: 4,
         title: '问卷4',
         description: '这是问卷4的说明。'
     },
     {
+        voteID: 5,
         title: '问卷5',
         description: '这是问卷5的说明。'
     },
     {
+        voteID: 6,
         title: '问卷6',
         description: '这是问卷6的说明。'
     },
     {
-        title: '问卷6',
-        description: '这是问卷6的说明。'
+        voteID: 7,
+        title: '问卷7',
+        description: '这是问卷7的说明。'
     },
     {
-        title: '问卷6',
-        description: '这是问卷6的说明。'
+        voteID: 8,
+        title: '问卷8',
+        description: '这是问卷8的说明。'
     },
     {
-        title: '问卷6',
-        description: '这是问卷6的说明。'
+        voteID: 9,
+        title: '问卷9',
+        description: '这是问卷9的说明。'
     },
     {
-        title: '问卷6',
-        description: '这是问卷6的说明。'
+        voteID: 10,
+        title: '问卷10',
+        description: '这是问卷10的说明。'
     }
     // 可以添加更多的问卷
 ];
