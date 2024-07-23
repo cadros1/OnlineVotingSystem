@@ -86,6 +86,13 @@
                             @input="validateJumpLogic($event, index)" min="0" max="9999" placeholder="跳题逻辑">
                         <button class="delete" @click="removeOption(index)">删除</button>
                     </div>
+                    <div >
+                        <input type="checkbox" v-model="editingItem.hasOther" />
+                        <label>
+                            允许其他选项
+                        </label>
+                    </div>
+
                     <div class="option">
                         <button class="newOp" @click="addOption">添加选项</button>
                         <button class="edit" @click="saveItem">确定</button>
@@ -130,7 +137,7 @@ onMounted(() => {
 });
 
 function editItem(item) {
-    editingItem.value = { ...item, options: [...item.options], jumpLogic: [...item.jumpLogic], isRequired: item.isRequired };
+    editingItem.value = { ...item, options: [...item.options], jumpLogic: [...item.jumpLogic], isRequired: item.isRequired, hasOther: item.hasOther };
     showModal.value = true;
 }
 
@@ -150,7 +157,7 @@ function deleteItem(item) {
 function addItemWithType() {
     if (selectedType.value) {
         const maxId = Math.max(...items.value.map(item => item.id), 0);
-        items.value.push({ id: maxId + 1, type: selectedType.value, name: '', options: [], jumpLogic: [], isRequired: true, hasOther: false });
+        items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: [], jumpLogic: [null], isRequired: true, hasOther: false });
         showModal.value = false;
     }
 }
@@ -184,6 +191,7 @@ function addOption() {
     if (editingItem.value) {
         editingItem.value.options.push('');
         editingItem.value.jumpLogic.push(null);
+        editingItem.value.hasOther = true;
     }
 }
 
