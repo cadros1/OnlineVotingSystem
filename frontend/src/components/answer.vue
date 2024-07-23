@@ -246,7 +246,26 @@ const submitAnswers = () => {
     axios.post('/vote/' + voteID.value + '/answer', {
         vote_id: voteID.value,
         account: sessionStorage.getItem('account'),
-        answers: selectedOptions.value
+        //将selectedOptions.value转换为数组
+        // public class Answer {
+        // private int question_id;
+        // private String custom_answer;
+        answers: questions.value.map((question, index) => {
+            let answer;
+            if (question.question_type === 0) {
+                answer = selectedOptions.value[index];
+            } else if (question.question_type === 1) {
+                answer = selectedOptions.value[index].join(',');
+            } else if (question.question_type === 2) {
+                answer = selectedOptions.value[index];
+            } else if (question.question_type === 3) {
+                answer = selectedOptions.value[index];
+            }
+            return {
+                question_id: question.question_id,
+                custom_answer: answer
+            };
+        })
     })
         .then(res => {
             if (res.data.code === 20000) {
