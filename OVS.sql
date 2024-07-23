@@ -21,6 +21,7 @@ CREATE TABLE `votes` (
   `user_account` VARCHAR(20) NOT NULL,
   `root_question_id` INT,
   `is_public` BOOLEAN NOT NULL,
+  `publush_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`vote_id`),
   FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
@@ -61,6 +62,7 @@ INSERT INTO `options` (`question_id`, `option_text`, `is_other`) VALUES (2, '其
 CREATE TABLE `answeredUsers` (
   `vote_id` INT NOT NULL,
   `user_account` VARCHAR(20) NOT NULL,
+  `answer_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`vote_id`, `user_account`),
   FOREIGN KEY (`vote_id`) REFERENCES `votes` (`vote_id`),
   FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)

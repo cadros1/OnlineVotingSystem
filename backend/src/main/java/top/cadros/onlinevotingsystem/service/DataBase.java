@@ -5,6 +5,7 @@ import top.cadros.onlinevotingsystem.object.Vote;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -52,8 +53,8 @@ public class DataBase {
         return users.get(0);
     }
 
-    public static int insertVote(String vote_title, String vote_descruption, int root_question_id, String user_account, boolean isPublic) throws Exception {
-        final String sql = "INSERT INTO votes(title, description, user_account, root_question_id, is_public) VALUES(?, ?, ?, ?, ?)";
+    public static int insertVote(String vote_title, String vote_descruption, int root_question_id, String user_account, boolean isPublic, Instant publishTime) throws Exception {
+        final String sql = "INSERT INTO votes(title, description, user_account, root_question_id, is_public, publish_time) VALUES(?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -63,6 +64,7 @@ public class DataBase {
             ps.setString(3, user_account);
             ps.setInt(4, root_question_id);
             ps.setBoolean(5, isPublic);
+            ps.setTimestamp(6, java.sql.Timestamp.from(publishTime));
             return ps;
         }, keyHolder);
 

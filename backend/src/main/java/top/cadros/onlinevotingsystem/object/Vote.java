@@ -1,5 +1,6 @@
 package top.cadros.onlinevotingsystem.object;
 
+import java.time.Instant;
 import java.util.Map;
 
 public class Vote implements java.io.Serializable {
@@ -9,17 +10,19 @@ public class Vote implements java.io.Serializable {
     private User user;
     private int rootQuestionId;
     private boolean isPublic;
+    private Instant publishTime;
     private Map<Integer,Question> questionMap;
 
     public Vote() {
     }
 
-    public Vote(int vote_id, String title, String description, User user, int rootQuestionId, Map<Integer, Question> questionMap) {
+    public Vote(int vote_id, String title, String description, User user, int rootQuestionId, Instant publishTime, Map<Integer, Question> questionMap) {
         this.vote_id = vote_id;
         this.title = title;
         this.description = description;
         this.user = user;
         this.rootQuestionId = rootQuestionId;
+        this.publishTime = publishTime;
         this.questionMap = questionMap;
     }
 
@@ -90,4 +93,14 @@ public class Vote implements java.io.Serializable {
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
+
+    public Instant getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(Instant publishTime) {
+        this.publishTime = publishTime;
+    }
+
+    
 }

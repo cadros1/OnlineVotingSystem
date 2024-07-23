@@ -1,5 +1,6 @@
 package top.cadros.onlinevotingsystem.controller;
 
+import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 import top.cadros.onlinevotingsystem.object.*;
 import top.cadros.onlinevotingsystem.service.DataBase;
@@ -47,7 +47,12 @@ public class VoteController {
     @PostMapping("/vote/newvote")
     public ResponseEntity<ApiResponse> createVote(@RequestBody VoteRequestBody voteRequestBody) {
         try{
-            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(), voteRequestBody.getDescription(), voteRequestBody.getRootQuestionId(), voteRequestBody.getAccount(), voteRequestBody.isPublic());
+            int vote_id = DataBase.insertVote(voteRequestBody.getTitle(),
+                                              voteRequestBody.getDescription(),
+                                              voteRequestBody.getRootQuestionId(),
+                                              voteRequestBody.getAccount(),
+                                              voteRequestBody.isPublic(),
+                                              voteRequestBody.getPublishTime());
             Vote newVote=new Vote();
             ObjectMapper mapper = new ObjectMapper();
             List<List<String>> keyValuePairs = mapper.readValue(voteRequestBody.getQuestionMap(), List.class);
@@ -62,6 +67,7 @@ public class VoteController {
             newVote.setQuestionMap(map);
             newVote.setUser(DataBase.queryUserByAccount(voteRequestBody.getAccount()));
             newVote.setPublic(voteRequestBody.isPublic());
+            newVote.setPublishTime(Instant.now());
             VoteFileService.outputVoteToFile(newVote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
         }catch(Exception e){
@@ -110,6 +116,7 @@ class VoteRequestBody{
     String questionMap;
     String account;
     boolean isPublic;
+    Instant publishTime;
     public String getTitle() {
         return title;
     }
@@ -145,6 +152,12 @@ class VoteRequestBody{
     }
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
+    }
+    public Instant getPublishTime() {
+        return publishTime;
+    }
+    public void setPublishTime(Instant publishTime) {
+        this.publishTime = publishTime;
     }
 }
 
