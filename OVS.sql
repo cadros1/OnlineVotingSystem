@@ -21,7 +21,7 @@ CREATE TABLE `votes` (
   `user_account` VARCHAR(20) NOT NULL,
   `root_question_id` INT,
   `is_public` BOOLEAN NOT NULL,
-  `publush_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `publish_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`vote_id`),
   FOREIGN KEY (`user_account`) REFERENCES `users` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

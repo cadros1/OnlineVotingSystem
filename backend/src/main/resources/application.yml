@@ -10,3 +10,6 @@ spring:
       pool-name: HikariCP
       maximum-pool-size: 5
       connection-timeout: 1000
+  devtools:
+    restart:
+      exclude: voteFiles/**
