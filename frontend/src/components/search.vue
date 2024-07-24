@@ -74,6 +74,8 @@ function SearchVote() {
                     title.value = res.data.data.title;
                     description.value = res.data.data.description;
                     isPublic.value = res.data.data.isPublic;
+                    console.log('res.data.data.publishTime', res.data.data.publishTime);
+                    console.log('new Date(res.data.data.publishTime).toLocaleString()', new Date(res.data.data.publishTime).toLocaleString());
                     //将publishTime格式从零时区2024-07-24T03:32:09.969467400Z转为北京时间2024-07-23 15:32:09
                     publishTime.value = new Date(res.data.data.publishTime).toLocaleString();
                     usermame.value = res.data.data.user.username;
