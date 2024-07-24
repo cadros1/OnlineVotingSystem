@@ -53,7 +53,24 @@ const viewStatistics = (id) => {
 };
 
 const deleteSurvey = (id) => {
-    console.log(`删除问卷 ${id}`);
+    try {
+        console.log('/vote/' + id);
+        axios.delete('/vote/' + id)
+            .then(res => {
+                if (res.data.code === 20000) {
+                    console.log('删除问卷成功1');
+                    getVoteList();
+                } else {
+                    console.error('删除问卷失败2');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                console.error('删除问卷失败3');
+            });
+    } catch (e) {
+        console.error('删除问卷失败4');
+    }
 };
 
 function getVoteList() {
