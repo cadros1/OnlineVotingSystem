@@ -231,4 +231,38 @@ public class DataBase {
         
         return ratios;
     }
+
+    public static QuestionAnalyseData analyseAnswers(int vote_id, int question_id){
+        String sql="SELECT custom_answer,COUNT(custom_answer) FROM answers "+
+                   "WHERE vote_id=? AND question_id=? "+
+                   "GROUP BY custom_answer";
+        RowMapper<OptionAnalyseData> rowMapper=(rs, rowNum)->new OptionAnalyseData(rs.getString("custom_answer"), rs.getInt("COUNT(custom_answer)"));
+        List<OptionAnalyseData> analyseData=jdbcTemplate.query(sql, rowMapper, vote_id, question_id);
+        QuestionAnalyseData questionAnalyseData=new QuestionAnalyseData();
+        questionAnalyseData.setOptionText(analyseData.stream().map(OptionAnalyseData::getOptionText).toArray(String[]::new));
+        questionAnalyseData.setCount(analyseData.stream().mapToInt(OptionAnalyseData::getCount).toArray());
+        questionAnalyseData.setQuestionId(question_id);
+        return questionAnalyseData;
+    }
+}
+
+class OptionAnalyseData{
+    String optionText;
+    int count;
+    public OptionAnalyseData(String optionText, int count) {
+        this.optionText = optionText;
+        this.count = count;
+    }
+    public String getOptionText() {
+        return optionText;
+    }
+    public void setOptionText(String optionText) {
+        this.optionText = optionText;
+    }
+    public int getCount() {
+        return count;
+    }
+    public void setCount(int count) {
+        this.count = count;
+    }
 }
