@@ -99,6 +99,8 @@
                     </div>
                 </div>
                 <div v-if="editingItem.type === '填空'">
+                    <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 0)"
+                        min="0" max="9999" placeholder="跳题逻辑">
                     <button class="edit" @click="saveItem">确定</button>
                 </div>
                 <div v-if="editingItem.type === '判断'">

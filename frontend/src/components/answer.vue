@@ -215,14 +215,17 @@ const nextQuestion = () => {
         return;
     }
 
-    //填空题
-    if (currentQuestionIndex.value === questions.value.length - 1) {
-        alert('问卷完成！');
-        submitAnswers();
+    let nextQuestionId;
+    if (questions.value[currentQuestionIndex.value].jumpLogic[i] == null || questions.value[currentQuestionIndex.value].jumpLogic[i] > questions.value.length || questions.value[currentQuestionIndex.value].jumpLogic[i] < 1) {
+        console.log('填空题，但这个选项没有指定合法的跳题逻辑', i);
+    } else {
+        nextQuestionId = parseInt(questions.value[currentQuestionIndex.value].jumpLogic[i]);
+        console.log('填空题，有指定合法的跳题逻辑', nextQuestionId);
+        currentQuestionIndex.value = nextQuestionId - 1;
         return;
     }
     currentQuestionIndex.value++;
-    console.log('填空题，但没有指定合法的跳题逻辑');
+    console.log('填空题，均没有指定合法的跳题逻辑');
     return;
 }
 
