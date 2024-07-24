@@ -164,7 +164,7 @@ public class VoteController {
         }
     }
 
-    @GetMapping("/vote/{vote_id}/analyse")
+    @GetMapping("/analyse/{vote_id}")
     public ResponseEntity<ApiResponse> getVoteAnalyse(@PathVariable int vote_id){
         try{
             VoteAnalyseData voteAnalyseData=DataAnalyseService.analyseVoteByVoteId(vote_id);
