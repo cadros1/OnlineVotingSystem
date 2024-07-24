@@ -44,6 +44,7 @@
 
 
 <script setup>
+import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 // 页面加载后获取问卷列表
