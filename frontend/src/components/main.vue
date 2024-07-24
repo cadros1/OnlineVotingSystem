@@ -47,23 +47,23 @@ onMounted(() => {
 
 function getVoteList() {
     try {
-        console.log('/vote/');
-        axios.get('/vote/')
+        console.log('/vote');
+        axios.get('/vote')
             .then(res => {
                 if (res.data.code === 20000) {
                     questionnaires.value = res.data.data;
                     console.log(questionnaires.value);
-                    console.log('获取问卷列表成功');
+                    console.log('获取问卷列表成功1');
                 } else {
-                    console.error('获取问卷列表失败');
+                    console.error('获取问卷列表失败2');
                 }
             })
             .catch(err => {
                 console.log(err);
-                console.error('获取问卷列表失败');
+                console.error('获取问卷列表失败3');
             });
     } catch (e) {
-        console.error('获取问卷列表失败');
+        console.error('获取问卷列表失败4');
     }
 }
 
