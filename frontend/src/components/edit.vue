@@ -261,7 +261,7 @@ const saveItems = async () => {
         console.log('headers:', headers);
         console.log('title:', title.value);
         console.log('description:', description.value);
-        console.log('isPublic:', true)
+        console.log('isPublic:', isPublic.value)
         console.log('publishTime:', publishTime.value);
         console.log('account:', sessionStorage.getItem('account'));
         console.log('rootQuestionId:', "1");
