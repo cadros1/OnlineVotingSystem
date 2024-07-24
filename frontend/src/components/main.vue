@@ -21,66 +21,51 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import Sidebar from './sidebar.vue';
+import axios from 'axios';
 
-const questionnaires = [
+const questionnaires = ref([
     {
         voteID: 1,
         title: '问卷1',
-        description: '这是问卷1的说明。'
+        description: '这是问卷1的说明。',
+        username: 'admin',
     },
-    {
-        voteID: 2,
-        title: '问卷2',
-        description: '这是问卷2的说明。'
-    },
-    {
-        voteID: 3,
-        title: '问卷3',
-        description: '这是问卷3的说明。'
-    },
-    {
-        voteID: 4,
-        title: '问卷4',
-        description: '这是问卷4的说明。'
-    },
-    {
-        voteID: 5,
-        title: '问卷5',
-        description: '这是问卷5的说明。'
-    },
-    {
-        voteID: 6,
-        title: '问卷6',
-        description: '这是问卷6的说明。'
-    },
-    {
-        voteID: 7,
-        title: '问卷7',
-        description: '这是问卷7的说明。'
-    },
-    {
-        voteID: 8,
-        title: '问卷8',
-        description: '这是问卷8的说明。'
-    },
-    {
-        voteID: 9,
-        title: '问卷9',
-        description: '这是问卷9的说明。'
-    },
-    {
-        voteID: 10,
-        title: '问卷10',
-        description: '这是问卷10的说明。'
-    }
-    // 可以添加更多的问卷
-];
+    // 其他问卷数据
+]);
 
 const startAnswering = (questionnaire) => {
     console.log('开始回答问卷:', questionnaire.title);
     // 这里可以添加跳转到问卷回答页面的逻辑
 };
+
+onMounted(() => {
+    getVoteList();
+});
+
+function getVoteList() {
+    try {
+        console.log('/questionnaire/list');
+        axios.get('/questionnaire/list')
+            .then(res => {
+                if (res.data.code === 20000) {
+                    questionnaires.value = res.data.data;
+                    console.log(questionnaires.value);
+                    console.log('获取问卷列表成功');
+                } else {
+                    console.error('获取问卷列表失败');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                console.error('获取问卷列表失败');
+            });
+    } catch (e) {
+        console.error('获取问卷列表失败');
+    }
+}
+
 </script>
 
 <style scoped>

@@ -5,16 +5,50 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome To managepage!</h1>
+                <div class="content">
+                    <h1>问卷统计</h1>
+                    <div v-for="survey in surveys" :key="survey.id" class="survey-item">
+                        <h2>{{ survey.title }}</h2>
+                        <p>{{ survey.description }}</p>
+                        <p>发布时间: {{ survey.publishTime }}</p>
+                        <p>是否公开: {{ survey.isPublic ? '是' : '否' }}</p>
+                        <button @click="viewStatistics(survey.id)">查看统计</button>
+                        <button @click="deleteSurvey(survey.id)">删除</button>
+                    </div>
+                </div>
             </div>
-
-            <router-view />
         </div>
     </div>
 </template>
 
 <script setup>
 import Sidebar from './sidebar.vue';
+import { ref } from 'vue';
+
+const surveys = ref([
+    {
+        id: 1,
+        title: '问卷1',
+        description: '这是一个关于问卷1的描述',
+        publishTime: '2023-04-01',
+        isPublic: true
+    },
+    {
+        id: 2,
+        title: '问卷2',
+        description: '这是一个关于问卷2的描述',
+        publishTime: '2023-04-02',
+        isPublic: false
+    }
+]);
+
+const viewStatistics = (id) => {
+    console.log(`查看问卷 ${id} 的统计`);
+};
+
+const deleteSurvey = (id) => {
+    console.log(`删除问卷 ${id}`);
+};
 </script>
 
 <style scoped>
@@ -52,5 +86,21 @@ import Sidebar from './sidebar.vue';
     height: auto;
     border-radius: 10px;
     padding: 20px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.survey-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+button {
+    margin-right: 10px;
 }
 </style>
