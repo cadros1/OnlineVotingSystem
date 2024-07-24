@@ -60,6 +60,7 @@ const deleteSurvey = (id) => {
             .then(res => {
                 if (res.data.code === 20000) {
                     console.log('删除问卷成功1');
+                    window.alert('删除问卷成功');
                     getVoteList();
                 } else {
                     console.error('删除问卷失败2');
