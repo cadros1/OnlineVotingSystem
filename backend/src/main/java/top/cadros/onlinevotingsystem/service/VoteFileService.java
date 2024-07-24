@@ -35,4 +35,12 @@ public class VoteFileService {
             return (Vote)ois.readObject();
         }
     }
+
+    public static void deleteVoteFile(int vote_id) throws Exception{
+        File file=new File(".\\src\\main\\resources\\voteFiles\\"+vote_id+".dat");
+        if(!file.exists()){
+            throw new Exception("文件不存在");
+        }
+        file.delete();
+    }
 }

@@ -96,11 +96,11 @@ public class Vote implements java.io.Serializable {
         this.questionMap = questionMap;
     }
 
-    public boolean isPublic() {
+    public boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setPublic(boolean isPublic) {
+    public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
 

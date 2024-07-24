@@ -5,7 +5,10 @@ import top.cadros.onlinevotingsystem.object.*;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.Instant;
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.dao.DuplicateKeyException;
@@ -90,8 +93,12 @@ public class DataBase {
     }
 
     public static void deleteVoteByVoteId(int vote_id){
-        String sql = "DELETE FROM votes WHERE vote_id = ?";
-        jdbcTemplate.update(sql, vote_id);
+        String sql1="DELETE FROM votes WHERE vote_id = ?";
+        String sql2="DELETE FROM answeredUsers WHERE vote_id = ?";
+        String sql3="DELETE FROM answers WHERE vote_id = ?";
+        jdbcTemplate.update(sql3, vote_id);
+        jdbcTemplate.update(sql2, vote_id);
+        jdbcTemplate.update(sql1, vote_id);
     }
 
     /**
@@ -204,5 +211,24 @@ public class DataBase {
     public static void deleteVoteById(int voteId){
         String sql = "DELETE FROM votes WHERE vote_id = ?";
         jdbcTemplate.update(sql, voteId);
+    }
+
+    /**
+     * 查询
+     * @return
+     */
+    public static Map<Integer, Double> calculateOptionRatios(int vote_id, int question_id) {
+        String sql = "SELECT selected_option_id, COUNT(*) as option_count FROM answers WHERE vote_id = ? AND question_id = ? GROUP BY selected_option_id";
+        RowMapper<Map.Entry<Integer, Long>> rowMapper = (rs, rowNum) -> new AbstractMap.SimpleEntry<>(rs.getInt("selected_option_id"), rs.getLong("option_count"));
+        
+        List<Map.Entry<Integer, Long>> counts = jdbcTemplate.query(sql, rowMapper, vote_id, question_id);
+        long total = counts.stream().mapToLong(Map.Entry::getValue).sum();
+        
+        Map<Integer, Double> ratios = new HashMap<>();
+        for (Map.Entry<Integer, Long> entry : counts) {
+            ratios.put(entry.getKey(), entry.getValue() / (double) total);
+        }
+        
+        return ratios;
     }
 }
