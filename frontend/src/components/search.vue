@@ -74,8 +74,8 @@ function SearchVote() {
                     title.value = res.data.data.title;
                     description.value = res.data.data.description;
                     isPublic.value = res.data.data.isPublic;
-                    //将publishTime格式从2024-07-24T03:32:09.969467400Z转为2024年07月24日 03:32:09
-                    publishTime.value = res.data.data.publishTime.slice(0, 10) + '' + res.data.data.publishTime.slice(11, 19);
+                    //将publishTime格式从零时区2024-07-24T03:32:09.969467400Z转为北京时间2024-07-23 15:32:09
+                    publishTime.value = new Date(res.data.data.publishTime).toLocaleString();
                     usermame.value = res.data.data.user.username;
                 } else {
                     showModal.value = true;
