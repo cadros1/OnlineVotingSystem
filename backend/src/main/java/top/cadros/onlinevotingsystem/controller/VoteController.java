@@ -68,8 +68,8 @@ public class VoteController {
             newVote.setRootQuestionId(voteRequestBody.getRootQuestionId());
             newVote.setQuestionMap(map);
             newVote.setUser(DataBase.queryUserByAccount(voteRequestBody.getAccount()));
-            newVote.setPublic(voteRequestBody.getIsPublic());
-            newVote.setPublishTime(Instant.now());
+            newVote.setIsPublic(voteRequestBody.getIsPublic());
+            newVote.setPublishTime(voteRequestBody.getPublishTime());
             VoteFileService.outputVoteToFile(newVote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
         }catch(Exception e){
@@ -153,12 +153,13 @@ public class VoteController {
     }
 
     @DeleteMapping("/vote/{vote_id}")
-    public ResponseEntity<ApiResponse> deleteVoteById(@PathVariable int voteId){
+    public ResponseEntity<ApiResponse> deleteVoteById(@PathVariable int vote_id){
         try{
-            DataBase.deleteVoteByVoteId(voteId);
+            DataBase.deleteVoteByVoteId(vote_id);
+
             return ResponseEntity.ok(new ApiResponse(20000, "问卷删除成功", "OK", null));
         }catch(Exception e){
-            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员",null, null));
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员",null, e.getMessage()));
         }
     }
 }

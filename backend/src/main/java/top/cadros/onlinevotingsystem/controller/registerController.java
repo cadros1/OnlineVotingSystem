@@ -17,7 +17,7 @@ public class registerController {
             DataBase.insertUser(user);
             return ResponseEntity.ok(new ApiResponse(20000, "注册成功", null, null));
         }catch(Exception e){
-            return ResponseEntity.status(500).body(new ApiResponse(50000, e.getMessage(), null, null));
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
         }
     }
 }
