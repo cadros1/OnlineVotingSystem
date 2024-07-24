@@ -28,7 +28,7 @@ import { ref } from 'vue';
 
 const questionnaires = ref([
     {
-        voteID: 1,
+        vote_id: 1,
         title: '问卷1',
         description: '这是问卷1的说明。',
         username: 'admin',
@@ -37,8 +37,20 @@ const questionnaires = ref([
 ]);
 
 const startAnswering = (questionnaire) => {
-    console.log('开始回答问卷:', questionnaire.title);
-    // 这里可以添加跳转到问卷回答页面的逻辑
+    if (sessionStorage.getItem('token')) {
+        // 已登录，跳转到回答页面
+        router.push({
+            path: '/answer',
+            query: {
+                voteID: questionnaire.vote_id.value,
+            }
+        });
+    } else {
+        // 未登录，跳转到登录页面
+        window.alert('请先登录！');
+        router.push('/login');
+        return;
+    }
 };
 
 onMounted(() => {

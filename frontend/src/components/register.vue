@@ -68,7 +68,7 @@ const handleRegister = async () => {
     return;
   }
   try {
-    const response = await axios.post('/registerpage', {
+    const response = await axios.post('/register', {
       account: account.value,
       username: username.value,
       password: password.value

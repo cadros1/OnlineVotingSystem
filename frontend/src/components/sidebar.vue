@@ -66,6 +66,7 @@ const goToUserPage = () => {
     router.push('/user');
   } else {
     // 未登录，跳转到登录页面
+    window.alert('请先登录！');
     router.push('/login');
     return;
   }
