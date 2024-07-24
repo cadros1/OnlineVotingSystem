@@ -47,8 +47,8 @@ onMounted(() => {
 
 function getVoteList() {
     try {
-        console.log('/questionnaire/list');
-        axios.get('/questionnaire/list')
+        console.log('/vote/');
+        axios.get('/vote/')
             .then(res => {
                 if (res.data.code === 20000) {
                     questionnaires.value = res.data.data;
