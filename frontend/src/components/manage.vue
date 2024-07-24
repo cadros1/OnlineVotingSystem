@@ -27,6 +27,10 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
+onMounted(() => {
+    getVoteList();
+});
+
 const surveys = ref([
     {
         id: 1,
