@@ -34,7 +34,6 @@
                             </div>
                         </div>
                     </div>
-                    <button @click="exportStatistics">导出统计信息</button>
                 </div>
             </div>
         </div>
@@ -45,7 +44,6 @@
 import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import XLSX from 'xlsx';
 
 onMounted(() => {
     getVoteList();
@@ -159,29 +157,6 @@ function getVoteList() {
 const calculatePercentage = (count, total) => {
     if (total === 0) return '0';
     return ((count / total) * 100).toFixed(2);
-};
-
-const exportStatistics = () => {
-    const data = questions.value.map(question => {
-        return {
-            question: question.question_text,
-            options: question.options.map((option, index) => ({
-                option: option,
-                count: question.optionStats[index] || 0,
-                percentage: calculatePercentage(question.optionStats[index], question.totalVotes)
-            }))
-        };
-    });
-
-    const worksheet = XLSX.utils.json_to_sheet(data.flatMap(question => question.options.map(option => ({
-        Question: question.question,
-        Option: option.option,
-        Count: option.count,
-        Percentage: option.percentage
-    }))));
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Statistics");
-    XLSX.writeFile(workbook, "问卷统计.xlsx");
 };
 </script>
 
