@@ -216,10 +216,10 @@ const nextQuestion = () => {
     }
 
     let nextQuestionId;
-    if (questions.value[currentQuestionIndex.value].jumpLogic[i] == null || questions.value[currentQuestionIndex.value].jumpLogic[i] > questions.value.length || questions.value[currentQuestionIndex.value].jumpLogic[i] < 1) {
-        console.log('填空题，但这个选项没有指定合法的跳题逻辑', i);
+    if (questions.value[currentQuestionIndex.value].jumpLogic[0] == null || questions.value[currentQuestionIndex.value].jumpLogic[0] > questions.value.length || questions.value[currentQuestionIndex.value].jumpLogic[0] < 1) {
+        console.log('填空题，但这个选项没有指定合法的跳题逻辑', 0);
     } else {
-        nextQuestionId = parseInt(questions.value[currentQuestionIndex.value].jumpLogic[i]);
+        nextQuestionId = parseInt(questions.value[currentQuestionIndex.value].jumpLogic[0]);
         console.log('填空题，有指定合法的跳题逻辑', nextQuestionId);
         currentQuestionIndex.value = nextQuestionId - 1;
         return;
