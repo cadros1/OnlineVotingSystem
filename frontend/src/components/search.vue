@@ -27,7 +27,7 @@
                 <p>问卷描述: {{ description }}</p>
                 <p>发布时间: {{ publishTime }}</p>
                 <p>发布人: {{ usermame }}</p>
-                <p>是否公开: {{ isPublic }}</p>
+                <p>是否公开: {{ isPublic ? '是' : '否' }}</p>
                 <button @click="showModal = false">关闭</button>
                 <button class="edit" @click="startAnswer()">开始作答</button>
             </div>
@@ -57,7 +57,6 @@ const publishTime = ref("");
 const error = ref("");
 const usermame = ref("");
 
-
 function SearchVote() {
     if (!sessionStorage.getItem('token')) {
         // 未登录，跳转到登录页面
@@ -75,7 +74,8 @@ function SearchVote() {
                     title.value = res.data.data.title;
                     description.value = res.data.data.description;
                     isPublic.value = res.data.data.isPublic;
-                    publishTime.value = res.data.data.publishTime;
+                    //将publishTime格式从2024-07-24T03:32:09.969467400Z转为2024年07月24日 03:32:09
+                    publishTime.value = res.data.data.publishTime.slice(0, 10) + '' + res.data.data.publishTime.slice(11, 19);
                     usermame.value = res.data.data.user.username;
                 } else {
                     showModal.value = true;
