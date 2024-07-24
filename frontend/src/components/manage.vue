@@ -23,7 +23,10 @@
 
 <script setup>
 import Sidebar from './sidebar.vue';
-import { ref } from 'vue';
+import Sidebar from './sidebar.vue';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
 
 const surveys = ref([
     {
@@ -49,6 +52,28 @@ const viewStatistics = (id) => {
 const deleteSurvey = (id) => {
     console.log(`删除问卷 ${id}`);
 };
+
+function getVoteList() {
+    try {
+        console.log('/vote?'+sessionStorage.getItem('account'));
+        axios.get('/vote?'+sessionStorage.getItem('account'))
+            .then(res => {
+                if (res.data.code === 20000) {
+                    questionnaires.value = res.data.data;
+                    console.log(questionnaires.value);
+                    console.log('获取问卷列表成功1');
+                } else {
+                    console.error('获取问卷列表失败2');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                console.error('获取问卷列表失败3');
+            });
+    } catch (e) {
+        console.error('获取问卷列表失败4');
+    }
+}
 </script>
 
 <style scoped>
