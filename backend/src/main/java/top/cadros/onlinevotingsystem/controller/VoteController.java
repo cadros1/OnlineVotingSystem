@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import top.cadros.onlinevotingsystem.object.*;
+import top.cadros.onlinevotingsystem.service.DataAnalyseService;
 import top.cadros.onlinevotingsystem.service.DataBase;
 import top.cadros.onlinevotingsystem.service.VoteFileService;
 
@@ -160,6 +161,19 @@ public class VoteController {
             return ResponseEntity.ok(new ApiResponse(20000, "问卷删除成功", "OK", null));
         }catch(Exception e){
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员",null, e.getMessage()));
+        }
+    }
+
+    @GetMapping("/vote/{vote_id}/analyse")
+    public ResponseEntity<ApiResponse> getVoteAnalyse(@PathVariable int vote_id){
+        try{
+            VoteAnalyseData voteAnalyseData=DataAnalyseService.analyseVoteByVoteId(vote_id);
+            voteAnalyseData.setVote(VoteFileService.readVoteFromFile(vote_id));
+            return ResponseEntity.ok(new ApiResponse(20000, "问卷统计成功", "OK", voteAnalyseData));
+        }catch(IllegalStateException e){
+            return ResponseEntity.status(403).body(new ApiResponse(40300, "回答数量不足以产生有效统计", null, e.getMessage()));
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
         }
     }
 }
