@@ -7,6 +7,9 @@ public class Answer {
     private int selected_option_id;
     private String custom_answer;
 
+    public Answer() {
+    }
+
     public Answer(int vote_id, int question_id, String user_account, int selected_option_id, String custom_answer) {
         this.vote_id=vote_id;
         this.question_id = question_id;
