@@ -53,16 +53,34 @@ const viewStatistics = (id) => {
 };
 
 const deleteSurvey = (id) => {
-    console.log(`删除问卷 ${id}`);
+    try {
+        console.log('/vote/' + id);
+        axios.delete('/vote/' + id)
+            .then(res => {
+                if (res.data.code === 20000) {
+                    console.log('删除问卷成功1');
+                    getVoteList();
+                } else {
+                    console.error('删除问卷失败2');
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                console.error('删除问卷失败3');
+            });
+    } catch (e) {
+        console.error('删除问卷失败4');
+    }
 };
 
 function getVoteList() {
     try {
-        console.log('/vote?user_account='+sessionStorage.getItem('account'));
-        axios.get('/vote?user_account='+sessionStorage.getItem('account'))
+        console.log('/vote?user_account=' + sessionStorage.getItem('account'));
+        axios.get('/vote?user_account=' + sessionStorage.getItem('account'))
             .then(res => {
                 if (res.data.code === 20000) {
                     questionnaires.value = res.data.data;
+                    console.log('res:', res.data.data);
                     console.log(questionnaires.value);
                     console.log('获取问卷列表成功1');
                 } else {
