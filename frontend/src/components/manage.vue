@@ -75,8 +75,8 @@ const deleteSurvey = (id) => {
 
 function getVoteList() {
     try {
-        console.log('/vote?user_account=' + sessionStorage.getItem('account'));
-        axios.get('/vote?user_account=' + sessionStorage.getItem('account'))
+        console.log('/vote?userAccount=' + sessionStorage.getItem('account'));
+        axios.get('/vote?userAccount=' + sessionStorage.getItem('account'))
             .then(res => {
                 if (res.data.code === 20000) {
                     questionnaires.value = res.data.data;
