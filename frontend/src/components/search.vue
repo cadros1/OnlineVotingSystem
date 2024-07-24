@@ -28,8 +28,10 @@
                 <p>发布时间: {{ publishTime }}</p>
                 <p>发布人: {{ usermame }}</p>
                 <p>是否公开: {{ isPublic ? '是' : '否' }}</p>
-                <button @click="showModal = false">关闭</button>
-                <button class="edit" @click="startAnswer()">开始作答</button>
+                <div class="button-group">
+                    <button @click="showModal = false">关闭</button>
+                    <button class="edit" @click="startAnswer()">开始作答</button>
+                </div>
             </div>
             <div v-else>
                 <h2>查找失败！</h2>
@@ -171,6 +173,11 @@ function startAnswer() {
 .input-group input {
     margin-left: 10px;
     width: 400px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: row;
 }
 
 button {
