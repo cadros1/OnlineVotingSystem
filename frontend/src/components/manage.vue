@@ -83,22 +83,25 @@ const fetchStatistics = async (id) => {
     try {
         const response = await axios.get('/analyse/' + id);
         if (response.data.code === 20000) {
-            statistics.value = response.data.data.questionAnalyseDatas;
-            const voteData = response.data.data.vote;
+            const { vote, questionAnalyseDatas } = response.data.data;
             vote.value = {
-                title: voteData.title,
-                description: voteData.description,
-                isPublic: voteData.isPublic,
-                publishTime: voteData.publishTime,
-                username: response.data.data.user.vote.username,
-                rootQuestionId: voteData.rootQuestionId,
-                questionMap: voteData.questionMap
+                title: vote.title,
+                description: vote.description,
+                isPublic: vote.isPublic,
+                publishTime: vote.publishTime,
+                username: response.data.data.user.username,
+                rootQuestionId: vote.rootQuestionId,
+                questionMap: vote.questionMap
             };
-            questions.value = Object.values(vote.value.questionMap).map(question => ({
-                ...question,
-                showDetails: false,
-                optionStats: statistics.value.find(stat => stat.question_id === question.question_id)?.options || []
-            }));
+            questions.value = Object.values(vote.questionMap).map(question => {
+                const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
+                return {
+                    ...question,
+                    showDetails: false,
+                    options: question.options,
+                    optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
+                };
+            });
         } else {
             console.error('获取统计信息失败');
         }
