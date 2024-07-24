@@ -17,7 +17,6 @@
       <div class="button-container">
         <button class="login-button" @click="handleSubmit">登录</button>
         <button class="register-button" @click="goToRegister">注册</button>
-        <button class="skip-button" @click="goToMainPage">跳过</button>
       </div>
 
     </div>
@@ -45,7 +44,7 @@ const handleSubmit = async () => {
 
       sessionStorage.setItem('token', response.data.authorization);
       // 将token存入sessionStorage
-      console.log('登录成功，token:', response.data.authorization);
+      console.log('登录成功,token:', response.data.authorization);
       sessionStorage.setItem('username', response.data.data.username);
       // 将用户名存入sessionStorage'
       console.log('用户名:', response.data.data.username)
