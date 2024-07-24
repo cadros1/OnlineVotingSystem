@@ -129,7 +129,7 @@ const showModal = ref(false);
 const selectedType = ref('');
 const editingItem = ref(null);
 const title = ref('');
-const description = ref('');
+const description = ref(null);
 const isPublic = ref(false);
 const publishTime = ref('');
 
