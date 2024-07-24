@@ -236,8 +236,8 @@ const submitAnswers = () => {
     // 打印答案
     console.log('答案：');
     for (let i = 0; i < questions.value.length; i++) {
-        if (selectedOptions.value[i] === '其他') {
-            console.log(`第${i + 1}题：${selectedOptions.value[i]} - ${otherOptions.value[i]}`);
+        if (selectedOptions.value[i] === '其他' || selectedOptions.value[i].includes('其他')) {
+            console.log(`第${i + 1}题：${selectedOptions.value[i]}${otherOptions.value[i]}`);
         } else {
             console.log(`第${i + 1}题：${selectedOptions.value[i]}`);
         }
