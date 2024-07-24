@@ -7,13 +7,13 @@
             <div class="right">
                 <div class="content">
                     <h1>问卷统计</h1>
-                    <div v-for="survey in surveys" :key="survey.id" class="survey-item">
-                        <h2>{{ survey.title }}</h2>
-                        <p>{{ survey.description }}</p>
-                        <p>发布时间: {{ survey.publishTime }}</p>
-                        <p>是否公开: {{ survey.isPublic ? '是' : '否' }}</p>
-                        <button @click="viewStatistics(survey.id)">查看统计</button>
-                        <button @click="deleteSurvey(survey.id)">删除</button>
+                    <div v-for="questionnaire in questionnaires" :key="questionnaire.id" class="questionnaire-item">
+                        <h2>{{ questionnaire.title }}</h2>
+                        <p>{{ questionnaire.description }}</p>
+                        <p>发布时间: {{ questionnaire.publishTime }}</p>
+                        <p>是否公开: {{ questionnaire.isPublic ? '是' : '否' }}</p>
+                        <button @click="viewStatistics(questionnaire.id)">查看统计</button>
+                        <button @click="deleteSurvey(questionnaire.id)">删除</button>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@ onMounted(() => {
     getVoteList();
 });
 
-const surveys = ref([
+const questionnaires = ref([
     {
         id: 1,
         title: '问卷1',
@@ -58,8 +58,8 @@ const deleteSurvey = (id) => {
 
 function getVoteList() {
     try {
-        console.log('/vote?'+sessionStorage.getItem('account'));
-        axios.get('/vote?'+sessionStorage.getItem('account'))
+        console.log('/vote?user_account='+sessionStorage.getItem('account'));
+        axios.get('/vote?user_account='+sessionStorage.getItem('account'))
             .then(res => {
                 if (res.data.code === 20000) {
                     questionnaires.value = res.data.data;
@@ -123,7 +123,7 @@ function getVoteList() {
     width: 100%;
 }
 
-.survey-item {
+.questionnaire-item {
     border-bottom: 1px solid #ccc;
     padding: 10px 0;
 }
