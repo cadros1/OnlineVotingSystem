@@ -25,7 +25,9 @@ import { onMounted } from 'vue';
 import Sidebar from './sidebar.vue';
 import axios from 'axios';
 import { ref } from 'vue';
-import router from '../router';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 
 const questionnaires = ref([
     {
