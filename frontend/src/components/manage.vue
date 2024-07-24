@@ -89,7 +89,7 @@ const fetchStatistics = async (id) => {
                 description: vote.description,
                 isPublic: vote.isPublic,
                 publishTime: vote.publishTime,
-                username: response.data.data.user.username,
+                username: response.data.data.vote.user.username,
                 rootQuestionId: vote.rootQuestionId,
                 questionMap: vote.questionMap
             };
