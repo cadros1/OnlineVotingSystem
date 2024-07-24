@@ -58,11 +58,12 @@ const deleteSurvey = (id) => {
 
 function getVoteList() {
     try {
-        console.log('/vote?user_account='+sessionStorage.getItem('account'));
-        axios.get('/vote?user_account='+sessionStorage.getItem('account'))
+        console.log('/vote?user_account=' + sessionStorage.getItem('account'));
+        axios.get('/vote?user_account=' + sessionStorage.getItem('account'))
             .then(res => {
                 if (res.data.code === 20000) {
                     questionnaires.value = res.data.data;
+                    console.log('res:', res.data.data);
                     console.log(questionnaires.value);
                     console.log('获取问卷列表成功1');
                 } else {
