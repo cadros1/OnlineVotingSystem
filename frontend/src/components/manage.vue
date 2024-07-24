@@ -23,6 +23,7 @@
             <div class="modal-content">
                 <span class="close" @click="closeStatisticsModal">&times;</span>
                 <h2>问卷统计 - {{ vote.title }}</h2>
+                <p>回答数量: {{ answeredNumber }}</p> <!-- 添加这一行显示回答数量 -->
                 <div v-if="statisticsLoading">加载中...</div>
                 <div v-else>
                     <div v-for="(question, index) in questions" :key="question.question_id" class="question-statistics"
@@ -41,22 +42,23 @@
     </div>
 </template>
 
+
 <script setup>
-import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
 // 页面加载后获取问卷列表
 onMounted(() => getVoteList());
 
 const showModal = ref(false);
 const selectedVoteId = ref(null);
 const vote = ref({
-    title: '', description: '', isPublic: true, publishTime: null, username: '', rootQuestionId: null, questionMap: {}
+    title: '', description: '', isPublic: true, publishTime: null,
+    username: '', rootQuestionId: null, questionMap: {}
 });
 const questions = ref([]);
 const statisticsLoading = ref(true);
 const questionnaires = ref([]);
+const answeredNumber = ref(0); // 添加一个 ref 用来存放回答数量
 
 const toggleQuestionDetails = (index) => {
     questions.value[index].showDetails = !questions.value[index].showDetails;
@@ -81,10 +83,11 @@ async function fetchStatistics(id) {
     try {
         const res = await axios.get(`/analyse/${id}`);
         if (res.data.code === 20000) {
-            const { vote: voteData, questionAnalyseDatas, answeredNumber } = res.data.data;
+            const { vote: voteData, questionAnalyseDatas, answeredNumber: answeredNum } = res.data.data;
             vote.value = {
                 title: voteData.title, description: voteData.description, isPublic: voteData.isPublic,
-                publishTime: voteData.publishTime, username: voteData.user.username, rootQuestionId: voteData.rootQuestionId, questionMap: voteData.questionMap
+                publishTime: voteData.publishTime, username: voteData.user.username,
+                rootQuestionId: voteData.rootQuestionId, questionMap: voteData.questionMap
             };
             questions.value = Object.values(voteData.questionMap).map(question => {
                 const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
@@ -94,6 +97,7 @@ async function fetchStatistics(id) {
                     optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
                 };
             }).filter(hasStatistics); // 过滤掉没有统计数据的题目
+            answeredNumber.value = answeredNum; // 设置回答数量
         } else {
             console.error('获取统计信息失败');
         }
@@ -106,6 +110,7 @@ async function fetchStatistics(id) {
 
 // 计算选项的百分比
 const getPercentage = (question, index) => {
+    if (!question.optionStats) return 0;
     const total = question.optionStats.reduce((sum, count) => sum + count, 0);
     return total > 0 ? ((question.optionStats[index] / total) * 100).toFixed(2) : 0;
 };
