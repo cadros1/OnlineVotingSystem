@@ -72,7 +72,7 @@ public class VoteController {
             newVote.setIsPublic(voteRequestBody.getIsPublic());
             newVote.setPublishTime(voteRequestBody.getPublishTime());
             VoteFileService.outputVoteToFile(newVote);
-            return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
+            return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", vote_id));
         }catch(Exception e){
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", "OK", null));
         }
