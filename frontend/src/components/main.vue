@@ -46,7 +46,7 @@ const startAnswering = (questionnaire) => {
         router.push({
             path: '/answer',
             query: {
-                voteID: questionnaire.vote_id.value,
+                voteID: questionnaire.vote_id,
             }
         });
     } else {
