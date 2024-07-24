@@ -6,7 +6,7 @@
             </div>
             <div class="right">
                 <div class="content">
-                    <h1>问卷列表</h1>
+                    <h1>公开问卷列表</h1>
                     <div class="questionnaire-list">
                         <div class="questionnaire-box" v-for="(questionnaire, index) in questionnaires" :key="index">
                             <h2>{{ questionnaire.title }}</h2>
