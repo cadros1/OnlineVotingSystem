@@ -11,7 +11,7 @@
                         class="questionnaire-item">
                         <h2>{{ questionnaire.title }}</h2>
                         <p>{{ questionnaire.description }}</p>
-                        <p>发布时间: {{ new Date(questionnaire.publishTime).toLocaleString() }}</p>
+                        <p>发布时间: {{ formatDate(questionnaire.publishTime) }}</p>
                         <p>是否公开: {{ questionnaire.isPublic ? '是' : '否' }}</p>
                         <button @click="openStatisticsModal(questionnaire.vote_id)">查看统计</button>
                         <button @click="deleteSurvey(questionnaire.vote_id)">删除</button>
@@ -25,20 +25,19 @@
                 <h2>问卷统计 - {{ vote.title }}</h2>
                 <div v-if="statisticsLoading">加载中...</div>
                 <div v-else>
-                    <<div v-for="(question, index) in questions" :key="question.question_id" class="question-statistics"
+                    <div v-for="(question, index) in questions" :key="question.question_id" class="question-statistics"
                         v-if="hasStatistics(question)">
                         <h3 @click="toggleQuestionDetails(index)">{{ question.question_text }}</h3>
                         <div v-show="question.showDetails" class="options-stats">
                             <div v-for="(option, optIndex) in question.options" :key="optIndex" class="option-item">
-                                <p>{{ option }}: {{ question.optionStats && question.optionStats[optIndex] || 0 }} ({{
-                                    getPercentage(question, optIndex) }}%)</p>
+                                <p>{{ option }}: {{ question.optionStats[optIndex] || 0 }} ({{ getPercentage(question,
+                                    optIndex) }}%)</p>
                             </div>
                         </div>
+                    </div>
                 </div>
-
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -47,25 +46,17 @@ import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-onMounted(() => {
-    getVoteList();
-});
+// 页面加载后获取问卷列表
+onMounted(() => getVoteList());
 
 const showModal = ref(false);
 const selectedVoteId = ref(null);
-const statistics = ref([]);
 const vote = ref({
-    title: '',
-    description: '',
-    isPublic: true,
-    publishTime: null,
-    username: '',
-    rootQuestionId: null,
-    questionMap: {}
+    title: '', description: '', isPublic: true, publishTime: null, username: '', rootQuestionId: null, questionMap: {}
 });
-
 const questions = ref([]);
 const statisticsLoading = ref(true);
+const questionnaires = ref([]);
 
 const toggleQuestionDetails = (index) => {
     questions.value[index].showDetails = !questions.value[index].showDetails;
@@ -81,90 +72,75 @@ const closeStatisticsModal = () => {
     showModal.value = false;
 };
 
-const hasStatistics = (question) => {
-    return question.optionStats && question.optionStats.some(count => count > 0);
-};
+// 检查问题是否有统计数据
+const hasStatistics = (question) => question.optionStats && question.optionStats.some(count => count > 0);
 
-function fetchStatistics(id) {
+// 获取并设置统计数据
+async function fetchStatistics(id) {
     statisticsLoading.value = true;
-    axios.get('/analyse/' + id)
-        .then(res => {
-            if (res.data.code === 20000) {
-                const { vote, questionAnalyseDatas } = res.data.data;
-                vote.value = {
-                    title: vote.title,
-                    description: vote.description,
-                    isPublic: vote.isPublic,
-                    publishTime: vote.publishTime,
-                    username: res.data.data.vote.user.username,
-                    rootQuestionId: vote.rootQuestionId,
-                    questionMap: vote.questionMap
+    try {
+        const res = await axios.get(`/analyse/${id}`);
+        if (res.data.code === 20000) {
+            const { vote: voteData, questionAnalyseDatas, answeredNumber } = res.data.data;
+            vote.value = {
+                title: voteData.title, description: voteData.description, isPublic: voteData.isPublic,
+                publishTime: voteData.publishTime, username: voteData.user.username, rootQuestionId: voteData.rootQuestionId, questionMap: voteData.questionMap
+            };
+            questions.value = Object.values(voteData.questionMap).map(question => {
+                const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
+                return {
+                    ...question,
+                    showDetails: false,
+                    optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
                 };
-                questions.value = Object.values(vote.questionMap).map(question => {
-                    const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
-                    return {
-                        ...question,
-                        showDetails: false,
-                        options: question.options,
-                        optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
-                    };
-                }).filter(hasStatistics); // 过滤掉没有统计数据的题目
-            } else {
-                console.error('获取统计信息失败');
-            }
-        })
-        .catch(err => {
-            console.error('获取统计信息出错：', err);
-        })
-        .finally(() => {
-            statisticsLoading.value = false;
-        });
+            }).filter(hasStatistics); // 过滤掉没有统计数据的题目
+        } else {
+            console.error('获取统计信息失败');
+        }
+    } catch (err) {
+        console.error('获取统计信息出错：', err);
+    } finally {
+        statisticsLoading.value = false;
+    }
 }
 
-
+// 计算选项的百分比
 const getPercentage = (question, index) => {
     const total = question.optionStats.reduce((sum, count) => sum + count, 0);
     return total > 0 ? ((question.optionStats[index] / total) * 100).toFixed(2) : 0;
 };
 
-const questionnaires = ref([]);
-
-const deleteSurvey = (id) => {
+// 删除问卷并更新问卷列表
+const deleteSurvey = async (id) => {
     try {
-        axios.delete('/vote/' + id)
-            .then(res => {
-                if (res.data.code === 20000) {
-                    window.alert('删除问卷成功');
-                    getVoteList();
-                } else {
-                    console.error('删除问卷失败');
-                }
-            })
-            .catch(err => {
-                console.error('删除问卷失败：', err);
-            });
-    } catch (e) {
-        console.error('删除问卷失败：', e);
+        const res = await axios.delete(`/vote/${id}`);
+        if (res.data.code === 20000) {
+            window.alert('删除问卷成功');
+            getVoteList();
+        } else {
+            console.error('删除问卷失败');
+        }
+    } catch (err) {
+        console.error('删除问卷失败：', err);
     }
 };
 
-function getVoteList() {
+// 获取问卷列表
+const getVoteList = async () => {
     try {
-        axios.get('/vote?userAccount=' + sessionStorage.getItem('account'))
-            .then(res => {
-                if (res.data.code === 20000) {
-                    questionnaires.value = res.data.data;
-                } else {
-                    console.error('获取问卷列表失败');
-                }
-            })
-            .catch(err => {
-                console.error('获取问卷列表失败：', err);
-            });
-    } catch (e) {
-        console.error('获取问卷列表失败：', e);
+        const res = await axios.get('/vote', { params: { userAccount: sessionStorage.getItem('account') } });
+        if (res.data.code === 20000) {
+            questionnaires.value = res.data.data;
+        } else {
+            console.error('获取问卷列表失败');
+        }
+    } catch (err) {
+        console.error('获取问卷列表失败：', err);
     }
-}
+};
+
+// 格式化日期
+const formatDate = (timestamp) => new Date(timestamp).toLocaleString();
 </script>
 
 <style scoped>
