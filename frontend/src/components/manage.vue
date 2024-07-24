@@ -7,10 +7,11 @@
             <div class="right">
                 <div class="content">
                     <h1>问卷统计</h1>
-                    <div v-for="questionnaire in questionnaires" :key="questionnaire.vote_id" class="questionnaire-item">
+                    <div v-for="questionnaire in questionnaires" :key="questionnaire.vote_id"
+                        class="questionnaire-item">
                         <h2>{{ questionnaire.title }}</h2>
                         <p>{{ questionnaire.description }}</p>
-                        <p>发布时间: {{ questionnaire.publishTime }}</p>
+                        <p>发布时间: {{ new Date(questionnaire.publishTime).toLocaleString() }}</p>
                         <p>是否公开: {{ questionnaire.isPublic ? '是' : '否' }}</p>
                         <button @click="viewStatistics(questionnaire.vote_id)">查看统计</button>
                         <button @click="deleteSurvey(questionnaire.vote_id)">删除</button>
@@ -59,6 +60,7 @@ const deleteSurvey = (id) => {
             .then(res => {
                 if (res.data.code === 20000) {
                     console.log('删除问卷成功1');
+                    window.alert('删除问卷成功');
                     getVoteList();
                 } else {
                     console.error('删除问卷失败2');
@@ -139,6 +141,7 @@ function getVoteList() {
     flex-direction: column;
     margin-top: 20px;
     width: 100%;
+    overflow-y: auto;
 }
 
 .questionnaire-item {

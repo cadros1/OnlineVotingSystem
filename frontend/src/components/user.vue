@@ -5,10 +5,9 @@
                 <Sidebar></Sidebar>
             </div>
             <div class="right">
-                <h1>Welcome To Userpage!</h1>
-                <p>Your account is {{ getInformation('account') }}.</p>
-                <p>Your username is {{ getInformation('username') }}.</p>
-                <p>Your token is {{ getInformation('token') }}.</p>
+                <h1>用户主页!</h1>
+                <p>账户 {{ getInformation('account') }}.</p>
+                <p>用户名 {{ getInformation('username') }}.</p>
                 <button @click="Exit">退出登录</button>
             </div>
             <router-view />
