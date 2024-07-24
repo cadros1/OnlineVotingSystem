@@ -53,7 +53,7 @@ public class VoteController {
                                               voteRequestBody.getDescription(),
                                               voteRequestBody.getRootQuestionId(),
                                               voteRequestBody.getAccount(),
-                                              voteRequestBody.isPublic(),
+                                              voteRequestBody.getIsPublic(),
                                               voteRequestBody.getPublishTime());
             Vote newVote=new Vote();
             ObjectMapper mapper = new ObjectMapper();
@@ -68,7 +68,7 @@ public class VoteController {
             newVote.setRootQuestionId(voteRequestBody.getRootQuestionId());
             newVote.setQuestionMap(map);
             newVote.setUser(DataBase.queryUserByAccount(voteRequestBody.getAccount()));
-            newVote.setPublic(voteRequestBody.isPublic());
+            newVote.setPublic(voteRequestBody.getIsPublic());
             newVote.setPublishTime(Instant.now());
             VoteFileService.outputVoteToFile(newVote);
             return ResponseEntity.ok(new ApiResponse(20000, "问卷创建成功", "OK", null));
@@ -138,24 +138,16 @@ public class VoteController {
     }
 
     @GetMapping("/vote")
-    public ResponseEntity<ApiResponse> getVoteList() {
-        try{
-            List<Vote> votes = DataBase.queryAllVotes();
+    public ResponseEntity<ApiResponse> getVotes(@RequestParam(required = false) String userAccount) {
+        try {
+            List<Vote> votes;
+            if (userAccount != null && !userAccount.isEmpty()) {
+                votes = DataBase.queryVotesByAccount(userAccount);
+            } else {
+                votes = DataBase.queryPublicVotes();
+            }
             return ResponseEntity.ok(new ApiResponse(20000, "问卷列表获取成功", "OK", votes));
-        }catch(Exception e){
-            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
-        }
-    }
-
-    /**
-     * 前端使用get请求某个用户的问卷列表
-     */
-    @GetMapping("/vote?user_account={userAccount}")
-    public ResponseEntity<ApiResponse> getVotesListByAccount(@RequestParam String userAccount) {
-        try{
-            List<Vote> votes = DataBase.queryVotesByAccount(userAccount);
-            return ResponseEntity.ok(new ApiResponse(20000, "问卷列表获取成功", "OK", votes));
-        }catch(Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
         }
     }
@@ -179,45 +171,59 @@ class VoteRequestBody{
     String account;
     boolean isPublic;
     Instant publishTime;
+    // Getter and Setter methods
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getDescription() {
         return description;
     }
-    public void setDescription(String Description) {
-        this.description = Description;
+
+    public void setDescription(String description) {
+        this.description = description;
     }
+
     public int getRootQuestionId() {
         return rootQuestionId;
     }
+
     public void setRootQuestionId(int rootQuestionId) {
         this.rootQuestionId = rootQuestionId;
     }
-    public String getAccount() {
-        return account;
-    }
-    public void setAccount(String account) {
-        this.account = account;
-    }
+
     public String getQuestionMap() {
         return questionMap;
     }
+
     public void setQuestionMap(String questionMap) {
         this.questionMap = questionMap;
     }
-    public boolean isPublic() {
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public boolean getIsPublic() {
         return isPublic;
     }
-    public void setPublic(boolean isPublic) {
+
+    public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
+
     public Instant getPublishTime() {
         return publishTime;
     }
+
     public void setPublishTime(Instant publishTime) {
         this.publishTime = publishTime;
     }

@@ -26,12 +26,13 @@ public class Vote implements java.io.Serializable {
         this.questionMap = questionMap;
     }
 
-    public Vote(int vote_id, String title, String description, User user, int rootQuestionId, Instant publishTime) {
+    public Vote(int vote_id, String title, String description, User user, int rootQuestionId, boolean isPublic, Instant publishTime) {
         this.vote_id = vote_id;
         this.title = title;
         this.description = description;
         this.user = user;
         this.rootQuestionId = rootQuestionId;
+        this.isPublic = isPublic;
         this.publishTime = publishTime;
     }
 

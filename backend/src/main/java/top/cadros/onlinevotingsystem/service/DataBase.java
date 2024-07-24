@@ -164,6 +164,21 @@ public class DataBase {
                                                              new User(rs.getString("user_account"),
                                                                       rs.getString("username")),
                                                              rs.getInt("root_question_id"),
+                                                             rs.getBoolean("is_public"),
+                                                             rs.getTimestamp("publish_time").toInstant());
+        List<Vote> votes = jdbcTemplate.query(sql, rowMapper);
+        return votes;
+    }
+
+    public static List<Vote> queryPublicVotes(){
+        String sql="SELECT * FROM votes JOIN users ON users.account=votes.user_account AND is_public = true";
+        RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
+                                                             rs.getString("title"),
+                                                             rs.getString("description"),
+                                                             new User(rs.getString("user_account"),
+                                                                      rs.getString("username")),
+                                                             rs.getInt("root_question_id"),
+                                                             rs.getBoolean("is_public"),
                                                              rs.getTimestamp("publish_time").toInstant());
         List<Vote> votes = jdbcTemplate.query(sql, rowMapper);
         return votes;
@@ -180,6 +195,7 @@ public class DataBase {
                                                              new User(rs.getString("user_account"),
                                                                       rs.getString("username")),
                                                              rs.getInt("root_question_id"),
+                                                             rs.getBoolean("is_public"),
                                                              rs.getTimestamp("publish_time").toInstant());
         List<Vote> votes = jdbcTemplate.query(sql, rowMapper, userAccount);
         return votes;
