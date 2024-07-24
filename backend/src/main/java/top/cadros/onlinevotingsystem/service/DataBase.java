@@ -125,7 +125,7 @@ public class DataBase {
     }
 
     public static List<AnswerLog> queryAnswerLogsByVoteId(int vote_id){
-        String sql = "SELECT * FROM answer_logs WHERE vote_id = ?";
+        String sql = "SELECT * FROM answeredUsers WHERE vote_id = ?";
         RowMapper<AnswerLog> rowMapper = (rs, rowNum) -> new AnswerLog(rs.getInt("vote_id"),
                                                                       rs.getString("user_account"),
                                                                       rs.getTimestamp("answer_time").toInstant());
@@ -141,7 +141,7 @@ public class DataBase {
      * 确认用户是否已经回答过某个问卷
      */
     public static boolean confirmAnswerLog(int vote_id,String user_account){
-        String sql = "SELECT * FROM answer_logs WHERE vote_id = ? AND user_account = ?";
+        String sql = "SELECT * FROM answeredUsers WHERE vote_id = ? AND user_account = ?";
         RowMapper<AnswerLog> rowMapper = (rs, rowNum) -> new AnswerLog(rs.getInt("vote_id"),
                                                                       rs.getString("user_account"),
                                                                       rs.getTimestamp("answer_time").toInstant());
