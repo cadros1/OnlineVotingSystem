@@ -42,6 +42,7 @@ const questionnaires = ref([
 const startAnswering = (questionnaire) => {
     if (sessionStorage.getItem('token')) {
         // 已登录，跳转到回答页面
+        console.log('questionnaire:', questionnaire);
         router.push({
             path: '/answer',
             query: {
