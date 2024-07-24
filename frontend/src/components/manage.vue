@@ -7,13 +7,13 @@
             <div class="right">
                 <div class="content">
                     <h1>问卷统计</h1>
-                    <div v-for="questionnaire in questionnaires" :key="questionnaire.id" class="questionnaire-item">
+                    <div v-for="questionnaire in questionnaires" :key="questionnaire.vote_id" class="questionnaire-item">
                         <h2>{{ questionnaire.title }}</h2>
                         <p>{{ questionnaire.description }}</p>
                         <p>发布时间: {{ questionnaire.publishTime }}</p>
                         <p>是否公开: {{ questionnaire.isPublic ? '是' : '否' }}</p>
-                        <button @click="viewStatistics(questionnaire.id)">查看统计</button>
-                        <button @click="deleteSurvey(questionnaire.id)">删除</button>
+                        <button @click="viewStatistics(questionnaire.vote_id)">查看统计</button>
+                        <button @click="deleteSurvey(questionnaire.vote_id)">删除</button>
                     </div>
                 </div>
             </div>
@@ -33,14 +33,14 @@ onMounted(() => {
 
 const questionnaires = ref([
     {
-        id: 1,
+        vote_id: 1,
         title: '问卷1',
         description: '这是一个关于问卷1的描述',
         publishTime: '2023-04-01',
         isPublic: true
     },
     {
-        id: 2,
+        vote_id: 2,
         title: '问卷2',
         description: '这是一个关于问卷2的描述',
         publishTime: '2023-04-02',
