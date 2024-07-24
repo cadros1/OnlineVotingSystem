@@ -99,18 +99,22 @@
                     </div>
                 </div>
                 <div v-if="editingItem.type === '填空'">
-                    <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 0)"
-                        min="0" max="9999" placeholder="跳题逻辑">
-                    <button class="edit" @click="saveItem">确定</button>
+                    <div v-for="(option, index) in editingItem.options" :key="index" class="option">
+                        <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 0)"
+                            min="0" max="9999" placeholder="跳题逻辑">
+                        <button class="edit" @click="saveItem">确定</button>
+                    </div>
                 </div>
                 <div v-if="editingItem.type === '判断'">
-                    <label>对</label>
-                    <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 0)"
-                        min="0" max="9999" placeholder="跳题逻辑">
-                    <label>错</label>
-                    <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 1)"
-                        min="0" max="9999" placeholder="跳题逻辑">
-                    <button class="edit" @click="saveItem">确定</button>
+                    <div v-for="(option, index) in editingItem.options" :key="index" class="option">
+                        <label>{{ option }}</label>
+                        <input type="number" :value="editingItem.jumpLogic[index]" @input="validateJumpLogic($event, 0)"
+                            min="0" max="9999" placeholder="跳题逻辑">
+                    </div>
+                    <div class="option">
+                        <label></label>
+                        <button class="edit" @click="saveItem">确定</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,12 +173,12 @@ function addItemWithType() {
     if (selectedType.value) {
         const maxId = Math.max(...items.value.map(item => item.id), 0);
         if (selectedType.value === '判断') {
-            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['对', '错'], jumpLogic: [null], isRequired: true, hasOther: false });
+            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['对', '错'], jumpLogic: [null,null], isRequired: true, hasOther: false });
         }
         else if (selectedType.value === '单选' || selectedType.value === '多选') {
             items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['选项一', '选项二'], jumpLogic: [null, null], isRequired: true, hasOther: false });
         } else {
-            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: [], jumpLogic: [null], isRequired: true, hasOther: false });
+            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: [''], jumpLogic: [null], isRequired: true, hasOther: false });
         }
         showModal.value = false;
     }
