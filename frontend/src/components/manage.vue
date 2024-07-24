@@ -29,7 +29,8 @@
                         <h3 @click="toggleQuestionDetails(index)">{{ question.question_text }}</h3>
                         <div v-show="question.showDetails" class="options-stats">
                             <div v-for="(option, optIndex) in question.options" :key="optIndex" class="option-item">
-                                <p>{{ option }}: {{ question.optionStats[optIndex] || 0 }}</p>
+                                <p>{{ option }}: {{ question.optionStats[optIndex] || 0 }} ({{
+                                    calculatePercentage(question.optionStats[optIndex], question.totalVotes) }}%)</p>
                             </div>
                         </div>
                     </div>
@@ -95,11 +96,13 @@ const fetchStatistics = async (id) => {
             };
             questions.value = Object.values(vote.questionMap).map(question => {
                 const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
+                const totalVotes = questionStats ? questionStats.count.reduce((a, b) => a + b, 0) : 0;
                 return {
                     ...question,
                     showDetails: false,
                     options: question.options,
-                    optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
+                    optionStats: questionStats ? questionStats.count : question.options.map(() => 0),
+                    totalVotes: totalVotes
                 };
             });
         } else {
@@ -150,6 +153,11 @@ function getVoteList() {
         console.error('获取问卷列表失败：', e);
     }
 }
+
+const calculatePercentage = (count, total) => {
+    if (total === 0) return '0';
+    return ((count / total) * 100).toFixed(2);
+};
 </script>
 
 <style scoped>
