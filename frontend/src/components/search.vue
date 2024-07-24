@@ -59,6 +59,12 @@ const usermame = ref("");
 
 
 function SearchVote() {
+    if (!sessionStorage.getItem('token')) {
+        // 未登录，跳转到登录页面
+        window.alert('请先登录！');
+        router.push('/login');
+        return;
+    }
     try {
         console.log('/vote/' + voteID.value);
         axios.get('/vote/' + voteID.value)
