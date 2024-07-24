@@ -23,7 +23,6 @@
 
 <script setup>
 import Sidebar from './sidebar.vue';
-import Sidebar from './sidebar.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
