@@ -15,7 +15,7 @@ public class DataAnalyseService {
         VoteAnalyseData voteAnalyseData=new VoteAnalyseData();
         voteAnalyseData.setAnsweredNumber(answerLogs.size());
         voteAnalyseData.setQuestionAnalyseDatas(new ArrayList<QuestionAnalyseData>());
-        if(answerLogs.size()<10){
+        if(answerLogs.size()<5){
             throw new IllegalStateException("回答数量不足以产生有效统计");
         }
         for(Question question:vote.getQuestionMap().values()){
