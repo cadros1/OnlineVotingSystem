@@ -25,19 +25,20 @@
                 <h2>问卷统计 - {{ vote.title }}</h2>
                 <div v-if="statisticsLoading">加载中...</div>
                 <div v-else>
-                    <div v-for="(question, index) in questions" :key="question.question_id" class="question-statistics"
+                    <<div v-for="(question, index) in questions" :key="question.question_id" class="question-statistics"
                         v-if="hasStatistics(question)">
                         <h3 @click="toggleQuestionDetails(index)">{{ question.question_text }}</h3>
                         <div v-show="question.showDetails" class="options-stats">
                             <div v-for="(option, optIndex) in question.options" :key="optIndex" class="option-item">
-                                <p>{{ option }}: {{ question.optionStats[optIndex] || 0 }} ({{ getPercentage(question,
-                                    optIndex) }}%)</p>
+                                <p>{{ option }}: {{ question.optionStats && question.optionStats[optIndex] || 0 }} ({{
+                                    getPercentage(question, optIndex) }}%)</p>
                             </div>
                         </div>
-                    </div>
                 </div>
+
             </div>
         </div>
+    </div>
     </div>
 </template>
 
@@ -84,39 +85,42 @@ const hasStatistics = (question) => {
     return question.optionStats && question.optionStats.some(count => count > 0);
 };
 
-const fetchStatistics = async (id) => {
+function fetchStatistics(id) {
     statisticsLoading.value = true;
-    try {
-        const response = await axios.get('/analyse/' + id);
-        if (response.data.code === 20000) {
-            const { vote, questionAnalyseDatas } = response.data.data;
-            vote.value = {
-                title: vote.title,
-                description: vote.description,
-                isPublic: vote.isPublic,
-                publishTime: vote.publishTime,
-                username: response.data.data.vote.user.username,
-                rootQuestionId: vote.rootQuestionId,
-                questionMap: vote.questionMap
-            };
-            questions.value = Object.values(vote.questionMap).map(question => {
-                const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
-                return {
-                    ...question,
-                    showDetails: false,
-                    options: question.options,
-                    optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
+    axios.get('/analyse/' + id)
+        .then(res => {
+            if (res.data.code === 20000) {
+                const { vote, questionAnalyseDatas } = res.data.data;
+                vote.value = {
+                    title: vote.title,
+                    description: vote.description,
+                    isPublic: vote.isPublic,
+                    publishTime: vote.publishTime,
+                    username: res.data.data.vote.user.username,
+                    rootQuestionId: vote.rootQuestionId,
+                    questionMap: vote.questionMap
                 };
-            }).filter(hasStatistics); // 过滤掉没有统计数据的题目
-        } else {
-            console.error('获取统计信息失败');
-        }
-    } catch (err) {
-        console.error('获取统计信息出错：', err);
-    } finally {
-        statisticsLoading.value = false;
-    }
-};
+                questions.value = Object.values(vote.questionMap).map(question => {
+                    const questionStats = questionAnalyseDatas.find(stat => stat.questionId === question.question_id);
+                    return {
+                        ...question,
+                        showDetails: false,
+                        options: question.options,
+                        optionStats: questionStats ? questionStats.count : question.options.map(() => 0)
+                    };
+                }).filter(hasStatistics); // 过滤掉没有统计数据的题目
+            } else {
+                console.error('获取统计信息失败');
+            }
+        })
+        .catch(err => {
+            console.error('获取统计信息出错：', err);
+        })
+        .finally(() => {
+            statisticsLoading.value = false;
+        });
+}
+
 
 const getPercentage = (question, index) => {
     const total = question.optionStats.reduce((sum, count) => sum + count, 0);
