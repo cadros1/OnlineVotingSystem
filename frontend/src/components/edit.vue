@@ -173,7 +173,7 @@ function addItemWithType() {
     if (selectedType.value) {
         const maxId = Math.max(...items.value.map(item => item.id), 0);
         if (selectedType.value === '判断') {
-            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['对', '错'], jumpLogic: [null,null], isRequired: true, hasOther: false });
+            items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['对', '错'], jumpLogic: [null, null], isRequired: true, hasOther: false });
         }
         else if (selectedType.value === '单选' || selectedType.value === '多选') {
             items.value.push({ id: maxId + 1, type: selectedType.value, name: '新建问题', options: ['选项一', '选项二'], jumpLogic: [null, null], isRequired: true, hasOther: false });
@@ -291,7 +291,7 @@ const saveItems = async () => {
         if (response.data.code === 20000) {
             // 保存成功处理
             console.log('问卷标题和说明保存成功');
-            window.alert('问卷标题和说明保存成功');
+            window.alert('问卷标题和说明保存成功!问卷ID:', response.data.data);
             router.push('/');
         } else {
             // 错误处理
