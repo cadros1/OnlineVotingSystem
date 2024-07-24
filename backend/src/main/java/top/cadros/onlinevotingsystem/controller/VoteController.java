@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.websocket.server.PathParam;
 import top.cadros.onlinevotingsystem.object.*;
 import top.cadros.onlinevotingsystem.service.DataBase;
 import top.cadros.onlinevotingsystem.service.VoteFileService;
@@ -85,7 +85,7 @@ public class VoteController {
             return ResponseEntity.status(400).body(new ApiResponse(40001, "问卷不存在", null, null));
         }
         try{//尝试插入回答记录
-            DataBase.insertAnswerLog(0, null);
+            DataBase.insertAnswerLog(answerRequestBody.getVote_id(), answerRequestBody.getUserAccount());
         }catch(DuplicateKeyException e){
             return ResponseEntity.status(400).body(new ApiResponse(40002, "您已经回答过此问卷", null, null));
         }
@@ -136,14 +136,39 @@ public class VoteController {
             return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, null));
         }
     }
-    
-    
-    
+
     @GetMapping("/vote")
-    public String sendVoteList(@RequestParam int page) {
-        return new String();//TODO
+    public ResponseEntity<ApiResponse> getVoteList() {
+        try{
+            List<Vote> votes = DataBase.queryAllVotes();
+            return ResponseEntity.ok(new ApiResponse(20000, "问卷列表获取成功", "OK", votes));
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
+        }
     }
-    
+
+    /**
+     * 前端使用get请求某个用户的问卷列表
+     */
+    @GetMapping("/vote?user_account={userAccount}")
+    public ResponseEntity<ApiResponse> getVotesListByAccount(@RequestParam String userAccount) {
+        try{
+            List<Vote> votes = DataBase.queryVotesByAccount(userAccount);
+            return ResponseEntity.ok(new ApiResponse(20000, "问卷列表获取成功", "OK", votes));
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员", null, e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/vote/{vote_id}")
+    public ResponseEntity<ApiResponse> deleteVoteById(@PathVariable int voteId){
+        try{
+            DataBase.deleteVoteByVoteId(voteId);
+            return ResponseEntity.ok(new ApiResponse(20000, "问卷删除成功", "OK", null));
+        }catch(Exception e){
+            return ResponseEntity.status(500).body(new ApiResponse(50000, "服务器错误，请联系管理员",null, null));
+        }
+    }
 }
 
 class VoteRequestBody{

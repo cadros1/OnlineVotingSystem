@@ -103,7 +103,7 @@ public class DataBase {
      * @param custom_answer 自定义答案
      */
     public static void insertAnswer(int vote_id, int question_id, String user_account, int select_option_id, String custom_answer)throws DuplicateKeyException{
-        String sql = "INSERT INTO answers(vote_id, question_id, user_account, select_option_id, custom_answer) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO answers(vote_id, question_id, user_account, selected_option_id, custom_answer) VALUES(?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, vote_id, question_id, user_account, select_option_id, custom_answer);
     }
 
@@ -113,7 +113,7 @@ public class DataBase {
      * @param user_account 用户账号
      */
     public static void insertAnswerLog(int vote_id, String user_account) throws DuplicateKeyException{
-        String sql = "INSERT INTO answer_logs(vote_id, user_account) VALUES(?, ?)";
+        String sql = "INSERT INTO answeredUsers(vote_id, user_account) VALUES(?, ?)";
         jdbcTemplate.update(sql, vote_id, user_account);
     }
 
@@ -153,39 +153,40 @@ public class DataBase {
         return answers;
     }
 
-    //public static List<Vote> queryVotesByAccount(User user) throws Exception {
-    //    String sql = "SELECT * FROM votes "+
-    //                 "JOIN users ON votes.user_account = users.account "+
-    //                 "WHERE users.account = ?";
-    //    RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
-    //                                                         rs.getString("title"),
-    //                                                         rs.getString("description"),
-    //                                                         new User(rs.getString("user_account"),
-    //                                                                  rs.getString("username")));
-    //    
-    //    List<Vote> votes = jdbcTemplate.query(sql, rowMapper, user.getAccount());
-    //    if (votes.isEmpty()) {
-    //        return null;
-    //    } else {
-    //        return votes;
-    //    }
-    //}
-//
-    //public static Vote queryVoteByVoteId(int vote_id) throws Exception {
-    //    String sql = "SELECT * FROM votes "+
-    //                 "JOIN users ON votes.user_account=users.account "+
-    //                 "WHERE vote_id = ?";
-    //    RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
-    //                                                         rs.getString("title"),
-    //                                                         rs.getString("description"),
-    //                                                         new User(rs.getString("user_account"),
-    //                                                                  rs.getString("username")));
-    //    
-    //    List<Vote> votes = jdbcTemplate.query(sql, rowMapper, vote_id);
-    //    if (votes.size()==0) {
-    //        throw new Exception("此问卷不存在");
-    //    } else {
-    //        return votes.get(0);
-    //    }
-    //}
+    /**
+     * 查询所有问卷
+     */
+    public static List<Vote> queryAllVotes(){
+        String sql="SELECT * FROM votes JOIN users ON users.account=votes.user_account";
+        RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
+                                                             rs.getString("title"),
+                                                             rs.getString("description"),
+                                                             new User(rs.getString("user_account"),
+                                                                      rs.getString("username")),
+                                                             rs.getInt("root_question_id"),
+                                                             rs.getTimestamp("publish_time").toInstant());
+        List<Vote> votes = jdbcTemplate.query(sql, rowMapper);
+        return votes;
+    }
+
+    /**
+     * 查询某个用户发布的所有问卷
+     */
+    public static List<Vote> queryVotesByAccount(String userAccount){
+        String sql="SELECT * FROM votes JOIN users ON users.account=votes.user_account WHERE user_account = ?";
+        RowMapper<Vote> rowMapper = (rs, rowNum) -> new Vote(rs.getInt("vote_id"),
+                                                             rs.getString("title"),
+                                                             rs.getString("description"),
+                                                             new User(rs.getString("user_account"),
+                                                                      rs.getString("username")),
+                                                             rs.getInt("root_question_id"),
+                                                             rs.getTimestamp("publish_time").toInstant());
+        List<Vote> votes = jdbcTemplate.query(sql, rowMapper, userAccount);
+        return votes;
+    }
+
+    public static void deleteVoteById(int voteId){
+        String sql = "DELETE FROM votes WHERE vote_id = ?";
+        jdbcTemplate.update(sql, voteId);
+    }
 }
