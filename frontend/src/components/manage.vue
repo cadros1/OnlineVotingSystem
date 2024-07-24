@@ -7,14 +7,16 @@
             <div class="right">
                 <div class="content">
                     <h1>问卷统计</h1>
-                    <div v-for="questionnaire in questionnaires" :key="questionnaire.vote_id"
-                        class="questionnaire-item">
-                        <h2>{{ questionnaire.title }}</h2>
-                        <p>{{ questionnaire.description }}</p>
-                        <p>发布时间: {{ new Date(questionnaire.publishTime).toLocaleString() }}</p>
-                        <p>是否公开: {{ questionnaire.isPublic ? '是' : '否' }}</p>
-                        <button @click="openStatisticsModal(questionnaire.vote_id)">查看统计</button>
-                        <button @click="deleteSurvey(questionnaire.vote_id)">删除</button>
+                    <div class="questionnaire-list">
+                        <div v-for="questionnaire in questionnaires" :key="questionnaire.vote_id"
+                            class="questionnaire-item">
+                            <h2>{{ questionnaire.title }}</h2>
+                            <p>{{ questionnaire.description }}</p>
+                            <p>发布时间: {{ new Date(questionnaire.publishTime).toLocaleString() }}</p>
+                            <p>是否公开: {{ questionnaire.isPublic ? '是' : '否' }}</p>
+                            <button @click="openStatisticsModal(questionnaire.vote_id)">查看统计</button>
+                            <button @click="deleteSurvey(questionnaire.vote_id)">删除</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -30,7 +32,8 @@
                         <div v-show="question.showDetails" class="options-stats">
                             <div v-for="(option, optIndex) in question.options" :key="optIndex" class="option-item">
                                 <p>{{ option }}: {{ question.optionStats[optIndex] || 0 }} ({{
-                                    calculatePercentage(question.optionStats[optIndex], question.totalVotes) }}%)</p>
+                                    calculatePercentage(question.optionStats[optIndex], question.totalVotes) }}%)
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -195,16 +198,30 @@ const calculatePercentage = (count, total) => {
 }
 
 .content {
+    border-radius: 10px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
-    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.questionnaire-list {
+    background-color: #f0f0f0;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: flex;
     overflow-y: auto;
+    max-height: 700px;
 }
 
 .questionnaire-item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
 }
 
 button {
