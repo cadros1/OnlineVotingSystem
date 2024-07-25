@@ -14,12 +14,16 @@ import top.cadros.onlinevotingsystem.service.JwtService;
 
 import java.io.IOException;
 
+/**
+ * <p>过滤器类，用于身份验证</p>
+ * <p>在请求头中获取token，解析token，若token无效则返回401 Unauthorized</p>
+ * @author 高洪森
+ */
 @Component
 public class MyFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        // 在这里编写你的过滤逻辑
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         if(req.getRequestURL().toString().contains("/login")||req.getRequestURL().toString().contains("/register")){
@@ -50,11 +54,9 @@ public class MyFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // 初始化代码
     }
 
     @Override
     public void destroy() {
-        // 清理代码
     }
 }

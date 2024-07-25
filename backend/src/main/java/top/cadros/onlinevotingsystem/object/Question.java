@@ -2,6 +2,11 @@ package top.cadros.onlinevotingsystem.object;
 
 import java.util.ArrayList;
 
+/**
+ * <p>问题数据类</p>
+ * <p>用于存储问题信息</p>
+ * @Author 高洪森
+ */
 public class Question implements java.io.Serializable{
     private int question_id;
     private String question_text;

@@ -9,7 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+/**
+ * <p>登录控制器</p>
+ * <p>用于处理登录请求</p>
+ * @Author 高洪森
+ */
 @RestController
 public class LoginController{
 

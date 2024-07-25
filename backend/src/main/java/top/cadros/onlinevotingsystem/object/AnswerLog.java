@@ -2,6 +2,11 @@ package top.cadros.onlinevotingsystem.object;
 
 import java.time.Instant;
 
+/**
+ * <p>回答记录数据类</p>
+ * <p>用于存储回答记录信息</p>
+ * @auther 高洪森
+ */
 public class AnswerLog implements java.io.Serializable {
     int vote_id;
     String userAccount;

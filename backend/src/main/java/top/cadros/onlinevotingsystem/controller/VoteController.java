@@ -23,10 +23,18 @@ import top.cadros.onlinevotingsystem.service.DataAnalyseService;
 import top.cadros.onlinevotingsystem.service.DataBase;
 import top.cadros.onlinevotingsystem.service.VoteFileService;
 
-
+/**
+ * <p>问卷控制器类</p>
+ * <p>用于处理问卷相关的请求</p>
+ * @auther 高洪森
+ */
 @RestController
 public class VoteController {
 
+    /**
+     * 前端使用post请求保存问卷数据
+     * @url /vote/{vote_id}
+     */
     @PostMapping("/vote/{vote_id}")
     public ResponseEntity<ApiResponse> storeVote(@RequestBody Vote vote) {
         try{
@@ -37,6 +45,10 @@ public class VoteController {
         }
     }
 
+    /**
+     * 前端使用get请求获取问卷数据
+     * @url /vote/{vote_id}
+     */
     @GetMapping("/vote/{vote_id}")
     public ResponseEntity<ApiResponse> sendVote(@PathVariable int vote_id){
         try{
@@ -47,6 +59,10 @@ public class VoteController {
         }
     }
 
+    /**
+     * 前端使用post请求创建问卷
+     * @url /vote/newvote
+     */
     @PostMapping("/vote/newvote")
     public ResponseEntity<ApiResponse> createVote(@RequestBody VoteRequestBody voteRequestBody) {
         try{
@@ -78,6 +94,10 @@ public class VoteController {
         }
     }
 
+    /**
+     * 前端使用post请求提交问卷答案
+     * @url /vote/{vote_id}/answer
+     */
     @PostMapping("/vote/{vote_id}/answer")
     public ResponseEntity<ApiResponse> postAnswer(@RequestBody AnswerRequestBody answerRequestBody) {
         try{//尝试检查问卷是否存在
@@ -138,6 +158,11 @@ public class VoteController {
         }
     }
 
+    /**
+     * <p>前端使用get请求获取问卷列表</p>
+     * @url /vote
+     * @param userAccount 可选参数-用户账号
+     */
     @GetMapping("/vote")
     public ResponseEntity<ApiResponse> getVotes(@RequestParam(required = false) String userAccount) {
         try {
@@ -153,6 +178,10 @@ public class VoteController {
         }
     }
 
+    /**
+     * <p>前端使用delete请求删除问卷</p>
+     * @url /vote/{vote_id}
+     */
     @DeleteMapping("/vote/{vote_id}")
     public ResponseEntity<ApiResponse> deleteVoteById(@PathVariable int vote_id){
         try{
@@ -164,6 +193,10 @@ public class VoteController {
         }
     }
 
+    /**
+     * <p>前端使用get请求获取问卷统计数据</p>
+     * @url /analyse/{vote_id}
+     */
     @GetMapping("/analyse/{vote_id}")
     public ResponseEntity<ApiResponse> getVoteAnalyse(@PathVariable int vote_id){
         try{
@@ -178,6 +211,9 @@ public class VoteController {
     }
 }
 
+/**
+ * <p>问卷存储请求数据体类</p>
+ */
 class VoteRequestBody{
     String title;
     String description;
@@ -244,6 +280,9 @@ class VoteRequestBody{
     }
 }
 
+/**
+ * <p>回答存储请求数据体类</p>
+ */
 class AnswerRequestBody{
     int vote_id;
     String userAccount;

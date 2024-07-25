@@ -1,5 +1,10 @@
 package top.cadros.onlinevotingsystem.object;
 
+/**
+ * <p>问题分析数据类</p>
+ * <p>用于存储问题分析数据</p>
+ * @author 高洪森
+ */
 public class QuestionAnalyseData implements java.io.Serializable{
     int questionId;
     String[] optionText;

@@ -1,5 +1,10 @@
 package top.cadros.onlinevotingsystem.object;
 
+/**
+ * <p>回答数据类</p>
+ * <p>用于存储回答信息</p>
+ * @Author 高洪森
+ */
 public class Answer {
     private int vote_id;
     private int question_id;

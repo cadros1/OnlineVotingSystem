@@ -3,6 +3,11 @@ package top.cadros.onlinevotingsystem.object;
 import java.time.Instant;
 import java.util.Map;
 
+/**
+ * <p>问卷类</p>
+ * <p>用于存储问卷信息</p>
+ * @author 高洪森
+ */
 public class Vote implements java.io.Serializable {
     private int vote_id;
     private String title;

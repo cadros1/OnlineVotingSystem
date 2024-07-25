@@ -2,6 +2,11 @@ package top.cadros.onlinevotingsystem.object;
 
 import java.util.List;
 
+/**
+ * <p>问卷分析数据类</p>
+ * <p>用于存储问卷分析数据</p>
+ * @author 高洪森
+ */
 public class VoteAnalyseData implements java.io.Serializable{
     Vote vote;
     int answeredNumber;

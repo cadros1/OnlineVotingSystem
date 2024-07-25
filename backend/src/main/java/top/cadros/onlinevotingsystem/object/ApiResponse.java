@@ -1,5 +1,10 @@
 package top.cadros.onlinevotingsystem.object;
 
+/**
+ * <p>API响应数据类</p>
+ * <p>用于封装http响应数据</p>
+ * @author 高洪森
+ */
 public class ApiResponse {
     int code;
     String message;

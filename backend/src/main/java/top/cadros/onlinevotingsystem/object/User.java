@@ -1,5 +1,10 @@
 package top.cadros.onlinevotingsystem.object;
 
+/**
+ * <p>用户数据类</p>
+ * <p>用于存储用户信息</p>
+ * @author 高洪森
+ */
 public class User implements java.io.Serializable {
     private String account;
     private String password;

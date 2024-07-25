@@ -15,6 +15,10 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>JWT服务类，用于生成和解析JWT</p>
+ * @author 高洪森
+ */
 @Component
 public class JwtService {
     private static String secret;

@@ -1,5 +1,10 @@
 package top.cadros.onlinevotingsystem.object;
 
+/**
+ * <p>选项数据类</p>
+ * <p>用于存储选项信息</p>
+ * @Author 高洪森
+ */
 public class Option implements java.io.Serializable{
     private int option_id;
     private String option_text;

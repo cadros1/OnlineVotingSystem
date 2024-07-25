@@ -10,6 +10,11 @@ import org.springframework.stereotype.Component;
 
 import top.cadros.onlinevotingsystem.object.*;
 
+/**
+ * <p>问卷文件服务类</p>
+ * <p>用于将问卷对象写入文件，从文件中读取问卷对象，删除问卷文件</p>
+ * @author 高洪森
+ */
 @Component
 public class VoteFileService {
     private static ObjectOutputStream oos;

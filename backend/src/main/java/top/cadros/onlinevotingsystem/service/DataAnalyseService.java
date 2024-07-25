@@ -7,6 +7,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>数据分析服务类</p>
+ * <p>用于分析问卷数据</p>
+ * @author 高洪森
+ */
 @Component
 public class DataAnalyseService {
     public static VoteAnalyseData analyseVoteByVoteId(int voteId) throws Exception {

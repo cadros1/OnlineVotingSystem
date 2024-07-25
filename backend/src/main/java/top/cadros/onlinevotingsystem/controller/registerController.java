@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * <p>注册控制器</p>
+ * <p>用于处理注册请求</p>
+ * @Author 高洪森
+ */
 @RestController
 public class registerController {
 

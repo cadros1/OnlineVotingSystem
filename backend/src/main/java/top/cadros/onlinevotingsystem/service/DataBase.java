@@ -18,6 +18,11 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>数据库服务类</p>
+ * <p>用于与数据库进行交互</p>
+ * @author 高洪森
+ */
 @Component
 public class DataBase {
     private static JdbcTemplate jdbcTemplate;
